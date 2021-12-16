@@ -1,0 +1,13 @@
+namespaces:
+- author:
+  - Ryan Ly
+  contact:
+  - rly@lbl.gov
+  doc: An NWB extension for storing BEADL programs and data
+  name: ndx-beadl
+  schema:
+  - namespace: core
+    neurodata_types:
+    - ElectricalSeries
+  - source: ndx-beadl.extensions.yaml
+  version: 0.1.0
