@@ -1,8 +1,121 @@
-groups:
-- neurodata_type_def: TetrodeSeries
-  neurodata_type_inc: ElectricalSeries
-  doc: An extension of ElectricalSeries to include the tetrode ID for each time series.
+datasets:
+- neurodata_type_def: TaskProgram
+  neurodata_type_inc: NWBData
+  name: task_program
+  dtype: text
+  doc: A dataset to store a task program.
   attributes:
-  - name: trode_id
-    dtype: int32
-    doc: The tetrode ID.
+  - name: language
+    dtype: text
+    doc: The language of the program. Currently only "XML" is supported. It is not
+      recommended to include executable code here.
+  - name: schema
+    dtype:
+      target_type: TaskSchema
+      reftype: object
+    doc: The task schema that governs the program.
+- neurodata_type_def: BEADLTaskProgram
+  neurodata_type_inc: TaskProgram
+  doc: A dataset to store a BEADL task program.
+  attributes:
+  - name: language
+    dtype: text
+    default_value: XML
+    doc: The language of the program, fixed to "XML".
+    required: false
+- neurodata_type_def: TaskSchema
+  neurodata_type_inc: NWBData
+  name: task_schema
+  dtype: text
+  doc: A dataset to store a task schema, e.g., an XSD file.
+  attributes:
+  - name: version
+    dtype: text
+    doc: The version of the schema
+  - name: language
+    dtype: text
+    doc: The language of the schema. Currently only "XSD" is supported.
+- neurodata_type_def: BEADLTaskSchema
+  neurodata_type_inc: TaskSchema
+  doc: A dataset to store a BEADL task schema.
+  attributes:
+  - name: language
+    dtype: text
+    default_value: XSD
+    doc: The language of the schema, fixed to "XSD".
+    required: false
+groups:
+- neurodata_type_def: Tasks
+  neurodata_type_inc: LabMetaData
+  name: tasks
+  doc: A group to store task-related general metadata. TODO When merged with core,
+    this will no longer inherit from LabMetaData but from NWBContainer and be placed
+    optionally in /general.
+  datasets:
+  - name: task_program
+    neurodata_type_inc: TaskProgram
+    doc: A dataset to store a task program.
+  - name: task_schema
+    neurodata_type_inc: TaskSchema
+    doc: A dataset to store a task schema, e.g., an XSD file.
+- neurodata_type_def: TrialsTable
+  neurodata_type_inc: TimeIntervals
+  name: trials
+  doc: A column-based table to store information about trials, one trial per row.
+  datasets:
+  - name: states
+    neurodata_type_inc: DynamicTableRegion
+    doc: The states that occurred on each trial. This is represented as a ragged array
+      reference to rows of the States table.
+  - name: states_index
+    neurodata_type_inc: VectorIndex
+    doc: VectorIndex for the "states" column.
+  - name: events
+    neurodata_type_inc: DynamicTableRegion
+    doc: The events that occurred on each trial. This is represented as a ragged array
+      reference to rows of the Events table.
+  - name: events_index
+    neurodata_type_inc: DynamicTableRegion
+    doc: VectorIndex for the "events" column.
+- neurodata_type_def: StateTypesTable
+  neurodata_type_inc: DynamicTable
+  name: state_types
+  doc: A column-based table to store information about state types, one state type
+    per row.
+  datasets:
+  - name: state_name
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The name of the state.
+- neurodata_type_def: StatesTable
+  neurodata_type_inc: TimeIntervals
+  name: states
+  doc: A column-based table to store information about states, one state per row.
+  datasets:
+  - name: type
+    neurodata_type_inc: DynamicTableRegion
+    doc: The type of state that occurred on each trial. This is represented as a reference
+      to a row of the StateTypesTable.
+- neurodata_type_def: EventTypesTable
+  neurodata_type_inc: DynamicTable
+  name: event_types
+  doc: A column-based table to store information about event types, one event type
+    per row.
+  datasets:
+  - name: event_name
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The name of the event.
+- neurodata_type_def: EventsTable
+  neurodata_type_inc: DynamicTable
+  name: events
+  doc: A column-based table to store information about events, one event per row.
+  datasets:
+  - name: type
+    neurodata_type_inc: DynamicTableRegion
+    doc: The type of event that occurred on each trial. This is represented as a reference
+      to a row of the EventTypesTable.
+  - name: timestamp
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: The time that the event occurred, in seconds.

@@ -21,6 +21,11 @@ if not os.path.exists(ndx_beadl_specpath):
 # Load the namespace
 load_namespaces(ndx_beadl_specpath)
 
-# TODO: import your classes here or define your class using get_class to make
-# them accessible at the package level
-TetrodeSeries = get_class('TetrodeSeries', 'ndx-beadl')
+TaskSchema = get_class('TaskSchema', 'ndx-beadl')
+BEADLTaskSchema = get_class('BEADLTaskSchema', 'ndx-beadl')
+TaskProgram = get_class('TaskProgram', 'ndx-beadl')
+BEADLTaskProgram = get_class('BEADLTaskProgram', 'ndx-beadl')
+Tasks = get_class('Tasks', 'ndx-beadl')
+EventTypesTable = get_class('EventTypesTable', 'ndx-beadl')
+StateTypesTable = get_class('StateTypesTable', 'ndx-beadl')
+from .trials_table import EventsTable, StatesTable, TrialsTable  # noqa: F401,E402

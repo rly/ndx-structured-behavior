@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+<xs:element name="BEADL">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="BeadlTrialProtocol" type="BeadlTrialProtocolType"/>
+            <xs:element name="BeadlEditor" type="BeadlEditorType" minOccurs ="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+</xs:element>
+
+<xs:complexType name="BeadlTrialProtocolType">
+    <xs:sequence>
+        <xs:element name="BeadlArguments">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="BeadlArgument" minOccurs ="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                            <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="logical" />
+                                        <xs:enumeration value="numerical" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="HardwareSettings" type="HardwareSettingsType"/>
+        <xs:element name="BeadlInputs" type="BeadlInputsType"/>
+        <xs:element name="BeadlActions" type="BeadlActionsType"/>
+        <xs:element name="BeadlStates" type="BeadlStatesType"/>
+        <xs:element name="BeadlStateTransitions" type="BeadlStateTransitionsType"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="startState" type="xs:string" use="required"/>
+    <xs:attribute name="numberOfTrials" type="xs:double" use="required"/>
+</xs:complexType>
+
+
+<xs:complexType name="HardwareSettingsType">
+    <xs:sequence>
+        <xs:element name="ConnectionMapping" minOccurs ="0" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="Value" minOccurs ="0" maxOccurs="1" type="xs:string" />
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="resourceName" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+    <xs:attribute name="hardware" type="xs:string" use="required"/>
+    <xs:attribute name="version" type="xs:string" use="required"/>
+    <xs:attribute name="lang" type="xs:string" use="required"/>
+</xs:complexType>
+
+<!-- Definition of BeadlInputs -->
+<xs:complexType name="BeadlInputsType">
+    <xs:sequence>
+        <xs:element name="HardwareInput" minOccurs ="0" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:all>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="connection" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="VirtualInput" minOccurs ="0" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:all>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="connection" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<!-- Definition of BeadlActions -->
+<xs:complexType name="BeadlActionsType">
+    <xs:sequence>
+        <xs:element name="HardwareAction" minOccurs ="0" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:all>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="connection" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="VirtualAction" minOccurs ="0" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:all>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="connection" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BeadlStatesType">
+    <xs:sequence>
+        <xs:element name="BeadlState" minOccurs ="1" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="StateTimer" type="xs:string" default="0" />
+                    <xs:element name="StateOutputActions">
+                        <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                <!-- Definition of OutputAction-->
+                                <xs:element name="OutputAction">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="action" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="StateEvents">
+                        <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+
+                                <!-- Definition of ArgumentEvent-->
+                                <xs:element name="ArgumentEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent> <!-- ToDo: don't know if it needs to be like this since it has no content -->
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="argument" type="xs:string" use="required"/>
+                                                <xs:attribute name="comparison" type="xs:string" use="required"/>
+                                                <xs:attribute name="value" type="xs:string" use="required"/>
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of TimerEvent-->
+                                <xs:element name="TimerEvent">
+                                    <xs:complexType>
+                                        <xs:attribute name="timer" type="xs:string" use="required"/>
+                                        <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of ExternalEvent-->
+                                <xs:element name="ExternalEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of VirtualEvent-->
+                                <xs:element name="VirtualEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                            </xs:choice>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BeadlStateTransitionsType">
+    <xs:sequence>
+        <xs:element name="BeadlStateTransition" minOccurs ="1" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:all>
+                    <xs:element name="Dependency" minOccurs ="0" maxOccurs="1" type="DependencyType" />
+                </xs:all>
+                <xs:attribute name="from" type="xs:string" use="required"/>
+                <xs:attribute name="to" type="xs:string" use="required"/>
+                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                <xs:attribute name="label" type="xs:string" use="optional"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DependencyType">
+    <xs:sequence>
+        <xs:element name="Reference" type="xs:string" />
+        <xs:element name="Condition">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="less"/>
+                    <xs:enumeration value="less equal"/>
+                    <xs:enumeration value="equal"/>
+                    <xs:enumeration value="greater equal"/>
+                    <xs:enumeration value="greater"/>
+                    <xs:enumeration value="not equal"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:element>
+        <xs:element name="Value" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="type" use="required" >
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="BeadlArgumentDependency" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+</xs:complexType>
+
+
+<xs:complexType name="BeadlEditorType">
+    <!-- Not implemented yet, should just have a placeholde for an SVG!?! -->
+</xs:complexType>
+</xs:schema>

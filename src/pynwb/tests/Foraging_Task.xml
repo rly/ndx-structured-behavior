@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BEADL version="0.1.0">
+    <BeadlTrialProtocol name="Foraging_Task" startState="InitTrial" numberOfTrials="Inf">
+        <!-- Specify arguments to define HW settings and have influence on the protocol structure -->
+        <BeadlArguments>
+            <BeadlArgument name="changeBridge" type="logical" />
+            <BeadlArgument name="leftRewardDelay" type="numerical" />
+            <BeadlArgument name="leftValveTime" type="numerical" />
+            <BeadlArgument name="rightRewardDelay" type="numerical" />
+            <BeadlArgument name="rightValveTime" type="numerical" />
+        </BeadlArguments>
+        <!-- Hardware settings -->
+        <HardwareSettings hardware="BPOD" version="r0.5" lang="MATLAB">
+            <ConnectionMapping name="leftPort" resourceName="Port1" type="behavioralPort">
+                <Value>123</Value>
+                <Dependency />
+            </ConnectionMapping>
+            <ConnectionMapping name="rightPort" resourceName="Port2"   type="behavioralPort" />
+            <ConnectionMapping name="bridgeIn"  resourceName="BNC1In"  type="bncInput" />
+            <ConnectionMapping name="bridgeOut" resourceName="BNC1Out" type="bncOutput" />
+        </HardwareSettings>
+        <!--Map the names of the referred entities in the states (inputs and outputs) to the hardware settings-->
+        <BeadlInputs>
+            <HardwareInput name="bridgeReady" connection="bridgeIn" type="ttl" />
+            <HardwareInput name="leftPortPoke" connection="leftPort.poke" type="in/out" />
+            <HardwareInput name="rightPortPoke" connection="rightPort.poke" type="in/out" />
+        </BeadlInputs>
+        <BeadlActions>
+            <HardwareAction name="bridgeTrigger" connection="bridgeOut" type="ttl" />
+            <HardwareAction name="leftRewardValve" connection="leftPort.valve" type="valve" />
+            <HardwareAction name="rightRewardValve" connection="rightPort.valve" type="valve" />
+        </BeadlActions>
+        <!--Definition of the states-->
+        <BeadlStates>
+            <!--InitTrial state-->
+            <BeadlState name="InitTrial">
+                <StateTimer>0</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <ArgumentEvent eventname="changeBridgeSetting" argument="changeBridge" comparison="equal" value="true" />
+                    <ArgumentEvent eventname="skipBridgeSetting" argument="changeBridge" comparison="equal" value="false" />
+                </StateEvents>
+            </BeadlState>
+            <!--TriggerBridge state-->
+            <BeadlState name="TriggerBridge">
+                <StateTimer>0</StateTimer>
+                <StateOutputActions>
+                    <OutputAction action="bridgeTrigger">high</OutputAction>
+                </StateOutputActions>
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--WaitForBridge state-->
+            <BeadlState name="WaitForBridge">
+                <StateTimer>Inf</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <ExternalEvent source="bridgeReady" eventname="bridgeChanged">high</ExternalEvent>
+                </StateEvents>
+            </BeadlState>
+            <!--Pre state; for photometry baseline etc-->
+            <BeadlState name="Pre">
+                <StateTimer>2</StateTimer>
+                <StateOutputActions />
+                <StateInputs>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateInputs>
+            </BeadlState>
+            <!--WaitForPoke state; wait for the subject to make a decision-->
+            <BeadlState name="WaitForPoke">
+                <StateTimer>Inf</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <ExternalEvent source="leftPortPoke" eventname="leftPortIn">in</ExternalEvent>
+                    <ExternalEvent source="rightPortPoke" eventname="rightPortIn">in</ExternalEvent>
+                </StateEvents>
+            </BeadlState>
+            <!--Left part of the protocol!-->
+            <!--LeftRewardDelay state; hold back the reward for a certain periode of time-->
+            <BeadlState name="LeftRewardDelay">
+                <StateTimer>leftRewardDelay</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--LeftReward state; open the valve for a certain periode of time (regarding the reward size)-->
+            <BeadlState name="LeftReward">
+                <StateTimer>leftValveTime</StateTimer>
+                <StateOutputActions>
+                    <OutputAction action="leftRewardValve">open</OutputAction>
+                </StateOutputActions>
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--LeftReward state; give the subject some time to collect the reward-->
+            <BeadlState name="LeftDrinking">
+                <StateTimer>4</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--Left part of the protocol!-->
+            <!--LeftRewardDelay state; hold back the reward for a certain periode of time-->
+            <BeadlState name="RightRewardDelay">
+                <StateTimer>rightRewardDelay</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--RightReward state; open the valve for a certain periode of time (regarding the reward size)-->
+            <BeadlState name="RightReward">
+                <StateTimer>rightValveTime</StateTimer>
+                <StateOutputActions>
+                    <OutputAction action="rightRewardValve">open</OutputAction>
+                </StateOutputActions>
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+            <!--RightDrinking state; give the subject some time to collect the reward-->
+            <BeadlState name="RightDrinking">
+                <StateTimer>4</StateTimer>
+                <StateOutputActions />
+                <StateEvents>
+                    <TimerEvent timer="stateTimer" eventname="stateExpired" />
+                </StateEvents>
+            </BeadlState>
+        </BeadlStates>
+        <!--Definition of the state transitions-->
+        <BeadlStateTransitions>
+            <BeadlStateTransition from="InitTrial" to="TriggerBridge" eventname="changeBridgeSetting" label="" />
+            <BeadlStateTransition from="TriggerBridge" to="WaitForBridge" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="WaitForBridge" to="Pre" eventname="bridgeChanged" label="" />
+            <BeadlStateTransition from="InitTrial" to="Pre" eventname="skipBridgeSetting" label="bridge not updated" />
+            <BeadlStateTransition from="Pre" to="WaitForPoke" eventname="changeBridgeSetting" label="" />
+            <BeadlStateTransition from="WaitForPoke" to="LeftRewardDelay" eventname="leftPortIn" label="" />
+            <BeadlStateTransition from="LeftRewardDelay" to="LeftReward" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="LeftReward" to="LeftDrinking" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="LeftDrinking" to="end" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="WaitForPoke" to="RightRewardDelay" eventname="rightPortIn" label="" />
+            <BeadlStateTransition from="RightRewardDelay" to="RightReward" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="RightReward" to="RightDrinking" eventname="stateExpired" label="" />
+            <BeadlStateTransition from="RightDrinking" to="end" eventname="stateExpired" label="" />
+        </BeadlStateTransitions>
+    </BeadlTrialProtocol>
+</BEADL>
