@@ -24,7 +24,6 @@ def main():
 
     # TODO this is being written as a group spec
     task_program = NWBDatasetSpec(
-        name='task_program',  # TODO remove this because it should not be required to name a TaskProgram this
         neurodata_type_def='TaskProgram',
         neurodata_type_inc='NWBData',
         doc=('A dataset to store a task program.'),
@@ -58,11 +57,18 @@ def main():
                 dtype='text',
                 default_value='XML'
             ),
+            NWBAttributeSpec(
+                name='schema',
+                doc='The BEADL task schema that governs the program.',
+                dtype=NWBRefSpec(
+                    target_type='BEADLTaskSchema',
+                    reftype='object'
+                )
+            ),
         ],
     )
 
     task_schema = NWBDatasetSpec(
-        name='task_schema',  # TODO remove this because it should not be required to name a TaskProgram this
         neurodata_type_def='TaskSchema',
         neurodata_type_inc='NWBData',
         doc=('A dataset to store a task schema, e.g., an XSD file.'),
@@ -103,14 +109,14 @@ def main():
              'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
         datasets=[
             NWBDatasetSpec(
-                name='task_program',  # TODO look into whether this is compatible with setting name on TaskProgram
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
+                quantity='+'
             ),
             NWBDatasetSpec(
-                name='task_schema',
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
+                quantity='+'
             ),
         ]
     )

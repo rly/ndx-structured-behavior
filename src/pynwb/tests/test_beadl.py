@@ -69,12 +69,12 @@ class TestBEADLProgramConstructors(TestCase):
         self.assertIs(tasks.task_schema, beadl_task_schema)
         self.assertIs(tasks.task_program, beadl_task_program)
 
-
-class TestBEADLTableConstructors(TestCase):
-
-    def setUp(self):
-        """Set up an NWB file. Necessary because BEADL objects will be added to LabMetaData."""
-        self.nwbfile = set_up_nwbfile()
+# 
+# class TestBEADLTableConstructors(TestCase):
+#
+#     def setUp(self):
+#         """Set up an NWB file. Necessary because BEADL objects will be added to LabMetaData."""
+#         self.nwbfile = set_up_nwbfile()
 
     # def test_constructor(self):
     #     event_types = EventTypesTable(description="")
