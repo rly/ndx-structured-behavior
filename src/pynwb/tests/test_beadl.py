@@ -38,20 +38,22 @@ class TestBEADLProgramConstructors(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
+            name = 'beadl_task_schema', # why do we need this?
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
+            name = 'beadl_task_program', # why do we need this?
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
         )
 
         tasks = Tasks(
-            task_program=beadl_task_program,
-            task_schema=beadl_task_schema
+            task_programs=beadl_task_program,
+            task_schemas=beadl_task_schema
         )
 
         self.nwbfile.add_lab_meta_data(tasks)
@@ -69,7 +71,7 @@ class TestBEADLProgramConstructors(TestCase):
         self.assertIs(tasks.task_schema, beadl_task_schema)
         self.assertIs(tasks.task_program, beadl_task_program)
 
-# 
+#
 # class TestBEADLTableConstructors(TestCase):
 #
 #     def setUp(self):
