@@ -116,46 +116,57 @@ class TestBEADLProgramConstructors(TestCase):
     #     self.nwbfile.add_acquisition(events)
     #     self.nwbfile.add_acquisition(event_types)
 
-#
-# class TestTetrodeSeriesRoundtrip(TestCase):
-#     """Simple roundtrip test for TetrodeSeries."""
-#
-#     def setUp(self):
-#         self.nwbfile = set_up_nwbfile()
-#         self.path = "test.nwb"
-#
-#     def tearDown(self):
-#         remove_test_file(self.path)
-#
-#     def test_roundtrip(self):
-#         """
-#         Add a TetrodeSeries to an NWBFile, write it to file, read the file, and test that the TetrodeSeries from the
-#         file matches the original TetrodeSeries.
-#         """
-#         all_electrodes = self.nwbfile.create_electrode_table_region(
-#             region=list(range(0, 10)),
-#             description="all the electrodes"
-#         )
-#
-#         data = np.random.rand(100, 3)
-#         tetrode_series = TetrodeSeries(
-#             name="TetrodeSeries",
-#             description="description",
-#             data=data,
-#             rate=1000.,
-#             electrodes=all_electrodes,
-#             trode_id=1
-#         )
-#
-#         self.nwbfile.add_acquisition(tetrode_series)
-#
-#         with NWBHDF5IO(self.path, mode="w") as io:
-#             io.write(self.nwbfile)
-#
-#         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
-#             read_nwbfile = io.read()
-#             self.assertContainerEqual(tetrode_series, read_nwbfile.acquisition["TetrodeSeries"])
-#
+
+class TestTaskSeriesRoundtrip(TestCase):
+    """Simple roundtrip test for TetrodeSeries."""
+
+    def setUp(self):
+        self.nwbfile = set_up_nwbfile()
+        self.path = "test.nwb"
+
+    def tearDown(self):
+        remove_test_file(self.path)
+
+    def test_roundtrip(self):
+        """
+        Add a Task to an NWBFile, write it to file, read the file, and test that the Task from the
+        file matches the original Task.
+        """
+
+        with open("src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+            test_xsd = test_xsd_file.read()
+
+        with open("src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+            test_xml = test_xml_file.read()
+
+        beadl_task_schema = BEADLTaskSchema(
+            name = 'beadl_task_schema', # why do we need this?
+            data=test_xsd,
+            version="0.1.0",
+            language="XSD"  # TODO remove when no longer necessary
+        )
+
+        beadl_task_program = BEADLTaskProgram(
+            name = 'beadl_task_program', # why do we need this?
+            data=test_xml,
+            schema=beadl_task_schema,
+            language="XML"  # TODO remove when no longer necessary
+        )
+
+        tasks = Tasks(
+            task_programs=beadl_task_program,
+            task_schemas=beadl_task_schema
+        )
+
+        file_tasks = self.nwbfile.add_lab_meta_data(tasks)
+
+        with NWBHDF5IO(self.path, mode="w") as io:
+            io.write(self.nwbfile)
+
+        with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
+            read_nwbfile = io.read()
+            self.assertContainerEqual(file_tasks, read_nwbfile.lab_meta_data["Tasks"])
+
 #
 # class TestTetrodeSeriesRoundtripPyNWB(AcquisitionH5IOMixin, TestCase):
 #     """Complex, more complete roundtrip test for TetrodeSeries using pynwb.testing infrastructure."""
