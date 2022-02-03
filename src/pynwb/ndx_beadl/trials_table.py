@@ -170,7 +170,6 @@ class EventsTable(DynamicTable):
             'name': 'event_types_table',
             'type': 'EventTypesTable',
             'doc': ('The events table.'),
-            'default': None,
         },
         allow_positional=AllowPositional.ERROR,
     )
@@ -197,6 +196,12 @@ class EventsTable(DynamicTable):
     )
     def add_row(self, **kwargs):
         """Add an event to this table."""
-        super().add_row(**kwargs)
+        event_type_idx = kwargs['type']
+        if event_type_idx >= 0 and event_type_idx < len(self.type.table):
+            super().add_row(**kwargs)
+        else:
+            msg = 'Type index is out of bounds'
+            raise ValueError(msg)
+
 
     add_event = add_row  # alias for add_row

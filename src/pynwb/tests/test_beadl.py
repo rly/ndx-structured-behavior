@@ -52,69 +52,68 @@ class TestBEADLProgramConstructors(TestCase):
         )
 
         tasks = Tasks(
-            task_programs=beadl_task_program,
-            task_schemas=beadl_task_schema
+            task_programs=[beadl_task_program],
+            task_schemas=[beadl_task_schema]
         )
 
         self.nwbfile.add_lab_meta_data(tasks)
 
-        self.assertEqual(beadl_task_schema.name, "task_schema")
+        self.assertEqual(beadl_task_schema.name, "beadl_task_schema")
         self.assertEqual(beadl_task_schema.data, test_xsd)
         self.assertEqual(beadl_task_schema.version, "0.1.0")
         self.assertEqual(beadl_task_schema.language, "XSD")
-        self.assertEqual(beadl_task_program.name, "task_program")
+        self.assertEqual(beadl_task_program.name, "beadl_task_program")
         self.assertEqual(beadl_task_program.data, test_xml)
         self.assertIs(beadl_task_program.schema, beadl_task_schema)
         self.assertEqual(beadl_task_program.language, "XML")
 
         self.assertEqual(tasks.name, "tasks")
-        self.assertIs(tasks.task_schema, beadl_task_schema)
-        self.assertIs(tasks.task_program, beadl_task_program)
+        self.assertEqual(tasks.task_schemas, {'beadl_task_schema': beadl_task_schema})
+        self.assertEqual(tasks.task_programs, {'beadl_task_program': beadl_task_program})
 
-#
-# class TestBEADLTableConstructors(TestCase):
-#
-#     def setUp(self):
-#         """Set up an NWB file. Necessary because BEADL objects will be added to LabMetaData."""
-#         self.nwbfile = set_up_nwbfile()
 
-    # def test_constructor(self):
-    #     event_types = EventTypesTable(description="")
-    #     event_types.add_row(event_name="leftPortIn")
-    #     event_types.add_row(event_name="rightPortIn")
-    #
-    #     events = EventsTable(description="")
-    #     events.add_event(type=0, timestamp=0.4)
-    #     events.add_event(type=1, timestamp=0.5)
-    #     events.add_event(type=1, timestamp=1.4)
-    #     events.add_event(type=0, timestamp=1.5)
-    #
-    #     state_types = StateTypesTable(description="")
-    #     state_types.add_row(state_name="InitTrial")
-    #     state_types.add_row(state_name="TriggerBridge")
-    #     state_types.add_row(state_name="WaitForBridge")
-    #     state_types.add_row(state_name="Pre")
-    #
-    #     states = StatesTable(description="")
-    #     states.add_state(type=0, start_time=0.0, stop_time=0.1)
-    #     states.add_state(type=1, start_time=0.1, stop_time=0.2)
-    #     states.add_state(type=2, start_time=0.2, stop_time=0.4)
-    #     states.add_state(type=3, start_time=0.4, stop_time=0.5)
-    #     states.add_state(type=0, start_time=1.0, stop_time=1.1)
-    #     states.add_state(type=1, start_time=1.1, stop_time=1.2)
-    #     states.add_state(type=2, start_time=1.2, stop_time=1.4)
-    #     states.add_state(type=3, start_time=1.4, stop_time=1.5)
-    #
-    #     trials = TrialsTable(description="")
-    #     trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1],
-    #                      states_table=states, events_table=events)
-    #     trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
-    #
-    #     self.nwbfile.trials = trials
-    #     self.nwbfile.add_acquisition(states)  # TODO move to time intervals after merge
-    #     self.nwbfile.add_acquisition(state_types)
-    #     self.nwbfile.add_acquisition(events)
-    #     self.nwbfile.add_acquisition(event_types)
+class TestBEADLTableConstructors(TestCase):
+
+    def setUp(self):
+        """Set up an NWB file. Necessary because BEADL objects will be added to LabMetaData."""
+        self.nwbfile = set_up_nwbfile()
+
+    def test_constructor(self):
+        event_types = EventTypesTable(description="")
+        event_types.add_row(event_name="leftPortIn")
+        event_types.add_row(event_name="rightPortIn")
+
+        events = EventsTable(description="", event_types_table=event_types)
+        events.add_event(type=0, timestamp=0.4)
+        events.add_event(type=1, timestamp=0.5)
+        events.add_event(type=1, timestamp=1.4)
+        events.add_event(type=0, timestamp=1.5)
+
+        state_types = StateTypesTable(description="")
+        state_types.add_row(state_name="InitTrial")
+        state_types.add_row(state_name="TriggerBridge")
+        state_types.add_row(state_name="WaitForBridge")
+        state_types.add_row(state_name="Pre")
+
+        states = StatesTable(description="", state_types_table=state_types)
+        states.add_state(type=0, start_time=0.0, stop_time=0.1)
+        states.add_state(type=1, start_time=0.1, stop_time=0.2)
+        states.add_state(type=2, start_time=0.2, stop_time=0.4)
+        states.add_state(type=3, start_time=0.4, stop_time=0.5)
+        states.add_state(type=0, start_time=1.0, stop_time=1.1)
+        states.add_state(type=1, start_time=1.1, stop_time=1.2)
+        states.add_state(type=2, start_time=1.2, stop_time=1.4)
+        states.add_state(type=3, start_time=1.4, stop_time=1.5)
+
+        trials = TrialsTable(description="")
+        trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1])
+        trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
+
+        self.nwbfile.trials = trials
+        self.nwbfile.add_acquisition(states)  # TODO move to time intervals after merge
+        self.nwbfile.add_acquisition(state_types)
+        self.nwbfile.add_acquisition(events)
+        self.nwbfile.add_acquisition(event_types)
 
 
 class TestTaskSeriesRoundtrip(TestCase):
@@ -154,8 +153,8 @@ class TestTaskSeriesRoundtrip(TestCase):
         )
 
         tasks = Tasks(
-            task_programs=beadl_task_program,
-            task_schemas=beadl_task_schema
+            task_programs=[beadl_task_program],
+            task_schemas=[beadl_task_schema]
         )
 
         file_tasks = self.nwbfile.add_lab_meta_data(tasks)
@@ -165,7 +164,7 @@ class TestTaskSeriesRoundtrip(TestCase):
 
         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
             read_nwbfile = io.read()
-            self.assertContainerEqual(file_tasks, read_nwbfile.lab_meta_data["Tasks"])
+            self.assertContainerEqual(file_tasks, read_nwbfile.lab_meta_data["tasks"])
 
 #
 # class TestTetrodeSeriesRoundtripPyNWB(AcquisitionH5IOMixin, TestCase):
