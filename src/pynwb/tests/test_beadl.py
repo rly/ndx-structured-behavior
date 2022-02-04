@@ -79,23 +79,23 @@ class TestBEADLTableConstructors(TestCase):
         self.nwbfile = set_up_nwbfile()
 
     def test_constructor(self):
-        event_types = EventTypesTable(description="")
+        event_types = EventTypesTable(description="description") #assert description
         event_types.add_row(event_name="leftPortIn")
         event_types.add_row(event_name="rightPortIn")
 
-        events = EventsTable(description="", event_types_table=event_types)
+        events = EventsTable(description="description", event_types_table=event_types)
         events.add_event(type=0, timestamp=0.4)
         events.add_event(type=1, timestamp=0.5)
         events.add_event(type=1, timestamp=1.4)
         events.add_event(type=0, timestamp=1.5)
 
-        state_types = StateTypesTable(description="")
+        state_types = StateTypesTable(description="description")
         state_types.add_row(state_name="InitTrial")
         state_types.add_row(state_name="TriggerBridge")
         state_types.add_row(state_name="WaitForBridge")
         state_types.add_row(state_name="Pre")
 
-        states = StatesTable(description="", state_types_table=state_types)
+        states = StatesTable(description="description", state_types_table=state_types)
         states.add_state(type=0, start_time=0.0, stop_time=0.1)
         states.add_state(type=1, start_time=0.1, stop_time=0.2)
         states.add_state(type=2, start_time=0.2, stop_time=0.4)
@@ -105,7 +105,7 @@ class TestBEADLTableConstructors(TestCase):
         states.add_state(type=2, start_time=1.2, stop_time=1.4)
         states.add_state(type=3, start_time=1.4, stop_time=1.5)
 
-        trials = TrialsTable(description="")
+        trials = TrialsTable(description="description", states_table=states, events_table=events)
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
 
@@ -114,6 +114,30 @@ class TestBEADLTableConstructors(TestCase):
         self.nwbfile.add_acquisition(state_types)
         self.nwbfile.add_acquisition(events)
         self.nwbfile.add_acquisition(event_types)
+
+        self.assertEqual(trials.description, "description")
+        self.assertEqual(states.description, "description")
+        self.assertEqual(events.description, "description")
+        self.assertEqual(event_types.description, "description")
+        self.assertEqual(state_types.description, "description")
+
+        self.assertEqual(trials.columns[0].data, [0,1])
+        self.assertEqual(trials.columns[1].data, [0.8,1.8])
+        # self.assertEqual(trials.columns[2].data, 1) # [4, 8]
+        # self.assertEqual(trials.columns[3].data, [0.8,1.8]) #[0, 1, 2, 3, 4, 5, 6, 7]
+        # self.assertEqual(trials.columns[4].data, [0.8,1.8]) #[2, 4]
+        # self.assertEqual(trials.columns[5].data, [0.8,1.8]) #[0, 1, 2, 3]
+
+        self.assertEqual(states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
+        self.assertEqual(states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
+        self.assertEqual(states.columns[2].data, [0, 1, 2, 3, 0, 1, 2, 3])
+
+        self.assertEqual(events.columns[0].data, [0, 1, 1, 0])
+        self.assertEqual(events.columns[1].data, [0.4, 0.5, 1.4, 1.5])
+
+        self.assertEqual(state_types.columns[0].data, ['InitTrial', 'TriggerBridge', 'WaitForBridge', 'Pre'])
+
+        self.assertEqual(event_types.columns[0].data, ['leftPortIn', 'rightPortIn'])
 
 
 class TestTaskSeriesRoundtrip(TestCase):
