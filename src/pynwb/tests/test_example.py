@@ -37,41 +37,43 @@ class TestExample(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
+            name = 'beadl_task_schema',
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
+            name = 'beadl_task_program',
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
         )
 
         tasks = Tasks(
-            task_program=beadl_task_program,
-            task_schema=beadl_task_schema
+            task_programs=[beadl_task_program],
+            task_schemas=[beadl_task_schema]
         )
 
         self.nwbfile.add_lab_meta_data(tasks)
 
-        event_types = EventTypesTable(description="")
+        event_types = EventTypesTable(description="description") #assert description
         event_types.add_row(event_name="leftPortIn")
         event_types.add_row(event_name="rightPortIn")
 
-        events = EventsTable(description="", event_types_table=event_types)
+        events = EventsTable(description="description", event_types_table=event_types)
         events.add_event(type=0, timestamp=0.4)
         events.add_event(type=1, timestamp=0.5)
         events.add_event(type=1, timestamp=1.4)
         events.add_event(type=0, timestamp=1.5)
 
-        state_types = StateTypesTable(description="")
+        state_types = StateTypesTable(description="description")
         state_types.add_row(state_name="InitTrial")
         state_types.add_row(state_name="TriggerBridge")
         state_types.add_row(state_name="WaitForBridge")
         state_types.add_row(state_name="Pre")
 
-        states = StatesTable(description="", state_types_table=state_types)
+        states = StatesTable(description="description", state_types_table=state_types)
         states.add_state(type=0, start_time=0.0, stop_time=0.1)
         states.add_state(type=1, start_time=0.1, stop_time=0.2)
         states.add_state(type=2, start_time=0.2, stop_time=0.4)
@@ -81,7 +83,7 @@ class TestExample(TestCase):
         states.add_state(type=2, start_time=1.2, stop_time=1.4)
         states.add_state(type=3, start_time=1.4, stop_time=1.5)
 
-        trials = TrialsTable(description="", states_table=states, events_table=events)
+        trials = TrialsTable(description="description", states_table=states, events_table=events)
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
 

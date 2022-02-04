@@ -38,14 +38,14 @@ class TestBEADLProgramConstructors(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
-            name = 'beadl_task_schema', # why do we need this?
+            name = 'beadl_task_schema',
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
-            name = 'beadl_task_program', # why do we need this?
+            name = 'beadl_task_program',
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
@@ -123,9 +123,9 @@ class TestBEADLTableConstructors(TestCase):
 
         self.assertEqual(trials.columns[0].data, [0,1])
         self.assertEqual(trials.columns[1].data, [0.8,1.8])
-        # self.assertEqual(trials.columns[2].data, 1) # [4, 8]
+        # self.assertEqual(trials.columns[2].data, 1) # [4, 8] <--Vector Index
         # self.assertEqual(trials.columns[3].data, [0.8,1.8]) #[0, 1, 2, 3, 4, 5, 6, 7]
-        # self.assertEqual(trials.columns[4].data, [0.8,1.8]) #[2, 4]
+        # self.assertEqual(trials.columns[4].data, [0.8,1.8]) #[2, 4] <--Vector Index
         # self.assertEqual(trials.columns[5].data, [0.8,1.8]) #[0, 1, 2, 3]
 
         self.assertEqual(states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
