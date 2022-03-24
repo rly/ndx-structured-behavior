@@ -205,3 +205,30 @@ class EventsTable(DynamicTable):
 
 
     add_event = add_row  # alias for add_row
+
+@register_class('StateTypesTable', 'ndx-beadl')
+class StateTypesTable(DynamicTable):
+    __columns__ = (
+        {
+        'name': 'state_name',
+        'description': ('The name of the state type'),
+        'required': True
+        },
+    )
+
+    @docval(
+        *get_docval(DynamicTable.__init__, 'id', 'columns', 'colnames'),
+        {
+            'name': 'description',
+            'type': str,
+            'doc': 'A description of what is in this table.',
+            'default': 'state type data',
+        },)
+    def __init__(self, **kwargs):
+        kwargs['name'] = 'state_types'
+        call_docval_func(super().__init__, kwargs)
+
+    def xml_add_row(self, **kwargs):
+        parsed_states = kwargs['parsed_states'] # the result from "parse_BeadlStates"
+        for state in parsed_states['BeadlState']:
+            super().add_row(state_name=state['name'])
