@@ -39,6 +39,18 @@ class BeadlXMLParser():
         """
         return self._protocal.attrib
 
+    def element(self, **kwargs):
+        """
+        Takes in an element from the beadl_trial_protocal level in the xml file,
+        e.g BeadlArguments, HardwareSettings, BeadlInputs, BeadlActions, BeadlStates,
+        and BeadlStateTransitions.
+        """
+
+        element_name = kwargs['element_name']
+        element = self._protocal.find(element_name)
+
+        return element
+
     def parse_protocal_children(self, **kwargs):
         """
         Takes in an element from the beadl_trial_protocal level in the xml file,
@@ -50,27 +62,25 @@ class BeadlXMLParser():
         one child for each element, e.g more than one BeadlStates, and we want to be able
         to store them.
         """
-        element_name = kwargs['element']
-        element = self._protocal.find(element_name) # e.g BeadlArguments, HardwareSettings, etc
+        element_name = kwargs['element_name']
+        element = self.element(element_name=element_name) # e.g BeadlArguments, HardwareSettings, etc
         element_dict = defaultdict(list) # it is a list because there can be more than one of each child e.g BeadlStates
         for child in element.iter():
             element_dict[child.tag].append(child.attrib)
         return element_dict
 
-    def parse_BeadlArguments(self):
-        return self.parse_protocal_children(element='BeadlArguments')
+    def display_element(self, element, level=0):
+        """
+        Takes in an element from the beadl_trial_protocal level in the xml file,
+        e.g BeadlArguments, HardwareSettings, BeadlInputs, BeadlActions, BeadlStates,
+        and BeadlStateTransitions.
+        """
+        self._print_level(element,level)
+        for child in list(element):
+            self.display_element(child, level+2)
 
-    def parse_HardwareSettings(self):
-        return self.parse_protocal_children(element='HardwareSettings')
-
-    def parse_BeadlInputs(self):
-        return self.parse_protocal_children(element='BeadlInputs')
-
-    def parse_BeadlActions(self):
-        return self.parse_protocal_children(element='BeadlActions')
-
-    def parse_BeadlStates(self):
-        return self.parse_protocal_children(element='BeadlStates')
-
-    def parse_BeadlStateTransitions(self):
-        return self.parse_protocal_children(element='BeadlStateTransitions')
+    def _print_level(self, element, level):
+        print ('-'*level+element.tag)
+        print(' '*(level+(int(len(element.tag)/2)))+'|')
+        for item in element.attrib:
+            print(' '*(level+(int(len(element.tag)/2)))+'|--->',item+':',element.attrib[item])

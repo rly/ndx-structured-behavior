@@ -9,7 +9,7 @@ from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
 from ndx_beadl import (Tasks, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
-                       StateTypesTable, StatesTable, TrialsTable)
+                       StateTypesTable, StatesTable, TrialsTable, BeadlXMLParser)
 
 
 def set_up_nwbfile():
@@ -31,10 +31,10 @@ class TestBEADLProgramConstructors(TestCase):
 
     def test_constructor(self):
         """Test that the constructor for BEADLTaskSchema, BEADLTaskProgram, and Tasks set values as expected."""
-        with open("src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
             test_xsd = test_xsd_file.read()
 
-        with open("src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
@@ -80,8 +80,11 @@ class TestBEADLTableConstructors(TestCase):
 
     def test_constructor(self):
         event_types = EventTypesTable(description="description") #assert description
-        event_types.add_row(event_name="leftPortIn")
-        event_types.add_row(event_name="rightPortIn")
+        parsed_xml_object = BeadlXMLParser(path='/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml')
+        parsed_states = parsed_xml_object.parse_protocal_children(element_name='BeadlStates')
+        event_types.xml_add_row(parsed_states=parsed_states)
+        # event_types.add_row(event_name="leftPortIn")
+        # event_types.add_row(event_name="rightPortIn")
 
         events = EventsTable(description="description", event_types_table=event_types)
         events.add_event(type=0, timestamp=0.4)
@@ -90,10 +93,13 @@ class TestBEADLTableConstructors(TestCase):
         events.add_event(type=0, timestamp=1.5)
 
         state_types = StateTypesTable(description="description")
-        state_types.add_row(state_name="InitTrial")
-        state_types.add_row(state_name="TriggerBridge")
-        state_types.add_row(state_name="WaitForBridge")
-        state_types.add_row(state_name="Pre")
+        parsed_xml_object = BeadlXMLParser(path='/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml')
+        parsed_states = parsed_xml_object.parse_protocal_children(element_name='BeadlStates')
+        state_types.xml_add_row(parsed_states=parsed_states)
+        # state_types.add_row(state_name="InitTrial")
+        # state_types.add_row(state_name="TriggerBridge")
+        # state_types.add_row(state_name="WaitForBridge")
+        # state_types.add_row(state_name="Pre")
 
         states = StatesTable(description="description", state_types_table=state_types)
         states.add_state(type=0, start_time=0.0, stop_time=0.1)
@@ -123,6 +129,7 @@ class TestBEADLTableConstructors(TestCase):
 
         self.assertEqual(trials.columns[0].data, [0,1])
         self.assertEqual(trials.columns[1].data, [0.8,1.8])
+        self.assertEqual(trials.colnames, ('start_time', 'stop_time', 'states', 'events'))
         # self.assertEqual(trials.columns[2].data, 1) # [4, 8] <--Vector Index
         # self.assertEqual(trials.columns[3].data, [0.8,1.8]) #[0, 1, 2, 3, 4, 5, 6, 7]
         # self.assertEqual(trials.columns[4].data, [0.8,1.8]) #[2, 4] <--Vector Index
@@ -135,9 +142,9 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(events.columns[0].data, [0, 1, 1, 0])
         self.assertEqual(events.columns[1].data, [0.4, 0.5, 1.4, 1.5])
 
-        self.assertEqual(state_types.columns[0].data, ['InitTrial', 'TriggerBridge', 'WaitForBridge', 'Pre'])
+        self.assertEqual(state_types.columns[0].data, ['InitTrial', 'TriggerBridge', 'WaitForBridge', 'Pre', 'WaitForPoke', 'LeftRewardDelay', 'LeftReward', 'LeftDrinking', 'RightRewardDelay', 'RightReward', 'RightDrinking'])
 
-        self.assertEqual(event_types.columns[0].data, ['leftPortIn', 'rightPortIn'])
+        self.assertEqual(event_types.columns[0].data, ['bridgeChanged', 'leftPortIn', 'rightPortIn'])
 
 
 class TestTaskSeriesRoundtrip(TestCase):
@@ -156,10 +163,10 @@ class TestTaskSeriesRoundtrip(TestCase):
         file matches the original Task.
         """
 
-        with open("src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
             test_xsd = test_xsd_file.read()
 
-        with open("src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(

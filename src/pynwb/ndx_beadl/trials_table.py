@@ -206,6 +206,21 @@ class EventsTable(DynamicTable):
 
     add_event = add_row  # alias for add_row
 
+# class DynamicTableXML(DynamicTable):
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#
+    def xml_add_row(self, **kwargs):
+        parsed_states = kwargs['parsed_states']
+        elements = kwargs['elements']
+        data = {key: parsed_states[key] for key in elements}
+
+        {k: [g.get(k) for g in filtered_child[key] if k in g] for k in set().union(*filtered_child[key])}
+
+        super().add_row(data=data)
+
+
+
 @register_class('StateTypesTable', 'ndx-beadl')
 class StateTypesTable(DynamicTable):
     __columns__ = (
@@ -229,6 +244,33 @@ class StateTypesTable(DynamicTable):
         call_docval_func(super().__init__, kwargs)
 
     def xml_add_row(self, **kwargs):
-        parsed_states = kwargs['parsed_states'] # the result from "parse_BeadlStates"
+        parsed_states = kwargs['parsed_states']
         for state in parsed_states['BeadlState']:
             super().add_row(state_name=state['name'])
+
+@register_class('EventTypesTable', 'ndx-beadl')
+class EventTypesTable(DynamicTable):
+    __columns__ = (
+        {
+        'name': 'event_name',
+        'description': ('The name of the event type'),
+        'required': True
+        },
+    )
+
+    @docval(
+        *get_docval(DynamicTable.__init__, 'id', 'columns', 'colnames'),
+        {
+            'name': 'description',
+            'type': str,
+            'doc': 'A description of what is in this table.',
+            'default': 'state type data',
+        },)
+    def __init__(self, **kwargs):
+        kwargs['name'] = 'event_types'
+        call_docval_func(super().__init__, kwargs)
+
+    def xml_add_row(self, **kwargs):
+        parsed_states = kwargs['parsed_states']
+        for event in parsed_states['ExternalEvent']:
+            super().add_row(event_name=event['eventname'])

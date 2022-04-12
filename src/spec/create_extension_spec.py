@@ -158,21 +158,21 @@ def main():
         ]
     )
 
-    state_types_table = NWBGroupSpec(
-        name='state_types',
-        neurodata_type_def='StateTypesTable',
-        neurodata_type_inc='DynamicTable',
-        doc=('A column-based table to store information about state types, one state type per row.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='state_name',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The name of the state.'),
-            ),
-            # TODO link to a specific part of the task program
-        ]
-    )
+    # state_types_table = NWBGroupSpec(
+    #     name='state_types',
+    #     neurodata_type_def='StateTypesTable',
+    #     neurodata_type_inc='DynamicTable',
+    #     doc=('A column-based table to store information about state types, one state type per row.'),
+    #     datasets=[
+    #         NWBDatasetSpec(
+    #             name='state_name',
+    #             neurodata_type_inc='VectorData',
+    #             dtype='text',
+    #             doc=('The name of the state.'),
+    #         ),
+    #         # TODO link to a specific part of the task program
+    #     ]
+    # )
 
     states_table = NWBGroupSpec(
         name='states',
@@ -189,21 +189,21 @@ def main():
         ]
     )
 
-    event_types_table = NWBGroupSpec(
-        name='event_types',
-        neurodata_type_def='EventTypesTable',
-        neurodata_type_inc='DynamicTable',
-        doc=('A column-based table to store information about event types, one event type per row.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='event_name',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The name of the event.'),
-            ),
-            # TODO link to a specific part of the task program
-        ]
-    )
+    # event_types_table = NWBGroupSpec(
+    #     name='event_types',
+    #     neurodata_type_def='EventTypesTable',
+    #     neurodata_type_inc='DynamicTable',
+    #     doc=('A column-based table to store information about event types, one event type per row.'),
+    #     datasets=[
+    #         NWBDatasetSpec(
+    #             name='event_name',
+    #             neurodata_type_inc='VectorData',
+    #             dtype='text',
+    #             doc=('The name of the event.'),
+    #         ),
+    #         # TODO link to a specific part of the task program
+    #     ]
+    # )
 
     events_table = NWBGroupSpec(
         name='events',
