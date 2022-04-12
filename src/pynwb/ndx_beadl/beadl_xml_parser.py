@@ -74,6 +74,12 @@ class BeadlXMLParser():
         Takes in an element from the beadl_trial_protocal level in the xml file,
         e.g BeadlArguments, HardwareSettings, BeadlInputs, BeadlActions, BeadlStates,
         and BeadlStateTransitions.
+
+        Workflow for BeadlStates:
+        b=BeadlXMLParser(path='...')
+        s=b.element(element='BeadlStates')
+
+        b.display_element(s)
         """
         self._print_level(element,level)
         for child in list(element):
@@ -83,4 +89,4 @@ class BeadlXMLParser():
         print ('-'*level+element.tag)
         print(' '*(level+(int(len(element.tag)/2)))+'|')
         for item in element.attrib:
-            print(' '*(level+(int(len(element.tag)/2)))+'|--->',item+':',element.attrib[item])
+            print(' '*(level+(int(len(element.tag)/2)))+'|---'+item+':',element.attrib[item])
