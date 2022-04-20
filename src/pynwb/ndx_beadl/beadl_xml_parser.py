@@ -7,18 +7,21 @@ path = "/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml
 
 class BeadlXMLParser():
     def __init__(self, **kwargs):
-        self.path = kwargs['path'] # path to xml file
-        self._xml_object = ET.parse(path)
-        self._root = self._establish_root()
+        # if kwargs['path'] is not None:
+        #     self.path = kwargs['path'] # path to xml file
+        #     self._xml_object = ET.parse(path)
+        #     self._root = self._establish_root()
+        # else:
+        self._root = ET.fromstring(kwargs['string'])
         self.version = self._beadl_version()
         self._protocal = self._establish_protocal()
 
-    def _establish_root(self):
-        """
-        Helper function to establish root
-        """
-        root_object = self._xml_object.getroot()
-        return root_object
+    # def _establish_root(self):
+    #     """
+    #     Helper function to establish root
+    #     """
+    #     root_object = self._xml_object.getroot()
+    #     return root_object
 
     def _beadl_version(self):
         """

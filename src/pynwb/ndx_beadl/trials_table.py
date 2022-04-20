@@ -2,7 +2,7 @@ from pynwb import register_class
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, getargs, popargs, call_docval_func, AllowPositional
-
+from ndx_beadl import BEADLTaskProgram
 
 @register_class('TrialsTable', 'ndx-beadl')
 class TrialsTable(TimeIntervals):
@@ -223,6 +223,7 @@ class EventsTable(DynamicTable):
 
 @register_class('StateTypesTable', 'ndx-beadl')
 class StateTypesTable(DynamicTable):
+
     __columns__ = (
         {
         'name': 'state_name',
@@ -238,10 +239,13 @@ class StateTypesTable(DynamicTable):
             'type': str,
             'doc': 'A description of what is in this table.',
             'default': 'state type data',
-        },)
+        },
+        {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
+         'doc': 'the BEADLTaskProgram used'})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
         call_docval_func(super().__init__, kwargs)
+        self.beadl_task_program = kwargs['beadl_task_program']
 
     def xml_add_row(self, **kwargs):
         parsed_states = kwargs['parsed_states']
@@ -265,10 +269,13 @@ class EventTypesTable(DynamicTable):
             'type': str,
             'doc': 'A description of what is in this table.',
             'default': 'state type data',
-        },)
+        },
+        {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
+         'doc': 'the BEADLTaskProgram used'})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
         call_docval_func(super().__init__, kwargs)
+        self.beadl_task_program = kwargs['beadl_task_program']
 
     def xml_add_row(self, **kwargs):
         parsed_states = kwargs['parsed_states']

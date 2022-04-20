@@ -103,6 +103,12 @@ groups:
     neurodata_type_inc: DynamicTableRegion
     doc: The type of state that occurred on each trial. This is represented as a reference
       to a row of the StateTypesTable.
+  attributes:
+  - name: beadl_task_program
+    dtype:
+      target_type: BEADLTaskProgram
+      reftype: object
+    doc: The task program that governs the StateTypes and EventTypes.
 - neurodata_type_def: EventTypesTable
   neurodata_type_inc: DynamicTable
   name: event_types
