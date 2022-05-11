@@ -9,7 +9,7 @@ from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
 from ndx_beadl import (Tasks, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
-                       StateTypesTable, StatesTable, TrialsTable, BeadlXMLParser)
+                       StateTypesTable, StatesTable, TrialsTable)
 
 
 def set_up_nwbfile():
@@ -99,10 +99,7 @@ class TestBEADLTableConstructors(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program) #assert description
-        parsed_xml_object = BeadlXMLParser(string=event_types.beadl_task_program.data)
-        parsed_states = parsed_xml_object.parse_protocal_children(element_name='BeadlStates')
-        event_types.xml_add_row(parsed_states=parsed_states)
+        event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True) #assert description
 
         events = EventsTable(description="description", event_types_table=event_types)
         events.add_event(type=0, timestamp=0.4)
@@ -110,10 +107,7 @@ class TestBEADLTableConstructors(TestCase):
         events.add_event(type=1, timestamp=1.4)
         events.add_event(type=0, timestamp=1.5)
 
-        state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program)
-        parsed_xml_object = BeadlXMLParser(string=state_types.beadl_task_program.data)
-        parsed_states = parsed_xml_object.parse_protocal_children(element_name='BeadlStates')
-        state_types.xml_add_row(parsed_states=parsed_states)
+        state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True)
 
         states = StatesTable(description="description", state_types_table=state_types)
         states.add_state(type=0, start_time=0.0, stop_time=0.1)
@@ -129,12 +123,6 @@ class TestBEADLTableConstructors(TestCase):
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
 
-        self.nwbfile.trials = trials
-        self.nwbfile.add_acquisition(states)  # TODO move to time intervals after merge
-        self.nwbfile.add_acquisition(state_types)
-        self.nwbfile.add_acquisition(events)
-        self.nwbfile.add_acquisition(event_types)
-
         self.assertEqual(trials.description, "description")
         self.assertEqual(states.description, "description")
         self.assertEqual(events.description, "description")
@@ -144,10 +132,6 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(trials.columns[0].data, [0,1])
         self.assertEqual(trials.columns[1].data, [0.8,1.8])
         self.assertEqual(trials.colnames, ('start_time', 'stop_time', 'states', 'events'))
-        # self.assertEqual(trials.columns[2].data, 1) # [4, 8] <--Vector Index
-        # self.assertEqual(trials.columns[3].data, [0.8,1.8]) #[0, 1, 2, 3, 4, 5, 6, 7]
-        # self.assertEqual(trials.columns[4].data, [0.8,1.8]) #[2, 4] <--Vector Index
-        # self.assertEqual(trials.columns[5].data, [0.8,1.8]) #[0, 1, 2, 3]
 
         self.assertEqual(states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
         self.assertEqual(states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
@@ -203,6 +187,36 @@ class TestTaskSeriesRoundtrip(TestCase):
             task_schemas=[beadl_task_schema]
         )
 
+        event_types = EventTypesTable(description="description", beadl_task_program=tasks.task_programs['beadl_task_program'], populate_from_program=True) #assert description
+
+        events = EventsTable(description="description", event_types_table=event_types)
+        events.add_event(type=0, timestamp=0.4)
+        events.add_event(type=1, timestamp=0.5)
+        events.add_event(type=1, timestamp=1.4)
+        events.add_event(type=0, timestamp=1.5)
+
+        state_types = StateTypesTable(description="description", beadl_task_program=tasks.task_programs['beadl_task_program'], populate_from_program=True)
+
+        states = StatesTable(description="description", state_types_table=state_types)
+        states.add_state(type=0, start_time=0.0, stop_time=0.1)
+        states.add_state(type=1, start_time=0.1, stop_time=0.2)
+        states.add_state(type=2, start_time=0.2, stop_time=0.4)
+        states.add_state(type=3, start_time=0.4, stop_time=0.5)
+        states.add_state(type=0, start_time=1.0, stop_time=1.1)
+        states.add_state(type=1, start_time=1.1, stop_time=1.2)
+        states.add_state(type=2, start_time=1.2, stop_time=1.4)
+        states.add_state(type=3, start_time=1.4, stop_time=1.5)
+
+        trials = TrialsTable(description="description", states_table=states, events_table=events)
+        trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1])
+        trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3])
+
+        self.nwbfile.trials = trials
+        self.nwbfile.add_acquisition(states)  # TODO move to time intervals after merge
+        self.nwbfile.add_acquisition(state_types)
+        self.nwbfile.add_acquisition(events)
+        self.nwbfile.add_acquisition(event_types)
+
         file_tasks = self.nwbfile.add_lab_meta_data(tasks)
 
         with NWBHDF5IO(self.path, mode="w") as io:
@@ -211,6 +225,11 @@ class TestTaskSeriesRoundtrip(TestCase):
         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
             read_nwbfile = io.read()
             self.assertContainerEqual(file_tasks, read_nwbfile.lab_meta_data["tasks"])
+            self.assertContainerEqual(event_types, read_nwbfile.get_acquisition("event_types"))
+            self.assertContainerEqual(events, read_nwbfile.get_acquisition("events"))
+            self.assertContainerEqual(state_types, read_nwbfile.get_acquisition("state_types"))
+            self.assertContainerEqual(states, read_nwbfile.get_acquisition("states"))
+
 
 #
 # class TestTetrodeSeriesRoundtripPyNWB(AcquisitionH5IOMixin, TestCase):

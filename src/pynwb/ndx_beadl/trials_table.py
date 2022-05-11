@@ -3,6 +3,7 @@ from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, getargs, popargs, call_docval_func, AllowPositional
 from ndx_beadl import BEADLTaskProgram
+from .beadl_xml_parser import BeadlXMLParser
 
 @register_class('TrialsTable', 'ndx-beadl')
 class TrialsTable(TimeIntervals):
@@ -114,6 +115,7 @@ class StatesTable(TimeIntervals):
             'name': 'state_types_table',
             'type': 'StateTypesTable',
             'doc': ('The states table.'),
+            'default': None
         },
         allow_positional=AllowPositional.ERROR,
     )
@@ -170,6 +172,7 @@ class EventsTable(DynamicTable):
             'name': 'event_types_table',
             'type': 'EventTypesTable',
             'doc': ('The events table.'),
+            'default': None
         },
         allow_positional=AllowPositional.ERROR,
     )
@@ -206,23 +209,9 @@ class EventsTable(DynamicTable):
 
     add_event = add_row  # alias for add_row
 
-# class DynamicTableXML(DynamicTable):
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#
-    def xml_add_row(self, **kwargs):
-        parsed_states = kwargs['parsed_states']
-        elements = kwargs['elements']
-        data = {key: parsed_states[key] for key in elements}
-
-        {k: [g.get(k) for g in filtered_child[key] if k in g] for k in set().union(*filtered_child[key])}
-
-        super().add_row(data=data)
-
-
-
 @register_class('StateTypesTable', 'ndx-beadl')
 class StateTypesTable(DynamicTable):
+    # __fields__ = ('beadl_task_program',)
 
     __columns__ = (
         {
@@ -241,19 +230,30 @@ class StateTypesTable(DynamicTable):
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
-         'doc': 'the BEADLTaskProgram used'})
+         'doc': 'the BEADLTaskProgram used'},
+        {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
+         'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
-        call_docval_func(super().__init__, kwargs)
         self.beadl_task_program = kwargs['beadl_task_program']
+        self.populate_from_program = kwargs['populate_from_program']
+        call_docval_func(super().__init__, kwargs)
+        if self.populate_from_program:
+            self._populate_from_program()
 
-    def xml_add_row(self, **kwargs):
-        parsed_states = kwargs['parsed_states']
+    def _populate_from_program(self, **kwargs):
+        parsed_xml_object = BeadlXMLParser(string=self.beadl_task_program.data)
+        element=parsed_xml_object.element(element_name='BeadlStates')
+        parsed_states = parsed_xml_object._parse_protocal_children(element=element)
+
         for state in parsed_states['BeadlState']:
             super().add_row(state_name=state['name'])
 
 @register_class('EventTypesTable', 'ndx-beadl')
 class EventTypesTable(DynamicTable):
+
+    # __fields__ = ('beadl_task_program',) Why does this not work?
+
     __columns__ = (
         {
         'name': 'event_name',
@@ -271,13 +271,21 @@ class EventTypesTable(DynamicTable):
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
-         'doc': 'the BEADLTaskProgram used'})
+         'doc': 'the BEADLTaskProgram used'},
+        {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
+         'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
-        call_docval_func(super().__init__, kwargs)
         self.beadl_task_program = kwargs['beadl_task_program']
+        self.populate_from_program = kwargs['populate_from_program']
+        call_docval_func(super().__init__, kwargs)
+        if self.populate_from_program:
+            self._populate_from_program()
 
-    def xml_add_row(self, **kwargs):
-        parsed_states = kwargs['parsed_states']
+    def _populate_from_program(self):
+        parsed_xml_object = BeadlXMLParser(string=self.beadl_task_program.data)
+        element=parsed_xml_object.element(element_name='BeadlStates')
+        parsed_states = parsed_xml_object._parse_protocal_children(element=element)
+
         for event in parsed_states['ExternalEvent']:
             super().add_row(event_name=event['eventname'])
