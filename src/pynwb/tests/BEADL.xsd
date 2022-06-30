@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.1"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
 <xs:element name="BEADL">
@@ -19,14 +19,16 @@
                     <xs:element name="BeadlArgument" minOccurs ="0" maxOccurs="unbounded">
                         <xs:complexType>
                             <xs:attribute name="name" type="xs:string" use="required"/>
-                            <xs:attribute name="type" use="required">
+                            <xs:attribute name="expression" type="xs:string" use="optional"/>
+                            <xs:attribute name="type" use="optional">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:enumeration value="logical" />
-                                        <xs:enumeration value="numerical" />
+                                        <xs:enumeration value="numeric" />
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:attribute>
+                            <xs:attribute name="comment" type="xs:string" use="optional"/>
                         </xs:complexType>
                     </xs:element>
                 </xs:sequence>
@@ -60,12 +62,12 @@
     </xs:sequence>
     <xs:attribute name="hardware" type="xs:string" use="required"/>
     <xs:attribute name="version" type="xs:string" use="required"/>
-    <xs:attribute name="lang" type="xs:string" use="required"/>
+    <xs:attribute name="lang" type="xs:string" use="optional"/>
 </xs:complexType>
 
 <!-- Definition of BeadlInputs -->
 <xs:complexType name="BeadlInputsType">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded"> <!-- xs:sequence defines the order and xs:all can't work with unbounded numbers-->
         <xs:element name="HardwareInput" minOccurs ="0" maxOccurs="unbounded">
             <xs:complexType>
                 <xs:all>
@@ -74,6 +76,7 @@
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="connection" type="xs:string" use="required"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
+                <xs:attribute name="comment" type="xs:string" use="optional"/>
             </xs:complexType>
         </xs:element>
         <xs:element name="VirtualInput" minOccurs ="0" maxOccurs="unbounded">
@@ -84,9 +87,10 @@
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="connection" type="xs:string" use="required"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
+                <xs:attribute name="comment" type="xs:string" use="optional"/>
             </xs:complexType>
         </xs:element>
-    </xs:sequence>
+    </xs:choice>
 </xs:complexType>
 
 <!-- Definition of BeadlActions -->
@@ -100,6 +104,7 @@
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="connection" type="xs:string" use="required"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
+                <xs:attribute name="comment" type="xs:string" use="optional"/>
             </xs:complexType>
         </xs:element>
         <xs:element name="VirtualAction" minOccurs ="0" maxOccurs="unbounded">
@@ -110,6 +115,7 @@
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="connection" type="xs:string" use="required"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
+                <xs:attribute name="comment" type="xs:string" use="optional"/>
             </xs:complexType>
         </xs:element>
     </xs:sequence>
@@ -130,6 +136,19 @@
                                         <xs:simpleContent>
                                             <xs:extension base="xs:string">
                                                 <xs:attribute name="action" type="xs:string" use="required"/>
+                                                <xs:attribute name="value" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of OutputAction-->
+                                <xs:element name="SetVariableAction">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="action" type="xs:string" use="required"/>
+                                                <xs:attribute name="expression" type="xs:string" use="required"/>
                                             </xs:extension>
                                         </xs:simpleContent>
                                     </xs:complexType>
@@ -140,20 +159,6 @@
                     <xs:element name="StateEvents">
                         <xs:complexType>
                             <xs:choice minOccurs="0" maxOccurs="unbounded">
-
-                                <!-- Definition of ArgumentEvent-->
-                                <xs:element name="ArgumentEvent">
-                                    <xs:complexType>
-                                        <xs:simpleContent> <!-- ToDo: don't know if it needs to be like this since it has no content -->
-                                            <xs:extension base="xs:string">
-                                                <xs:attribute name="argument" type="xs:string" use="required"/>
-                                                <xs:attribute name="comparison" type="xs:string" use="required"/>
-                                                <xs:attribute name="value" type="xs:string" use="required"/>
-                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
-                                            </xs:extension>
-                                        </xs:simpleContent>
-                                    </xs:complexType>
-                                </xs:element>
 
                                 <!-- Definition of TimerEvent-->
                                 <xs:element name="TimerEvent">
@@ -170,18 +175,60 @@
                                             <xs:extension base="xs:string">
                                                 <xs:attribute name="source" type="xs:string" use="required"/>
                                                 <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                                <xs:attribute name="value" type="xs:string" use="required"/>
+                                                <xs:attribute name="gracePeriod" type="xs:double" use="optional"/>
                                             </xs:extension>
                                         </xs:simpleContent>
                                     </xs:complexType>
                                 </xs:element>
 
-                                <!-- Definition of VirtualEvent-->
+                                <!-- Definition of ArgumentEvent-->
+                                <xs:element name="ArgumentEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent> <!-- ToDo: don't know if it needs to be like this since it has no content -->
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
+                                                <xs:attribute name="expression" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of VariableEvent-->
+                                <xs:element name="VariableEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
+                                                <xs:attribute name="expression" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+
+                                <!-- Definition of TimeSpanEvent-->
+                                <xs:element name="TimeSpanEvent">
+                                    <xs:complexType>
+                                        <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                                <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
+                                                <xs:attribute name="expression" type="xs:string" use="required"/>
+                                            </xs:extension>
+                                        </xs:simpleContent>
+                                    </xs:complexType>
+                                </xs:element>
+                                
+                                <!-- Definition of VirtualEvent - a more generic way of dealing with virtual events!-->
                                 <xs:element name="VirtualEvent">
                                     <xs:complexType>
                                         <xs:simpleContent>
                                             <xs:extension base="xs:string">
-                                                <xs:attribute name="source" type="xs:string" use="required"/>
                                                 <xs:attribute name="eventname" type="xs:string" use="required"/>
+                                                <xs:attribute name="eventType" type="xs:string" use="required"/>
+                                                <xs:attribute name="source" type="xs:string" use="required"/>
                                             </xs:extension>
                                         </xs:simpleContent>
                                     </xs:complexType>
@@ -215,22 +262,6 @@
 </xs:complexType>
 
 <xs:complexType name="DependencyType">
-    <xs:sequence>
-        <xs:element name="Reference" type="xs:string" />
-        <xs:element name="Condition">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="less"/>
-                    <xs:enumeration value="less equal"/>
-                    <xs:enumeration value="equal"/>
-                    <xs:enumeration value="greater equal"/>
-                    <xs:enumeration value="greater"/>
-                    <xs:enumeration value="not equal"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:element>
-        <xs:element name="Value" type="xs:string" />
-    </xs:sequence>
     <xs:attribute name="type" use="required" >
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -238,8 +269,8 @@
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>
+    <xs:attribute name="expression" type="xs:string" use="required"/>
 </xs:complexType>
-
 
 <xs:complexType name="BeadlEditorType">
     <!-- Not implemented yet, should just have a placeholde for an SVG!?! -->

@@ -31,10 +31,10 @@ class TestBEADLProgramConstructors(TestCase):
 
     def test_constructor(self):
         """Test that the constructor for BEADLTaskSchema, BEADLTaskProgram, and Tasks set values as expected."""
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+        with open("BEADL.xsd", "r") as test_xsd_file:
             test_xsd = test_xsd_file.read()
 
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+        with open("LightChasingTask.xml", "r") as test_xml_file:
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
@@ -79,10 +79,10 @@ class TestBEADLTableConstructors(TestCase):
         self.nwbfile = set_up_nwbfile()
 
     def test_constructor(self):
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+        with open("BEADL.xsd", "r") as test_xsd_file:
             test_xsd = test_xsd_file.read()
 
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+        with open("LightChasingTask.xml", "r") as test_xml_file:
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
@@ -140,10 +140,10 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(events.columns[0].data, [0, 1, 1, 0])
         self.assertEqual(events.columns[1].data, [0.4, 0.5, 1.4, 1.5])
 
-        self.assertEqual(state_types.columns[0].data, ['InitTrial', 'TriggerBridge', 'WaitForBridge', 'Pre', 'WaitForPoke', 'LeftRewardDelay', 'LeftReward', 'LeftDrinking', 'RightRewardDelay', 'RightReward', 'RightDrinking'])
+        self.assertEqual(state_types.columns[0].data, ['WaitForPoke', 'End', 'Reward', 'ITI', 'TimeOut'])
         self.assertEqual(state_types.beadl_task_program.data, test_xml)
 
-        self.assertEqual(event_types.columns[0].data, ['bridgeChanged', 'leftPortIn', 'rightPortIn'])
+        self.assertEqual(event_types.columns[0].data, ['CorrectPortPoke_in', 'ErrorPort1Poke_in', 'ErrorPort2Poke_in'])
         self.assertEqual(event_types.beadl_task_program.data, test_xml)
 
 class TestTaskSeriesRoundtrip(TestCase):
@@ -162,10 +162,10 @@ class TestTaskSeriesRoundtrip(TestCase):
         file matches the original Task.
         """
 
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/BEADL.xsd", "r") as test_xsd_file:
+        with open("BEADL.xsd", "r") as test_xsd_file:
             test_xsd = test_xsd_file.read()
 
-        with open("/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml", "r") as test_xml_file:
+        with open("LightChasingTask.xml", "r") as test_xml_file:
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
