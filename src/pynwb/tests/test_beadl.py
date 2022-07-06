@@ -102,10 +102,10 @@ class TestBEADLTableConstructors(TestCase):
         event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True) #assert description
 
         events = EventsTable(description="description", event_types_table=event_types)
-        events.add_event(type=0, timestamp=0.4)
-        events.add_event(type=1, timestamp=0.5)
-        events.add_event(type=1, timestamp=1.4)
-        events.add_event(type=0, timestamp=1.5)
+        events.add_event(event_type=0, timestamp=0.4)
+        events.add_event(event_type=1, timestamp=0.5)
+        events.add_event(event_type=1, timestamp=1.4)
+        events.add_event(event_type=0, timestamp=1.5)
 
         state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True)
 
@@ -190,10 +190,10 @@ class TestTaskSeriesRoundtrip(TestCase):
         event_types = EventTypesTable(description="description", beadl_task_program=tasks.task_programs['beadl_task_program'], populate_from_program=True) #assert description
 
         events = EventsTable(description="description", event_types_table=event_types)
-        events.add_event(type=0, timestamp=0.4)
-        events.add_event(type=1, timestamp=0.5)
-        events.add_event(type=1, timestamp=1.4)
-        events.add_event(type=0, timestamp=1.5)
+        events.add_event(event_type=0, timestamp=0.4)
+        events.add_event(event_type=1, timestamp=0.5)
+        events.add_event(event_type=1, timestamp=1.4)
+        events.add_event(event_type=0, timestamp=1.5)
 
         state_types = StateTypesTable(description="description", beadl_task_program=tasks.task_programs['beadl_task_program'], populate_from_program=True)
 
