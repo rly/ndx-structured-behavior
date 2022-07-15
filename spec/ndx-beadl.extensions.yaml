@@ -77,12 +77,11 @@ groups:
     quantity: '?'
   - name: events
     neurodata_type_inc: DynamicTableRegion
-    doc: The events that occurred on each trial. This is represented as a ragged array
-      reference to rows of the Events table.
+    docs: The events that occurred on each trial.
     quantity: '?'
   - name: events_index
     neurodata_type_inc: DynamicTableRegion
-    doc: VectorIndex for the "events" column.
+    doc: VectorIndex for the events column
     quantity: '?'
   - name: actions
     neurodata_type_inc: DynamicTableRegion
