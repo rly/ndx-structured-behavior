@@ -80,7 +80,7 @@ groups:
     docs: The events that occurred on each trial.
     quantity: '?'
   - name: events_index
-    neurodata_type_inc: DynamicTableRegion
+    neurodata_type_inc: VectorIndex
     doc: VectorIndex for the events column
     quantity: '?'
   - name: actions
