@@ -69,7 +69,6 @@ groups:
   - name: states
     neurodata_type_inc: DynamicTableRegion
     doc: The states that occurred on each trial. This is represented as a ragged array
-      reference to rows of the States table.
     quantity: '?'
   - name: states_index
     neurodata_type_inc: VectorIndex
