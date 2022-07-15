@@ -165,7 +165,7 @@ def main():
         doc=('A column-based table to store information about states, one state per row.'),
         datasets=[
             NWBDatasetSpec(
-                name='type',
+                name='state_type',
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The type of state that occurred on each trial. This is represented as a reference to '
                      'a row of the StateTypesTable.'),
@@ -184,6 +184,12 @@ def main():
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The type of event that occurred on each trial. This is represented as a reference to '
                      'a row of the EventTypesTable.'),
+            ),
+            NWBDatasetSpec(
+                name='value',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The value of the event'),
             ),
             NWBDatasetSpec(
                 name='timestamp',

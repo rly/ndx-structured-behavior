@@ -80,9 +80,18 @@ groups:
     doc: The events that occurred on each trial. This is represented as a ragged array
       reference to rows of the Events table.
     quantity: '?'
-  - name: events_index
+    - name: events_index
+      neurodata_type_inc: DynamicTableRegion
+      doc: VectorIndex for the "events" column.
+      quantity: '?'
+  - name: actions
     neurodata_type_inc: DynamicTableRegion
-    doc: VectorIndex for the "events" column.
+    doc: The actions that occurred on each trial. This is represented as a ragged array
+      reference to rows of the Actions table.
+    quantity: '?'
+  - name: actions_index
+    neurodata_type_inc: DynamicTableRegion
+    doc: VectorIndex for the "actions" column.
     quantity: '?'
 - neurodata_type_def: StateTypesTable
   neurodata_type_inc: DynamicTable
@@ -105,10 +114,18 @@ groups:
   name: states
   doc: A column-based table to store information about states, one state per row.
   datasets:
-  - name: type
+  - name: state_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of state that occurred on each trial. This is represented as a reference
       to a row of the StateTypesTable.
+  - name: start_time
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: The start time that the state
+  - name: stop_time
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: The stop time that the state
 - neurodata_type_def: EventTypesTable
   neurodata_type_inc: DynamicTable
   name: event_types
@@ -130,11 +147,48 @@ groups:
   name: events
   doc: A column-based table to store information about events, one event per row.
   datasets:
-  - name: type
+  - name: event_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of event that occurred on each trial. This is represented as a reference
       to a row of the EventTypesTable.
+  - name: value
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The value of the event
   - name: timestamp
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time that the event occurred, in seconds.
+- neurodata_type_def: ActionTypesTable
+  neurodata_type_inc: DynamicTable
+  name: action_types
+  doc: A column-based table to store information about action types, one action type
+    per row.
+  datasets:
+  - name: action_name
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The name of the action.
+  attributes:
+  - name: beadl_task_program
+    dtype:
+      target_type: BEADLTaskProgram
+      reftype: object
+    doc: The task program that governs the StateTypes and EventTypes.
+- neurodata_type_def: ActionTable
+  neurodata_type_inc: DynamicTable
+  name: actions
+  doc: A column-based table to store information about events, one event per row.
+  datasets:
+  - name: action_type
+    neurodata_type_inc: DynamicTableRegion
+    doc: The type of event that occurred on each trial. This is represented as a reference
+      to a row of the ActionTypesTable.
+  - name: value
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The value of the action.
+  - name: action_time
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: The time of the action.
