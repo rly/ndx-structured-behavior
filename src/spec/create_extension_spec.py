@@ -123,85 +123,87 @@ def main():
 
     # TODO force the DTR/VectorIndex targets to be specific data types
 
-    trials_table = NWBGroupSpec(
-        name='trials',
-        neurodata_type_def='TrialsTable',
-        neurodata_type_inc='TimeIntervals',
-        doc=('A column-based table to store information about trials, one trial per row.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='states',
-                neurodata_type_inc='DynamicTableRegion',
-                doc=('The states that occurred on each trial. This is represented as a ragged array reference to '
-                     'rows of the States table.'),
-                quantity='?',
-            ),
-            NWBDatasetSpec(
-                name='states_index',
-                neurodata_type_inc='VectorIndex',
-                doc=('VectorIndex for the "states" column.'),
-                quantity='?',
-            ),
-            NWBDatasetSpec(
-                name='events',
-                neurodata_type_inc='DynamicTableRegion',
-                doc=('The events that occurred on each trial. This is represented as a ragged array reference to '
-                     'rows of the Events table.'),
-                quantity='?',
-            ),
-            NWBDatasetSpec(
-                name='events_index',
-                neurodata_type_inc='DynamicTableRegion',
-                doc=('VectorIndex for the "events" column.'),
-                quantity='?',
-            ),
-        ]
-    )
+    # trials_table = NWBGroupSpec(
+    #     name='trials',
+    #     neurodata_type_def='TrialsTable',
+    #     neurodata_type_inc='TimeIntervals',
+    #     doc=('A column-based table to store information about trials, one trial per row.'),
+    #     datasets=[
+    #         NWBDatasetSpec(
+    #             name='states',
+    #             neurodata_type_inc='DynamicTableRegion',
+    #             doc=('The states that occurred on each trial. This is represented as a ragged array reference to '
+    #                  'rows of the States table.'),
+    #             quantity='?',
+    #         ),
+    #         NWBDatasetSpec(
+    #             name='states_index',
+    #             neurodata_type_inc='VectorIndex',
+    #             doc=('VectorIndex for the "states" column.'),
+    #             quantity='?',
+    #         ),
+    #         NWBDatasetSpec(
+    #             name='events',
+    #             neurodata_type_inc='DynamicTableRegion',
+    #             doc=('The events that occurred on each trial. This is represented as a ragged array reference to '
+    #                  'rows of the Events table.'),
+    #             quantity='?',
+    #         ),
+    #         NWBDatasetSpec(
+    #             name='events_index',
+    #             neurodata_type_inc='DynamicTableRegion',
+    #             doc=('VectorIndex for the "events" column.'),
+    #             quantity='?',
+    #         ),
+    #     ]
+    # )
+    #
+    # states_table = NWBGroupSpec(
+    #     name='states',
+    #     neurodata_type_def='StatesTable',
+    #     neurodata_type_inc='TimeIntervals',
+    #     doc=('A column-based table to store information about states, one state per row.'),
+    #     datasets=[
+    #         NWBDatasetSpec(
+    #             name='state_type',
+    #             neurodata_type_inc='DynamicTableRegion',
+    #             doc=('The type of state that occurred on each trial. This is represented as a reference to '
+    #                  'a row of the StateTypesTable.'),
+    #         ),
+    #     ]
+    # )
+    #
+    # events_table = NWBGroupSpec(
+    #     name='events',
+    #     neurodata_type_def='EventsTable',
+    #     neurodata_type_inc='DynamicTable',
+    #     doc=('A column-based table to store information about events, one event per row.'),
+    #     datasets=[
+    #         NWBDatasetSpec(
+    #             name='type',
+    #             neurodata_type_inc='DynamicTableRegion',
+    #             doc=('The type of event that occurred on each trial. This is represented as a reference to '
+    #                  'a row of the EventTypesTable.'),
+    #         ),
+    #         NWBDatasetSpec(
+    #             name='value',
+    #             neurodata_type_inc='VectorData',
+    #             dtype='text',
+    #             doc=('The value of the event'),
+    #         ),
+    #         NWBDatasetSpec(
+    #             name='timestamp',
+    #             neurodata_type_inc='VectorData',
+    #             dtype='float32',
+    #             doc=('The time that the event occurred, in seconds.'),
+    #         ),
+    #     ]
+    # )
 
-    states_table = NWBGroupSpec(
-        name='states',
-        neurodata_type_def='StatesTable',
-        neurodata_type_inc='TimeIntervals',
-        doc=('A column-based table to store information about states, one state per row.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='state_type',
-                neurodata_type_inc='DynamicTableRegion',
-                doc=('The type of state that occurred on each trial. This is represented as a reference to '
-                     'a row of the StateTypesTable.'),
-            ),
-        ]
-    )
+    # new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
+    #                   trials_table, state_types_table, states_table, event_types_table, events_table]
 
-    events_table = NWBGroupSpec(
-        name='events',
-        neurodata_type_def='EventsTable',
-        neurodata_type_inc='DynamicTable',
-        doc=('A column-based table to store information about events, one event per row.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='type',
-                neurodata_type_inc='DynamicTableRegion',
-                doc=('The type of event that occurred on each trial. This is represented as a reference to '
-                     'a row of the EventTypesTable.'),
-            ),
-            NWBDatasetSpec(
-                name='value',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The value of the event'),
-            ),
-            NWBDatasetSpec(
-                name='timestamp',
-                neurodata_type_inc='VectorData',
-                dtype='float32',
-                doc=('The time that the event occurred, in seconds.'),
-            ),
-        ]
-    )
-
-    new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
-                      trials_table, state_types_table, states_table, event_types_table, events_table]
+    new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks]
 
     # export the spec to yaml files in the spec folder
     output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'spec'))
