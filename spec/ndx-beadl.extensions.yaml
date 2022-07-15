@@ -88,7 +88,7 @@ groups:
       reference to rows of the Actions table.
     quantity: '?'
   - name: actions_index
-    neurodata_type_inc: DynamicTableRegion
+    neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "actions" column.
     quantity: '?'
 - neurodata_type_def: StateTypesTable
