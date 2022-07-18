@@ -250,6 +250,27 @@ def plot_trials(trials: Union[TrialsTable, pd.DataFrame],
                 fontsize=18,
                 rectangle_height=1,
                 marker_size=None):
+    """
+   Plot the event, actions, states, and trial times for one or more trials
+
+   :param trials: The TrialsTable or a DataFrame from subsetting the TrialsTable, e.g., via trials[0:100]
+   :param states: The StatesTable
+   :param state_types: The StateTypesTable that corresponds to StatesTable
+   :param actions: The ActionTable
+   :param action_types: The ActionTypesTable that corresponds to ActionTable
+   :param events: The EventsTable
+   :param event_types: The EventTypesTable that corresponds to EventsTable
+   :param show_event_values: Separate events both by type and value (True) or by type only (False). (Default=True)
+   :param marker: String marker to use in scatter plot. (Default="|")
+   :param figsize: Figure size tuple (Default=(18,10))
+   :param fontsize: Fontsize (Default=18)
+   :param rectangle_height: Height of the rectangles along the y-axis. This should normally be
+                             between 0 and 1. (Default=1)
+   :param marker_size: Height size for scatter plot markers for instantaneous acions/events/tates. (Default=None):
+
+   :return: Matplotlib figure. Call plt.show() to render the figure.
+    """
+
     trials_df = trials if isinstance(trials, pd.DataFrame) else trials.to_dataframe(index=True)
     fig = plt.figure(figsize=(18, 10) if figsize is None else figsize)
     events_index = [j for i in trials_df["events"] for j in i]
@@ -314,6 +335,7 @@ def plot_trials(trials: Union[TrialsTable, pd.DataFrame],
     plt.ylabel("Event / Action / State")
     plt.ylim(-1.5, plt.ylim()[1])
     plt.grid(axis='x')
-
     secax = ax.secondary_xaxis('top')
     secax.set_xticks(x_stop)
+
+    return fig
