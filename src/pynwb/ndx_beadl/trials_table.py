@@ -623,7 +623,7 @@ class ActionTypesTable(DynamicTable):
 
 
 @register_class('ActionTable', 'ndx-beadl')
-class ActionTable(DynamicTable):
+class ActionsTable(DynamicTable):
     """A table to hold OutputAction data."""
 
     __columns__ = (

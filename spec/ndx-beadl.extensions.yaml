@@ -173,7 +173,7 @@ groups:
       target_type: BEADLTaskProgram
       reftype: object
     doc: The task program that governs the StateTypes and EventTypes.
-- neurodata_type_def: ActionTable
+- neurodata_type_def: ActionsTable
   neurodata_type_inc: DynamicTable
   name: actions
   doc: A column-based table to store information about events, one event per row.
