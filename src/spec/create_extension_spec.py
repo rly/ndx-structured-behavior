@@ -102,23 +102,23 @@ def main():
     )
 
     tasks = NWBGroupSpec(
-        name='tasks',
-        neurodata_type_def='Tasks',
+        name='task',
+        neurodata_type_def='Task',
         neurodata_type_inc='LabMetaData',
         doc=('A group to store task-related general metadata. TODO When merged with core, this will no longer '
              'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
         datasets=[
             NWBDatasetSpec(
-                name='task_programs'
+                name='task_program',
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
-                quantity='+'
+                # quantity='+'
             ),
             NWBDatasetSpec(
-                name='task_schemas'
+                name='task_schema',
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
-                quantity='+'
+                # quantity='+'
             ),
         ]
     )

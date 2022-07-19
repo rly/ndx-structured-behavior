@@ -48,18 +48,18 @@ datasets:
     doc: The language of the schema, fixed to "XSD".
     required: false
 groups:
-- neurodata_type_def: Tasks
+- neurodata_type_def: Task
   neurodata_type_inc: LabMetaData
-  name: tasks
+  name: task
   doc: A group to store task-related general metadata. TODO When merged with core,
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - name: task_programs
+  - name: task_program
     neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
     # quantity: +
-  - name: task_schemas
+  - name: task_schema
     neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
     # quantity: +
