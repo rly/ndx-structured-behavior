@@ -109,11 +109,13 @@ def main():
              'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
         datasets=[
             NWBDatasetSpec(
+                name='task_programs'
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
                 quantity='+'
             ),
             NWBDatasetSpec(
+                name='task_schemas'
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
                 quantity='+'

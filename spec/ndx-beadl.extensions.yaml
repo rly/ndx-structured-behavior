@@ -55,12 +55,14 @@ groups:
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - neurodata_type_inc: TaskProgram
+  - name: task_programs
+    neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
-    quantity: +
-  - neurodata_type_inc: TaskSchema
+    # quantity: +
+  - name: task_schemas
+    neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
-    quantity: +
+    # quantity: +
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials

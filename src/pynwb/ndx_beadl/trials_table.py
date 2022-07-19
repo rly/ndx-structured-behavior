@@ -622,7 +622,7 @@ class ActionTypesTable(DynamicTable):
             super().add_row(action_name=action)
 
 
-@register_class('ActionTable', 'ndx-beadl')
+@register_class('ActionsTable', 'ndx-beadl')
 class ActionsTable(DynamicTable):
     """A table to hold OutputAction data."""
 
