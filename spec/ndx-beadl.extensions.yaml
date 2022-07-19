@@ -186,7 +186,7 @@ groups:
     neurodata_type_inc: VectorData
     dtype: text
     doc: The value of the action.
-  - name: action_time
+  - name: timestamp
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time of the action.

@@ -639,7 +639,7 @@ class ActionsTable(DynamicTable):
             'required': True
         },
         {
-            'name': 'action_time',
+            'name': 'timestamp',
             'description': ('The action time'),
             'required': True
         },
@@ -680,7 +680,7 @@ class ActionsTable(DynamicTable):
             'doc': ('The action value.'),
         },
         {
-            'name': 'action_time',
+            'name': 'timestamp',
             'type': float,
             'doc': ('The action time.'),
         },
@@ -746,7 +746,7 @@ class ActionsTable(DynamicTable):
 
             #populate events_table
             for i in range(len(action_times)):
-                self.add_row(action_type=region.data[i], value=action_value[i], action_time=action_times[i])
+                self.add_row(action_type=region.data[i], value=action_value[i], timestamp=action_times[i])
 
             return(self)
         else:
