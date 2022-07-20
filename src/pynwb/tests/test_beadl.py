@@ -8,7 +8,7 @@ from pynwb.ecephys import ElectrodeGroup
 from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
-from ndx_beadl import (Tasks, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable)
 
 
@@ -51,7 +51,7 @@ class TestBEADLProgramConstructors(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        tasks = Tasks(
+        tasks = Task(
             task_programs=[beadl_task_program],
             task_schemas=[beadl_task_schema]
         )
@@ -182,7 +182,7 @@ class TestTaskSeriesRoundtrip(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        tasks = Tasks(
+        tasks = Task(
             task_programs=[beadl_task_program],
             task_schemas=[beadl_task_schema]
         )
