@@ -120,6 +120,21 @@ def main():
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
                 # quantity='+'
             ),
+            NWBDatasetSpec(
+                name='event_types',
+                neurodata_type_inc='EventTypesTable',
+                doc=('The EventTypesTable')
+            ),
+            NWBDatasetSpec(
+                name='state_types',
+                neurodata_type_inc='StateTypesTable',
+                doc=('The StateTypesTable')
+            ),
+            NWBDatasetSpec(
+                name='action_types',
+                neurodata_type_inc='ActionTypesTable',
+                doc=('The ActionTypesTable')
+            )
         ]
     )
 
