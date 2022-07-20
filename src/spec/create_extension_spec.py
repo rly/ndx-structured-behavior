@@ -113,15 +113,15 @@ def main():
                 doc=('The name of the action'),
             ),
         ],
-        attributes=[
-            NWBAttributeSpec(
-                name='beadl_task_program',
-                doc='The task program',
-                dtype=NWBRefSpec(
-                    target_type='BEADLTaskProgram',
-                    reftype='object'
-            ),)
-        ],
+        # attributes=[
+        #     NWBAttributeSpec(
+        #         name='beadl_task_program',
+        #         doc='The task program',
+        #         dtype=NWBRefSpec(
+        #             target_type='BEADLTaskProgram',
+        #             reftype='object'
+        #     ),)
+        # ],
     )
 
     event_types_table = NWBGroupSpec(
@@ -136,15 +136,15 @@ def main():
                 doc=('The name of the event'),
             ),
         ],
-        attributes=[
-            NWBAttributeSpec(
-                name='beadl_task_program',
-                doc='The task program',
-                dtype=NWBRefSpec(
-                    target_type='BEADLTaskProgram',
-                    reftype='object'
-            ),)
-        ],
+        # attributes=[
+        #     NWBAttributeSpec(
+        #         name='beadl_task_program',
+        #         doc='The task program',
+        #         dtype=NWBRefSpec(
+        #             target_type='BEADLTaskProgram',
+        #             reftype='object'
+        #     ),)
+        # ],
     )
 
     state_types_table = NWBGroupSpec(
@@ -159,15 +159,15 @@ def main():
                 doc=('The name of the state'),
             ),
         ],
-        attributes=[
-            NWBAttributeSpec(
-                name='beadl_task_program',
-                doc='The task program',
-                dtype=NWBRefSpec(
-                    target_type='BEADLTaskProgram',
-                    reftype='object'
-            ),)
-        ],
+        # attributes=[
+        #     NWBAttributeSpec(
+        #         name='beadl_task_program',
+        #         doc='The task program',
+        #         dtype=NWBRefSpec(
+        #             target_type='BEADLTaskProgram',
+        #             reftype='object'
+        #     ),)
+        # ],
     )
 
     tasks = NWBGroupSpec(

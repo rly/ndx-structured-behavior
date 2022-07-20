@@ -500,13 +500,16 @@ class StateTypesTable(DynamicTable):
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
-         'doc': 'the BEADLTaskProgram used'},
+         'doc': 'the BEADLTaskProgram used', 'default': None},
         {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
         self.beadl_task_program = kwargs['beadl_task_program']
-        self.populate_from_program = kwargs['populate_from_program']
+        if self.beadl_task_program == None:
+            self.populate_from_program = False
+        else:
+            self.populate_from_program = kwargs['populate_from_program']
         call_docval_func(super().__init__, kwargs)
         if self.populate_from_program:
             self._populate_from_program()
@@ -522,7 +525,7 @@ class StateTypesTable(DynamicTable):
 @register_class('EventTypesTable', 'ndx-beadl')
 class EventTypesTable(DynamicTable):
 
-    __fields__ = ('beadl_task_program',)
+    # __fields__ = ('beadl_task_program',)
 
     __columns__ = (
         {
@@ -541,14 +544,17 @@ class EventTypesTable(DynamicTable):
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
-         'doc': 'the BEADLTaskProgram used'},
+         'doc': 'the BEADLTaskProgram used', 'default': None},
         {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
-        call_docval_func(super().__init__, kwargs)
         self.beadl_task_program = kwargs['beadl_task_program']
-        self.populate_from_program = kwargs['populate_from_program']
+        call_docval_func(super().__init__, kwargs)
+        if self.beadl_task_program == None:
+            self.populate_from_program = False
+        else:
+            self.populate_from_program = kwargs['populate_from_program']
         if self.populate_from_program:
             self._populate_from_program()
 
@@ -577,7 +583,7 @@ class EventTypesTable(DynamicTable):
 
 @register_class('ActionTypesTable', 'ndx-beadl')
 class ActionTypesTable(DynamicTable):
-    __fields__ = ('beadl_task_program',)
+    # __fields__ = ('beadl_task_program',)
 
     __columns__ = (
         {
@@ -596,14 +602,17 @@ class ActionTypesTable(DynamicTable):
             'default': 'Action type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
-         'doc': 'the BEADLTaskProgram used'},
+         'doc': 'the BEADLTaskProgram used', 'default': None},
         {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'action_type'
         call_docval_func(super().__init__, kwargs)
         self.beadl_task_program = kwargs['beadl_task_program']
-        self.populate_from_program = kwargs['populate_from_program']
+        if self.beadl_task_program == None:
+            self.populate_from_program = False
+        else:
+            self.populate_from_program = kwargs['populate_from_program']
         if self.populate_from_program:
             self._populate_from_program()
 

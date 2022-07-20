@@ -109,12 +109,6 @@ groups:
   name: state_types
   doc: A column-based table to store information about action_types, one type per
     row.
-  attributes:
-  - name: beadl_task_program
-    dtype:
-      target_type: BEADLTaskProgram
-      reftype: object
-    doc: The task program
   datasets:
   - name: state_name
     neurodata_type_inc: VectorData
@@ -133,12 +127,6 @@ groups:
   name: event_types
   doc: A column-based table to store information about action_types, one type per
     row.
-  attributes:
-  - name: beadl_task_program
-    dtype:
-      target_type: BEADLTaskProgram
-      reftype: object
-    doc: The task program
   datasets:
   - name: event_name
     neurodata_type_inc: VectorData
@@ -182,12 +170,6 @@ groups:
   name: action_types
   doc: A column-based table to store information about action_types, one type per
     row.
-  attributes:
-  - name: beadl_task_program
-    dtype:
-      target_type: BEADLTaskProgram
-      reftype: object
-    doc: The task program
   datasets:
   - name: action_name
     neurodata_type_inc: VectorData
