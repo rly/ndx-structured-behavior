@@ -57,7 +57,7 @@ class TrialsTable(TimeIntervals):
         },
         {
             'name': 'actions_table',
-            'type': 'ActionTable',
+            'type': 'ActionsTable',
             'doc': ('The actions table.'),
             'default': None,
         },
