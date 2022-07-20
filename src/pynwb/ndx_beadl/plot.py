@@ -364,7 +364,7 @@ def compute_state_transition_matrix(states: Union[StatesTable, pd.DataFrame],
         index=pd.Index(data=state_types['state_name'][:], name='from'),
         columns=pd.Index(data=state_types['state_name'][:], name='to'))
     state_transition_probability_df = state_transition_count_df.divide(state_transition_count_df.sum(axis='rows'),
-                                                                       axis='rows')
+                                                                       axis='columns')
 
     return state_transition_count_df, state_transition_probability_df
 
