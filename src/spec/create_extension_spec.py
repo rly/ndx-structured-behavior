@@ -181,13 +181,13 @@ def main():
                 name='task_program',
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
-                # quantity='+'
+                quantity='?'
             ),
             NWBDatasetSpec(
                 name='task_schema',
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
-                # quantity='+'
+                quantity='?'
             ),
             NWBDatasetSpec(
                 name='event_types',
