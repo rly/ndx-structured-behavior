@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from typing import Union
 from ndx_beadl import (EventsTable, EventTypesTable,
-                       ActionTable, ActionTypesTable,
+                       ActionsTable, ActionTypesTable,
                        StatesTable, StateTypesTable,
                        TrialsTable)
 
@@ -80,7 +80,7 @@ def plot_events(events: Union[EventsTable, pd.DataFrame],
     return fig
 
 
-def plot_actions(actions: Union[ActionTable, pd.DataFrame],
+def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
                  action_types: ActionTypesTable,
                  show_action_values: bool = True,
                  marker: str = None,
@@ -95,8 +95,8 @@ def plot_actions(actions: Union[ActionTable, pd.DataFrame],
     """
     Plot a tick plot showing the times of actions.
 
-    :param actions: The ActionTable or a DataFrame from subsetting the ActionTable, e.g., via actions[0:100]
-    :param action_types: The ActionTypesTable that corresponds to ActionTable
+    :param actions: The ActionsTable or a DataFrame from subsetting the ActionsTable, e.g., via actions[0:100]
+    :param action_types: The ActionTypesTable that corresponds to ActionsTable
     :param show_event_values: Separate events both by type and value (True) or by type only (False). (Default=True)
     :param marker: String marker to use in scatter plot. (Default="|")
     :param figsize: Figure size tuple
@@ -111,7 +111,7 @@ def plot_actions(actions: Union[ActionTable, pd.DataFrame],
     :return: Matplotlib figure. Call plt.show() to render the figure.
     """
     adf = actions if isinstance(actions, pd.DataFrame) else actions.to_dataframe(index=True)
-    x_values = adf['action_time'][:]
+    x_values = adf['timestamp'][:]
     # show events by type and value
     if show_action_values:
         action_types_loaded = action_types['action_name'][:]
@@ -242,7 +242,7 @@ def plot_states(states: Union[StatesTable, pd.DataFrame],
 def plot_trials(trials: Union[TrialsTable, pd.DataFrame],
                 states: StatesTable,
                 state_types: StateTypesTable,
-                actions: ActionTable,
+                actions: ActionsTable,
                 action_types: ActionTypesTable,
                 events: EventsTable,
                 event_types: EventTypesTable,
@@ -256,8 +256,8 @@ def plot_trials(trials: Union[TrialsTable, pd.DataFrame],
    :param trials: The TrialsTable or a DataFrame from subsetting the TrialsTable, e.g., via trials[0:100]
    :param states: The StatesTable
    :param state_types: The StateTypesTable that corresponds to StatesTable
-   :param actions: The ActionTable
-   :param action_types: The ActionTypesTable that corresponds to ActionTable
+   :param actions: The ActionsTable
+   :param action_types: The ActionTypesTable that corresponds to ActionsTable
    :param events: The EventsTable
    :param event_types: The EventTypesTable that corresponds to EventsTable
    :param show_event_values: Separate events both by type and value (True) or by type only (False). (Default=True)
