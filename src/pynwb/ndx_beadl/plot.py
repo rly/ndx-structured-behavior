@@ -386,7 +386,6 @@ def plot_state_transition_graph(transition_matrix, figsize=None, node_params=Non
     """
     states = transition_matrix.index.tolist()
     G = nx.MultiDiGraph()
-    labels = {}
     edge_labels = {}
 
     for i, origin_state in enumerate(states):
@@ -394,11 +393,11 @@ def plot_state_transition_graph(transition_matrix, figsize=None, node_params=Non
             rate = transition_matrix.loc[origin_state, destination_state]
             if rate > 0:
                 G.add_edge(origin_state, destination_state, weight=rate, label="{:.02f}".format(rate))
-                edge_labels[(origin_state, destination_state)] = label = "{:.02f}".format(rate)
+                edge_labels[(origin_state, destination_state)] = "{:.02f}".format(rate)
 
     fig =  plt.figure(figsize=(10, 10) if figsize is None else figsize)
     pos = nx.planar_layout(G)
-    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)  # , connectionstyle="arc3,rad=0.4")
+    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
     nx.draw_networkx_labels(G, pos, font_weight=2)
     nx.draw_networkx_edge_labels(G, pos, edge_labels)
     if node_params is not None:
