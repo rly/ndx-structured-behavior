@@ -359,19 +359,12 @@ def compute_state_transition_matrix(states: Union[StatesTable, pd.DataFrame],
     state_sequence = sdf['state_type'].to_numpy()
     for (i, j) in zip(state_sequence, state_sequence[1:]):
         state_transition_count[i][j] += 1
-    state_transition_probability = np.copy(state_transition_count).astype(float)
-    for i in range(num_states):
-        n = np.sum(state_transition_probability[i, :])
-        if n > 0:
-            state_transition_probability[i, :] = state_transition_probability[i, :] / n
     state_transition_count_df = pd.DataFrame(
         data=state_transition_count,
         index=pd.Index(data=state_types['state_name'][:], name='from'),
         columns=pd.Index(data=state_types['state_name'][:], name='to'))
-    state_transition_probability_df = pd.DataFrame(
-        data=state_transition_probability,
-        index=pd.Index(data=state_types['state_name'][:], name='from'),
-        columns=pd.Index(data=state_types['state_name'][:], name='to'))
+    state_transition_probability_df = state_transition_count_df.divide(state_transition_count_df.sum(axis='rows'),
+                                                                       axis='rows')
 
     return state_transition_count_df, state_transition_probability_df
 
