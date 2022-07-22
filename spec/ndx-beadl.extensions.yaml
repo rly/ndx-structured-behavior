@@ -64,13 +64,13 @@ groups:
     doc: A dataset to store a task schema, e.g., an XSD file.
     quantity: '?'
   - name: event_types
-    neurodata_type_inc: EventTypesTable
+    neurodata_type_inc: DynamicTable
     doc: The EventTypesTable
   - name: state_types
-    neurodata_type_inc: StateTypesTable
+    neurodata_type_inc: DynamicTable
     doc: The StateTypesTable
   - name: action_types
-    neurodata_type_inc: ActionTypesTable
+    neurodata_type_inc: DynamicTable
     doc: The ActionTypesTable
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
