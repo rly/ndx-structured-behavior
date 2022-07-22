@@ -286,6 +286,12 @@ def main():
         doc=('A column-based table to store information about events, one event per row.'),
         datasets=[
             NWBDatasetSpec(
+                name='timestamp',
+                neurodata_type_inc='VectorData',
+                dtype='float32',
+                doc=('The time that the event occurred, in seconds.'),
+            ),
+            NWBDatasetSpec(
                 name='event_type',
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The type of event that occurred on each trial. This is represented as a reference to '
@@ -297,12 +303,6 @@ def main():
                 dtype='text',
                 doc=('The value of the event'),
             ),
-            NWBDatasetSpec(
-                name='timestamp',
-                neurodata_type_inc='VectorData',
-                dtype='float32',
-                doc=('The time that the event occurred, in seconds.'),
-            ),
         ]
     )
 
@@ -312,6 +312,12 @@ def main():
         neurodata_type_inc='DynamicTable',
         doc=('A column-based table to store information about actions, one action per row.'),
         datasets=[
+            NWBDatasetSpec(
+                name='timestamp',
+                neurodata_type_inc='VectorData',
+                dtype='float32',
+                doc=('The time that the action occurred, in seconds.'),
+            ),
             NWBDatasetSpec(
                 name='action_type',
                 neurodata_type_inc='DynamicTableRegion',
@@ -323,12 +329,6 @@ def main():
                 neurodata_type_inc='VectorData',
                 dtype='text',
                 doc=('The value of the action'),
-            ),
-            NWBDatasetSpec(
-                name='timestamp',
-                neurodata_type_inc='VectorData',
-                dtype='float32',
-                doc=('The time that the action occurred, in seconds.'),
             ),
         ]
     )

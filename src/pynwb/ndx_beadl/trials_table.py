@@ -369,6 +369,11 @@ class EventsTable(DynamicTable):
 
     __columns__ = (
         {
+            'name': 'timestamp',
+            'description': ('The event timestamp'),
+            'required': True
+        },
+        {
             'name': 'event_type',
             'description': ('The event type'),
             'table': True,
@@ -377,11 +382,6 @@ class EventsTable(DynamicTable):
         {
             'name': 'value',
             'description': ('the event value'),
-            'required': True
-        },
-        {
-            'name': 'timestamp',
-            'description': ('The event timestamp'),
             'required': True
         },
     )
@@ -471,7 +471,7 @@ class EventsTable(DynamicTable):
 
             #populate events_table
             for i in range(len(event_times)):
-                self.add_row(event_type=region.data[i], value=event_value[i], timestamp=event_times[i])
+                self.add_row(timestamp=event_times[i], event_type=region.data[i], value=event_value[i])
 
             return(self)
         else:
@@ -639,6 +639,11 @@ class ActionsTable(DynamicTable):
 
     __columns__ = (
         {
+            'name': 'timestamp',
+            'description': ('The action time'),
+            'required': True
+        },
+        {
             'name': 'action_type',
             'description': ('The action type'),
             'table': True,
@@ -647,11 +652,6 @@ class ActionsTable(DynamicTable):
         {
             'name': 'value',
             'description': ('The action value'),
-            'required': True
-        },
-        {
-            'name': 'timestamp',
-            'description': ('The action time'),
             'required': True
         },
     )
