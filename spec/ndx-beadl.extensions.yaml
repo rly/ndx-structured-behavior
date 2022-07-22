@@ -133,7 +133,7 @@ groups:
   name: events
   doc: A column-based table to store information about events, one event per row.
   datasets:
-  - name: type
+  - name: event_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of event that occurred on each trial. This is represented as a reference
       to a row of the EventTypesTable.
@@ -150,7 +150,7 @@ groups:
   name: actions
   doc: A column-based table to store information about actions, one action per row.
   datasets:
-  - name: type
+  - name: action_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of action that occurred on each trial. This is represented as a
       reference to a row of the ActionTypesTable.

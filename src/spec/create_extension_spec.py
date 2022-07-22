@@ -191,17 +191,17 @@ def main():
             ),
             NWBDatasetSpec(
                 name='event_types',
-                neurodata_type_inc='EventTypesTable',
+                neurodata_type_inc='DynamicTable', #eventually be "EventTypesTable"
                 doc=('The EventTypesTable')
             ),
             NWBDatasetSpec(
                 name='state_types',
-                neurodata_type_inc='StateTypesTable',
+                neurodata_type_inc='DynamicTable', #eventually be "StateTypesTable"
                 doc=('The StateTypesTable')
             ),
             NWBDatasetSpec(
                 name='action_types',
-                neurodata_type_inc='ActionTypesTable',
+                neurodata_type_inc='DynamicTable', #eventually be "ActionTypesTable"
                 doc=('The ActionTypesTable')
             )
         ]
@@ -286,7 +286,7 @@ def main():
         doc=('A column-based table to store information about events, one event per row.'),
         datasets=[
             NWBDatasetSpec(
-                name='type',
+                name='event_type',
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The type of event that occurred on each trial. This is represented as a reference to '
                      'a row of the EventTypesTable.'),
@@ -313,7 +313,7 @@ def main():
         doc=('A column-based table to store information about actions, one action per row.'),
         datasets=[
             NWBDatasetSpec(
-                name='type',
+                name='action_type',
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The type of action that occurred on each trial. This is represented as a reference to '
                      'a row of the ActionTypesTable.'),
