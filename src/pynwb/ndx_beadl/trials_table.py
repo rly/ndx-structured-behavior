@@ -1,7 +1,7 @@
 from pynwb import register_class
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
-from hdmf.utils import docval, get_docval, getargs, popargs, call_docval_func, AllowPositional
+from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
 from ndx_beadl import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 from .utils import loadmat
@@ -72,7 +72,7 @@ class TrialsTable(TimeIntervals):
         self._states_table = popargs('states_table', kwargs)
         self._events_table = popargs('events_table', kwargs)
         self._action_table = popargs('actions_table', kwargs)
-        call_docval_func(super().__init__, kwargs)
+        super().__init__(**kwargs)
         self._set_dtr_ref()
 
     @docval(
@@ -156,7 +156,6 @@ class TrialsTable(TimeIntervals):
                 trial_events=[trial_events]
             trial_events_length.append(len(trial_events))
 
-    #     trial_events_length=[len(i['AllEvents']) for i in events_data]
         events_index=[]
         events_index_ranges=[]
         for i in range(len(trial_events_length)):
@@ -237,7 +236,7 @@ class StatesTable(TimeIntervals):
     def __init__(self, **kwargs):
         kwargs['name'] = 'states'
         state_types_table = popargs('state_types_table', kwargs)
-        call_docval_func(super().__init__, kwargs)
+        super().__init__(**kwargs)
         if self.state_type is not None and self.state_type.table is None:
             self.state_type.table = state_types_table
 
@@ -280,10 +279,10 @@ class StatesTable(TimeIntervals):
         data_dict= kwargs['data_dict']
 
         # 1) convert the list of dicts to list of lists containing the names.
-        temp=[]
+        converted_data=[]
         for entry in data_dict:
-            temp.append(list(itertools.chain.from_iterable([list(i.values()) for i in entry])))
-        return temp
+            converted_data.append(list(itertools.chain.from_iterable([list(i.values()) for i in entry])))
+        return converted_data
 
     def _all_states_validate(self, **kwargs):
         all_states= kwargs['all_states']
@@ -357,10 +356,10 @@ class StatesTable(TimeIntervals):
                 return(self)
 
             else:
-                msg = ''
+                msg = 'The states from the data does not match possible states from the task program.'
                 raise ValueError(msg)
         else:
-            msg = ''
+            msg = 'The AllStatesList column is invalid. Each entry must match.'
             raise ValueError(msg)
 
 
@@ -406,7 +405,7 @@ class EventsTable(DynamicTable):
     def __init__(self, **kwargs):
         kwargs['name'] = 'events'
         event_types_table = popargs('event_types_table', kwargs)
-        call_docval_func(super().__init__, kwargs)
+        super().__init__(**kwargs)
         if event_types_table is not None and self.event_type is not None and self.event_type.table is None:
             self.event_type.table = event_types_table
 
@@ -476,7 +475,8 @@ class EventsTable(DynamicTable):
 
             return(self)
         else:
-            "error"
+            msg = 'The events from the data does not match possible events from the task program.'
+            raise ValueError(msg)
 
 
 @register_class('StateTypesTable', 'ndx-beadl')
@@ -505,12 +505,12 @@ class StateTypesTable(DynamicTable):
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
-        self.beadl_task_program = kwargs['beadl_task_program']
+        self.beadl_task_program = popargs('beadl_task_program', kwargs)
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:
-            self.populate_from_program = kwargs['populate_from_program']
-        call_docval_func(super().__init__, kwargs)
+            self.populate_from_program = popargs('populate_from_program', kwargs)
+        super().__init__(**kwargs)
         if self.populate_from_program:
             self._populate_from_program()
 
@@ -549,12 +549,13 @@ class EventTypesTable(DynamicTable):
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
-        self.beadl_task_program = kwargs['beadl_task_program']
-        call_docval_func(super().__init__, kwargs)
+        self.beadl_task_program = popargs('beadl_task_program', kwargs)
+        populate_from_program = popargs('populate_from_program', kwargs)
+        super().__init__(**kwargs)
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:
-            self.populate_from_program = kwargs['populate_from_program']
+            self.populate_from_program = populate_from_program
         if self.populate_from_program:
             self._populate_from_program()
 
@@ -607,12 +608,13 @@ class ActionTypesTable(DynamicTable):
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'action_type'
-        call_docval_func(super().__init__, kwargs)
-        self.beadl_task_program = kwargs['beadl_task_program']
+        self.beadl_task_program = popargs('beadl_task_program', kwargs)
+        populate_from_program = popargs('populate_from_program', kwargs)
+        super().__init__(**kwargs)
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:
-            self.populate_from_program = kwargs['populate_from_program']
+            self.populate_from_program = populate_from_program
         if self.populate_from_program:
             self._populate_from_program()
 
@@ -673,7 +675,7 @@ class ActionsTable(DynamicTable):
     def __init__(self, **kwargs):
         kwargs['name'] = 'actions'
         action_types_table = popargs('action_types_table', kwargs)
-        call_docval_func(super().__init__, kwargs)
+        super().__init__(**kwargs)
         if action_types_table is not None and self.action_type is not None and self.action_type.table is None:
             self.action_type.table = action_types_table
 
@@ -759,4 +761,5 @@ class ActionsTable(DynamicTable):
 
             return(self)
         else:
-            print("error")
+            msg = 'The actions from the data does not match possible actions from the task program.'
+            raise ValueError(msg)

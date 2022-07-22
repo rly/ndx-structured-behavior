@@ -220,7 +220,6 @@ def main():
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The states that occurred on each trial. This is represented as a ragged array reference to '
                      'rows of the States table.'),
-                quantity='?',
             ),
             NWBDatasetSpec(
                 name='states_index',
@@ -233,7 +232,6 @@ def main():
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The events that occurred on each trial. This is represented as a ragged array reference to '
                      'rows of the Events table.'),
-                quantity='?',
             ),
             NWBDatasetSpec(
                 name='events_index',
@@ -246,7 +244,6 @@ def main():
                 neurodata_type_inc='DynamicTableRegion',
                 doc=('The actions that occurred on each trial. This is represented as a ragged array reference to '
                      'rows of the Actions table.'),
-                quantity='?',
             ),
             NWBDatasetSpec(
                 name='actions_index',
