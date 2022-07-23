@@ -1,4 +1,5 @@
 from pynwb import register_class
+from pynwb.file import LabMetaData
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
@@ -6,6 +7,58 @@ from ndx_beadl import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 from .utils import loadmat
 import itertools
+
+@register_class('Task', 'ndx-beadl')
+class Task(LabMetaData):
+    __nwbfields__ = (
+        {'name': 'task_program', 'child': True},
+        {'name': 'task_schema', 'child': True},
+        {'name': 'event_types', 'child': True},
+        {'name': 'state_types', 'child': True},
+        {'name': 'action_types', 'child': True},
+
+    )
+    @docval(
+        {
+            'name': 'task_program',
+            'type': 'TaskProgram',
+            'doc': 'A dataset to store a task program.',
+            'default': None
+        },
+        {
+            'name': 'task_schema',
+            'type': 'TaskSchema',
+            'doc': 'A dataset to store a task schema, e.g., an XSD file.',
+            'default': None
+        },
+        {
+            'name': 'event_types',
+            'type': 'EventTypesTable',
+            'doc': 'TBD',
+        },
+        {
+            'name': 'state_types',
+            'type': 'StateTypesTable',
+            'doc': 'TBD',
+        },
+        {
+            'name': 'action_types',
+            'type': 'ActionTypesTable',
+            'doc': 'TBD',
+        },)
+    def __init__(self, **kwargs):
+        kwargs['name'] = 'task'
+        task_program = popargs('task_program', kwargs)
+        task_schema = popargs('task_schema', kwargs)
+        event_types = popargs('event_types', kwargs)
+        state_types = popargs('state_types', kwargs)
+        action_types = popargs('action_types', kwargs)
+        super().__init__(**kwargs)
+        self.task_program = task_program
+        self.task_schema = task_schema
+        self.event_types = event_types
+        self.state_types = state_types
+        self.action_types = action_types
 
 @register_class('TrialsTable', 'ndx-beadl')
 class TrialsTable(TimeIntervals):
@@ -505,12 +558,15 @@ class StateTypesTable(DynamicTable):
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
-        self.beadl_task_program = popargs('beadl_task_program', kwargs)
+        beadl_task_program = popargs('beadl_task_program', kwargs)
+        populate_from_program = popargs('populate_from_program', kwargs)
+        super().__init__(**kwargs)
+        self.beadl_task_program = beadl_task_program
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:
-            self.populate_from_program = popargs('populate_from_program', kwargs)
-        super().__init__(**kwargs)
+            self.populate_from_program = populate_from_program
+
         if self.populate_from_program:
             self._populate_from_program()
 
@@ -549,9 +605,10 @@ class EventTypesTable(DynamicTable):
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
-        self.beadl_task_program = popargs('beadl_task_program', kwargs)
+        beadl_task_program = popargs('beadl_task_program', kwargs)
         populate_from_program = popargs('populate_from_program', kwargs)
         super().__init__(**kwargs)
+        self.beadl_task_program = beadl_task_program
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:
