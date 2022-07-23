@@ -370,7 +370,13 @@ def compute_state_transition_matrix(states: Union[StatesTable, pd.DataFrame],
     return state_transition_count_df, state_transition_probability_df
 
 
-def plot_state_transition_graph(transition_matrix, figsize=None, node_params=None):
+def plot_state_transition_graph(transition_matrix,
+                                figsize=None,
+                                node_params=None,
+                                edge_color='black',
+                                edge_font_color='black',
+                                node_font_color='red',
+                                fontsize=12):
     """
     Given a DataFrame with the state transition matrix (compute e.g., via compute_state_transition_matrix)
     plot the corresponding networkx graph visualizing the state transitions
@@ -397,9 +403,9 @@ def plot_state_transition_graph(transition_matrix, figsize=None, node_params=Non
 
     fig =  plt.figure(figsize=(10, 10) if figsize is None else figsize)
     pos = nx.planar_layout(G)
-    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
-    nx.draw_networkx_labels(G, pos, font_weight=2)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels)
+    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5, edge_color=edge_color)
+    nx.draw_networkx_labels(G, pos, font_weight=2, font_color=node_font_color, font_size=fontsize)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels, font_color=edge_font_color, font_size=fontsize)
     if node_params is not None:
         nx.draw_networkx_nodes(G, pos, **node_params)
     plt.axis('off')
