@@ -170,42 +170,44 @@ def main():
         # ],
     )
 
-    # tasks = NWBGroupSpec(
-    #     name='task',
-    #     neurodata_type_def='Task',
-    #     neurodata_type_inc='LabMetaData',
-    #     doc=('A group to store task-related general metadata. TODO When merged with core, this will no longer '
-    #          'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
-    #     datasets=[
-    #         NWBDatasetSpec(
-    #             name='task_program',
-    #             neurodata_type_inc='TaskProgram',
-    #             doc=('A dataset to store a task program.'),
-    #             quantity='?'
-    #         ),
-    #         NWBDatasetSpec(
-    #             name='task_schema',
-    #             neurodata_type_inc='TaskSchema',
-    #             doc=('A dataset to store a task schema, e.g., an XSD file.'),
-    #             quantity='?'
-    #         ),
-    #         NWBDatasetSpec(
-    #             name='event_types',
-    #             neurodata_type_inc='DynamicTable', #eventually be "EventTypesTable"
-    #             doc=('The EventTypesTable')
-    #         ),
-    #         NWBDatasetSpec(
-    #             name='state_types',
-    #             neurodata_type_inc='DynamicTable', #eventually be "StateTypesTable"
-    #             doc=('The StateTypesTable')
-    #         ),
-    #         NWBDatasetSpec(
-    #             name='action_types',
-    #             neurodata_type_inc='DynamicTable', #eventually be "ActionTypesTable"
-    #             doc=('The ActionTypesTable')
-    #         )
-    #     ]
-    # )
+    tasks = NWBGroupSpec(
+        name='task',
+        neurodata_type_def='Task',
+        neurodata_type_inc='LabMetaData',
+        doc=('A group to store task-related general metadata. TODO When merged with core, this will no longer '
+             'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
+        datasets=[
+            NWBDatasetSpec(
+                name='task_program',
+                neurodata_type_inc='TaskProgram',
+                doc=('A dataset to store a task program.'),
+                quantity='?'
+            ),
+            NWBDatasetSpec(
+                name='task_schema',
+                neurodata_type_inc='TaskSchema',
+                doc=('A dataset to store a task schema, e.g., an XSD file.'),
+                quantity='?'
+            ),
+        ],
+        groups=[
+            NWBGroupSpec(
+                name='event_types',
+                neurodata_type_inc='EventTypesTable', #eventually be "EventTypesTable"
+                doc=('The EventTypesTable')
+            ),
+            NWBGroupSpec(
+                name='state_types',
+                neurodata_type_inc='StateTypesTable', #eventually be "StateTypesTable"
+                doc=('The StateTypesTable')
+            ),
+            NWBGroupSpec(
+                name='action_types',
+                neurodata_type_inc='ActionTypesTable', #eventually be "ActionTypesTable"
+                doc=('The ActionTypesTable')
+            )
+        ]
+    )
 
     # TODO force the DTR/VectorIndex targets to be specific data types
 
@@ -334,7 +336,7 @@ def main():
     )
 
 
-    new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema,
+    new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
                       trials_table, state_types_table, states_table, event_types_table, events_table,
                       actions_table, action_types_table]
 

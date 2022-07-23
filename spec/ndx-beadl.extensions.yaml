@@ -48,6 +48,31 @@ datasets:
     doc: The language of the schema, fixed to "XSD".
     required: false
 groups:
+- neurodata_type_def: Task
+  neurodata_type_inc: LabMetaData
+  name: task
+  doc: A group to store task-related general metadata. TODO When merged with core,
+    this will no longer inherit from LabMetaData but from NWBContainer and be placed
+    optionally in /general.
+  datasets:
+  - name: task_program
+    neurodata_type_inc: TaskProgram
+    doc: A dataset to store a task program.
+    quantity: '?'
+  - name: task_schema
+    neurodata_type_inc: TaskSchema
+    doc: A dataset to store a task schema, e.g., an XSD file.
+    quantity: '?'
+  groups:
+  - name: event_types
+    neurodata_type_inc: EventTypesTable
+    doc: The EventTypesTable
+  - name: state_types
+    neurodata_type_inc: StateTypesTable
+    doc: The StateTypesTable
+  - name: action_types
+    neurodata_type_inc: ActionTypesTable
+    doc: The ActionTypesTable
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials
@@ -147,28 +172,3 @@ groups:
   - name: action_name
     neurodata_type_inc: VectorData
     doc: The name of the action
-- neurodata_type_def: Task
-  neurodata_type_inc: LabMetaData
-  name: task
-  doc: A group to store task-related general metadata. TODO When merged with core,
-    this will no longer inherit from LabMetaData but from NWBContainer and be placed
-    optionally in /general.
-  datasets:
-  - name: task_program
-    neurodata_type_inc: TaskProgram
-    doc: A dataset to store a task program.
-    quantity: '?'
-  - name: task_schema
-    neurodata_type_inc: TaskSchema
-    doc: A dataset to store a task schema, e.g., an XSD file.
-    quantity: '?'
-  groups:
-  - name: event_types
-    neurodata_type_inc: EventTypesTable
-    doc: The EventTypesTable
-  - name: state_types
-    neurodata_type_inc: StateTypesTable
-    doc: The StateTypesTable
-  - name: action_types
-    neurodata_type_inc: ActionTypesTable
-    doc: The ActionTypesTable
