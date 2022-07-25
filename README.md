@@ -3,7 +3,9 @@
 The extension *ndx_beadl* defines a collection of interlinked table data structures for
 storing behavioral tasks and data. While the extension has been designed with BEADL in 
 mind, the data structures are general and are intended to be useful even without BEADL. 
-The data model consists of three main components:
+For additional information about BEADL, please visit [https://beadl.org/](https://beadl.org/).
+
+The *ndx-beadl* data model consists of three main components:
 
 ![ndx-beadl schema](docs/tutorial_nwb_userdays_2022/ndx_beadl_schema.png?raw=true "ndx-beadl schema")
 
