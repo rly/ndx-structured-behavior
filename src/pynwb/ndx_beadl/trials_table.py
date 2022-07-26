@@ -764,7 +764,7 @@ class ActionsTable(DynamicTable):
             msg = 'Type index is out of bounds'
             raise ValueError(msg)
 
-    add_event = add_row  # alias for add_row
+    add_action = add_row  # alias for add_row
 
     @docval(
         {
