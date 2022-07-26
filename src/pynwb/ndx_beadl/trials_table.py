@@ -34,17 +34,17 @@ class Task(LabMetaData):
         {
             'name': 'event_types',
             'type': 'EventTypesTable',
-            'doc': 'TBD',
+            'doc': 'The table for event types populated by the task program',
         },
         {
             'name': 'state_types',
             'type': 'StateTypesTable',
-            'doc': 'TBD',
+            'doc': 'The table for state types populated by the task program',
         },
         {
             'name': 'action_types',
             'type': 'ActionTypesTable',
-            'doc': 'TBD',
+            'doc': 'The table for action types populated by the task program',
         },)
     def __init__(self, **kwargs):
         kwargs['name'] = 'task'
@@ -167,7 +167,7 @@ class TrialsTable(TimeIntervals):
             self.actions.table = self._action_table
 
     def populate_from_matlab(self, **kwargs):
-        states_table = self._states_table # this will be self.states when implemeneted
+        states_table = self._states_table
         events_table = self._events_table
         actions_table = self._action_table
         file_path = kwargs['data_path']
@@ -434,7 +434,7 @@ class EventsTable(DynamicTable):
         },
         {
             'name': 'value',
-            'description': ('the event value'),
+            'description': ('The event value'),
             'required': True
         },
     )
@@ -534,8 +534,6 @@ class EventsTable(DynamicTable):
 
 @register_class('StateTypesTable', 'ndx-beadl')
 class StateTypesTable(DynamicTable):
-    # __fields__ = ('beadl_task_program',)
-
     __columns__ = (
         {
         'name': 'state_name',
@@ -580,9 +578,6 @@ class StateTypesTable(DynamicTable):
 
 @register_class('EventTypesTable', 'ndx-beadl')
 class EventTypesTable(DynamicTable):
-
-    # __fields__ = ('beadl_task_program',)
-
     __columns__ = (
         {
         'name': 'event_name',
@@ -641,8 +636,6 @@ class EventTypesTable(DynamicTable):
 
 @register_class('ActionTypesTable', 'ndx-beadl')
 class ActionTypesTable(DynamicTable):
-    # __fields__ = ('beadl_task_program',)
-
     __columns__ = (
         {
         'name': 'action_name',
@@ -692,8 +685,6 @@ class ActionTypesTable(DynamicTable):
 
 @register_class('ActionsTable', 'ndx-beadl')
 class ActionsTable(DynamicTable):
-    """A table to hold OutputAction data."""
-
     __columns__ = (
         {
             'name': 'timestamp',
