@@ -50,6 +50,7 @@ class Task(LabMetaData):
             'type': 'TaskArgumentTable',
             'doc': 'The table for task arguments populated by the task program',
         },
+        allow_positional=AllowPositional.ERROR,
         )
     def __init__(self, **kwargs):
         kwargs['name'] = 'task'

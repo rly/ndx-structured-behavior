@@ -307,9 +307,7 @@ class TestTaskSeriesRoundtrip(TestCase):
 
         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
             read_nwbfile = io.read()
-            # breakpoint()
             self.assertContainerEqual(file_task, read_nwbfile.lab_meta_data["task"])
-            # breakpoint()
-            # self.assertContainerEqual(actions, read_nwbfile.get_acquisition("actions"))
+            self.assertContainerEqual(actions, read_nwbfile.get_acquisition("actions"))
             self.assertContainerEqual(events, read_nwbfile.get_acquisition("events"))
             self.assertContainerEqual(states, read_nwbfile.get_acquisition("states"))

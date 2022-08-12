@@ -175,7 +175,7 @@ groups:
     doc: The name of the action
 - neurodata_type_def: TaskArgumentTable
   neurodata_type_inc: DynamicTable
-  name: task_argument_table
+  name: task_arguments
   doc: Table to hold Task Program arguments.
   datasets:
   - name: argument_name

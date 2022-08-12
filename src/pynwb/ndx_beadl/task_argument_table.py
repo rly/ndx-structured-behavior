@@ -5,6 +5,7 @@ from hdmf.container import Row
 from ndx_beadl import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 
+@register_class('TaskArgumentTable', 'ndx-beadl')
 class TaskArgumentTable(DynamicTable):
     """
     A table to hold Task Program arguments.
@@ -58,7 +59,7 @@ class TaskArgumentTable(DynamicTable):
             'default': False}
     )
     def __init__(self, **kwargs):
-        kwargs['name'] = 'task_argument_table'
+        kwargs['name'] = 'task_arguments'
         beadl_task_program = popargs('beadl_task_program', kwargs)
         populate_from_program = popargs('populate_from_program', kwargs)
         super().__init__(**kwargs)
