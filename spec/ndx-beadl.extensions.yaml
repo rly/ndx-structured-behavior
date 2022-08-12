@@ -55,14 +55,12 @@ groups:
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - name: task_program
-    neurodata_type_inc: TaskProgram
+  - name: beadl_task_program
+    neurodata_type_inc: BEADLTaskProgram
     doc: A dataset to store a task program.
-    quantity: '?'
-  - name: task_schema
-    neurodata_type_inc: TaskSchema
+  - name: beadl_task_schema
+    neurodata_type_inc: BEADLTaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
-    quantity: '?'
   groups:
   - name: event_types
     neurodata_type_inc: EventTypesTable
@@ -73,6 +71,9 @@ groups:
   - name: action_types
     neurodata_type_inc: ActionTypesTable
     doc: The ActionTypesTable
+  - name: task_arguments
+    neurodata_type_inc: TaskArgumentTable
+    doc: The TaskArgumentTable
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials
@@ -172,3 +173,27 @@ groups:
   - name: action_name
     neurodata_type_inc: VectorData
     doc: The name of the action
+- neurodata_type_def: TaskArgumentTable
+  neurodata_type_inc: DynamicTable
+  name: task_argument_table
+  doc: Table to hold Task Program arguments.
+  datasets:
+  - name: argument_name
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The names of the arguments
+  - name: argument_description
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The comment of the argument from the program
+  - name: expression
+    neurodata_type_inc: VectorData
+    doc: The expression/value (as a string) of the argument
+  - name: expression_type
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The type of the argument value.
+  - name: output_type
+    neurodata_type_inc: VectorData
+    dtype: text
+    doc: The intended final type of the argument value.

@@ -11,25 +11,26 @@ import itertools
 @register_class('Task', 'ndx-beadl')
 class Task(LabMetaData):
     __nwbfields__ = (
-        {'name': 'task_program', 'child': True},
-        {'name': 'task_schema', 'child': True},
+        {'name': 'beadl_task_program', 'child': True},
+        {'name': 'beadl_task_schema', 'child': True},
         {'name': 'event_types', 'child': True},
         {'name': 'state_types', 'child': True},
         {'name': 'action_types', 'child': True},
+        {'name': 'task_arguments', 'child': True}
 
     )
     @docval(
         {
-            'name': 'task_program',
-            'type': 'TaskProgram',
+            'name': 'beadl_task_program',
+            'type': 'BEADLTaskProgram',
             'doc': 'A dataset to store a task program.',
-            'default': None
+            # 'default': None
         },
         {
-            'name': 'task_schema',
-            'type': 'TaskSchema',
+            'name': 'beadl_task_schema',
+            'type': 'BEADLTaskSchema',
             'doc': 'A dataset to store a task schema, e.g., an XSD file.',
-            'default': None
+            # 'default': None
         },
         {
             'name': 'event_types',
@@ -45,20 +46,28 @@ class Task(LabMetaData):
             'name': 'action_types',
             'type': 'ActionTypesTable',
             'doc': 'The table for action types populated by the task program',
-        },)
+        },
+        {
+            'name': 'task_arguments',
+            'type': 'TaskArgumentTable',
+            'doc': 'The table for task arguments populated by the task program',
+        },
+        )
     def __init__(self, **kwargs):
         kwargs['name'] = 'task'
-        task_program = popargs('task_program', kwargs)
-        task_schema = popargs('task_schema', kwargs)
+        task_program = popargs('beadl_task_program', kwargs)
+        task_schema = popargs('beadl_task_schema', kwargs)
         event_types = popargs('event_types', kwargs)
         state_types = popargs('state_types', kwargs)
         action_types = popargs('action_types', kwargs)
+        task_arguments = popargs('task_arguments', kwargs)
         super().__init__(**kwargs)
-        self.task_program = task_program
-        self.task_schema = task_schema
+        self.beadl_task_program = task_program
+        self.beadl_task_schema = task_schema
         self.event_types = event_types
         self.state_types = state_types
         self.action_types = action_types
+        self.task_arguments = task_arguments
 
 @register_class('TrialsTable', 'ndx-beadl')
 class TrialsTable(TimeIntervals):
@@ -175,6 +184,7 @@ class TrialsTable(TimeIntervals):
         matlab_file = loadmat(file_path)
         states_data = matlab_file['BeadlData']['States']
         events_data = matlab_file['BeadlData']['Events']
+        args_data = matlab_file['BeadlData']['BeadlArguments']
 
         trial_paths = [i['TrialPath'] for i in states_data]
 
@@ -243,6 +253,10 @@ class TrialsTable(TimeIntervals):
         #populate trials_table
         for i in range(len(start_times)):
             self.add_trial(start_time=start_times[i], stop_time=stop_times[i], states=states_index_ranges[i], events=events_index_ranges[i], actions=action_index_ranges[i])
+
+        #populate BeadlArguments as columns
+        for arg in args_data:
+            self.add_column(name=arg, description='Task Program Argument', data=args_data[arg])
 
         return self
 
@@ -552,7 +566,7 @@ class StateTypesTable(DynamicTable):
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
          'doc': 'the BEADLTaskProgram used', 'default': None},
-        {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
+        {'name': 'populate_from_program', 'type': bool, 'doc': 'Boolean to populate from task program.',
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'state_types'
@@ -568,7 +582,7 @@ class StateTypesTable(DynamicTable):
         if self.populate_from_program:
             self._populate_from_program()
 
-    def _populate_from_program(self, **kwargs):
+    def _populate_from_program(self):
         parsed_xml_object = BeadlXMLParser(string=self.beadl_task_program.data)
         element=parsed_xml_object.element(element_name='BeadlStates')
         parsed_states = parsed_xml_object._parse_protocal_children(element=element)
@@ -596,7 +610,7 @@ class EventTypesTable(DynamicTable):
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
          'doc': 'the BEADLTaskProgram used', 'default': None},
-        {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
+        {'name': 'populate_from_program', 'type': bool, 'doc': 'Boolean to populate from task program.',
          'default': False})
     def __init__(self, **kwargs):
         kwargs['name'] = 'event_types'
@@ -654,13 +668,14 @@ class ActionTypesTable(DynamicTable):
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
          'doc': 'the BEADLTaskProgram used', 'default': None},
-        {'name': 'populate_from_program', 'type': bool, 'doc': 'TBD',
+        {'name': 'populate_from_program', 'type': bool, 'doc': 'Boolean to populate from task program.',
          'default': False})
     def __init__(self, **kwargs):
-        kwargs['name'] = 'action_type'
-        self.beadl_task_program = popargs('beadl_task_program', kwargs)
+        kwargs['name'] = 'action_types'
+        beadl_task_program = popargs('beadl_task_program', kwargs)
         populate_from_program = popargs('populate_from_program', kwargs)
         super().__init__(**kwargs)
+        self.beadl_task_program = beadl_task_program
         if self.beadl_task_program == None:
             self.populate_from_program = False
         else:

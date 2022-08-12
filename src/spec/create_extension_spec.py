@@ -113,15 +113,6 @@ def main():
                 doc=('The name of the action'),
             ),
         ],
-        # attributes=[
-        #     NWBAttributeSpec(
-        #         name='beadl_task_program',
-        #         doc='The task program',
-        #         dtype=NWBRefSpec(
-        #             target_type='BEADLTaskProgram',
-        #             reftype='object'
-        #     ),)
-        # ],
     )
 
     event_types_table = NWBGroupSpec(
@@ -136,15 +127,6 @@ def main():
                 doc=('The name of the event'),
             ),
         ],
-        # attributes=[
-        #     NWBAttributeSpec(
-        #         name='beadl_task_program',
-        #         doc='The task program',
-        #         dtype=NWBRefSpec(
-        #             target_type='BEADLTaskProgram',
-        #             reftype='object'
-        #     ),)
-        # ],
     )
 
     state_types_table = NWBGroupSpec(
@@ -159,15 +141,6 @@ def main():
                 doc=('The name of the state'),
             ),
         ],
-        # attributes=[
-        #     NWBAttributeSpec(
-        #         name='beadl_task_program',
-        #         doc='The task program',
-        #         dtype=NWBRefSpec(
-        #             target_type='BEADLTaskProgram',
-        #             reftype='object'
-        #     ),)
-        # ],
     )
 
     tasks = NWBGroupSpec(
@@ -176,36 +149,42 @@ def main():
         neurodata_type_inc='LabMetaData',
         doc=('A group to store task-related general metadata. TODO When merged with core, this will no longer '
              'inherit from LabMetaData but from NWBContainer and be placed optionally in /general.'),
-        datasets=[
-            NWBDatasetSpec(
-                name='task_program',
-                neurodata_type_inc='TaskProgram',
-                doc=('A dataset to store a task program.'),
-                quantity='?'
-            ),
-            NWBDatasetSpec(
-                name='task_schema',
-                neurodata_type_inc='TaskSchema',
-                doc=('A dataset to store a task schema, e.g., an XSD file.'),
-                quantity='?'
-            ),
-        ],
         groups=[
             NWBGroupSpec(
                 name='event_types',
-                neurodata_type_inc='EventTypesTable', #eventually be "EventTypesTable"
+                neurodata_type_inc='EventTypesTable',
                 doc=('The EventTypesTable')
             ),
             NWBGroupSpec(
                 name='state_types',
-                neurodata_type_inc='StateTypesTable', #eventually be "StateTypesTable"
+                neurodata_type_inc='StateTypesTable',
                 doc=('The StateTypesTable')
             ),
             NWBGroupSpec(
                 name='action_types',
-                neurodata_type_inc='ActionTypesTable', #eventually be "ActionTypesTable"
+                neurodata_type_inc='ActionTypesTable',
                 doc=('The ActionTypesTable')
+            ),
+            NWBGroupSpec(
+                name='task_arguments',
+                neurodata_type_inc='TaskArgumentTable',
+                doc=('The TaskArgumentTable')
             )
+
+        ],
+        datasets=[
+            NWBDatasetSpec(
+                name='beadl_task_program',
+                neurodata_type_inc='BEADLTaskProgram',
+                doc=('A dataset to store a task program.'),
+                # quantity='?'
+            ),
+            NWBDatasetSpec(
+                name='beadl_task_schema',
+                neurodata_type_inc='BEADLTaskSchema',
+                doc=('A dataset to store a task schema, e.g., an XSD file.'),
+                # quantity='?'
+            ),
         ]
     )
 
@@ -335,10 +314,49 @@ def main():
         ]
     )
 
+    task_argument_table = NWBGroupSpec(
+        name='task_argument_table',
+        neurodata_type_def='TaskArgumentTable',
+        neurodata_type_inc='DynamicTable',
+        doc='Table to hold Task Program arguments.',
+        datasets=[
+            NWBDatasetSpec(
+                name='argument_name',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The names of the arguments'),
+            ),
+            NWBDatasetSpec(
+                name='argument_description',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The comment of the argument from the program'),
+            ),
+            NWBDatasetSpec(
+                name='expression',
+                neurodata_type_inc='VectorData',
+                doc=('The expression/value (as a string) of the argument'),
+            ),
+            NWBDatasetSpec(
+                name='expression_type',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The type of the argument value.'),
+            ),
+            NWBDatasetSpec(
+                name='output_type',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The intended final type of the argument value.'),
+            ),
+        ]
+
+    )
+
 
     new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
                       trials_table, state_types_table, states_table, event_types_table, events_table,
-                      actions_table, action_types_table]
+                      actions_table, action_types_table, task_argument_table]
 
     # new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks]
 

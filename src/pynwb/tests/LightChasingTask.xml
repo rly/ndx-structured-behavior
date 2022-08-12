@@ -2,11 +2,11 @@
 <BEADL version="0.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BEADL.xsd">
     <BeadlTrialProtocol name="LightChasingTask" startState="WaitForPoke" numberOfTrials="INF">
         <BeadlArguments>
-            <BeadlArgument name="CorrectPortNum" expression="randi(3)" comment="random integer value in range [1..3] to define the port to be used as correct port" type="numeric" />
-            <BeadlArgument name="RewardSize" expression="10" comment="reward size in microliter" type="numeric" />
-            <BeadlArgument name="ValveTime" expression="GetValveTime(RewardSize, ValveTime)" comment="convert the reward size into a duration the reward valve needs to be opened" type="numeric" />
-            <BeadlArgument name="TimeOutDuration" expression="6" comment="Time out duration when the subject selected the wrong port" type="numeric" />
-            <BeadlArgument name="ITIDuration" expression="6" comment="Inter-Trial-Interval" type="numeric" />
+            <BeadlArgument name="CorrectPortNum" expression="randi(3)" outputType="numeric" expressionType="string" comment="random integer value in range [1..3] to define the port to be used as correct port"  />
+            <BeadlArgument name="RewardSize" expression="10" outputType="numeric" expressionType="integer" comment="reward size in microliter" />
+            <BeadlArgument name="ValveTime" expression="GetValveTime(RewardSize, ValveTime)" outputType="numeric" expressionType="string" comment="convert the reward size into a duration the reward valve needs to be opened" />
+            <BeadlArgument name="TimeOutDuration" expression="6.0" outputType="numeric" expressionType="double" comment="Time out duration when the subject selected the wrong port" />
+            <BeadlArgument name="ITIDuration" expression="6" outputType="numeric" expressionType="integer" comment="Inter-Trial-Interval" />
         </BeadlArguments>
         <HardwareSettings hardware="Bpod" version="r0.5">
             <ConnectionMapping name="CorrectPort" resourceName="port1" type="behavioralPort">
