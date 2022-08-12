@@ -143,6 +143,44 @@ def main():
         ],
     )
 
+    task_argument_table = NWBGroupSpec(
+        name='task_argument_table',
+        neurodata_type_def='TaskArgumentTable',
+        neurodata_type_inc='DynamicTable',
+        doc='Table to hold Task Program arguments.',
+        datasets=[
+            NWBDatasetSpec(
+                name='argument_name',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The names of the arguments'),
+            ),
+            NWBDatasetSpec(
+                name='argument_description',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The comment of the argument from the program'),
+            ),
+            NWBDatasetSpec(
+                name='expression',
+                neurodata_type_inc='VectorData',
+                doc=('The expression/value (as a string) of the argument'),
+            ),
+            NWBDatasetSpec(
+                name='expression_type',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The type of the argument value.'),
+            ),
+            NWBDatasetSpec(
+                name='output_type',
+                neurodata_type_inc='VectorData',
+                dtype='text',
+                doc=('The intended final type of the argument value.'),
+            ),
+        ]
+    )
+
     tasks = NWBGroupSpec(
         name='task',
         neurodata_type_def='Task',
@@ -314,51 +352,9 @@ def main():
         ]
     )
 
-    task_argument_table = NWBGroupSpec(
-        name='task_argument_table',
-        neurodata_type_def='TaskArgumentTable',
-        neurodata_type_inc='DynamicTable',
-        doc='Table to hold Task Program arguments.',
-        datasets=[
-            NWBDatasetSpec(
-                name='argument_name',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The names of the arguments'),
-            ),
-            NWBDatasetSpec(
-                name='argument_description',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The comment of the argument from the program'),
-            ),
-            NWBDatasetSpec(
-                name='expression',
-                neurodata_type_inc='VectorData',
-                doc=('The expression/value (as a string) of the argument'),
-            ),
-            NWBDatasetSpec(
-                name='expression_type',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The type of the argument value.'),
-            ),
-            NWBDatasetSpec(
-                name='output_type',
-                neurodata_type_inc='VectorData',
-                dtype='text',
-                doc=('The intended final type of the argument value.'),
-            ),
-        ]
-
-    )
-
-
     new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
                       trials_table, state_types_table, states_table, event_types_table, events_table,
                       actions_table, action_types_table, task_argument_table]
-
-    # new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks]
 
     # export the spec to yaml files in the spec folder
     output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'spec'))

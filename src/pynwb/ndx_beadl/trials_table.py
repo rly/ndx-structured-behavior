@@ -24,13 +24,11 @@ class Task(LabMetaData):
             'name': 'beadl_task_program',
             'type': 'BEADLTaskProgram',
             'doc': 'A dataset to store a task program.',
-            # 'default': None
         },
         {
             'name': 'beadl_task_schema',
             'type': 'BEADLTaskSchema',
             'doc': 'A dataset to store a task schema, e.g., an XSD file.',
-            # 'default': None
         },
         {
             'name': 'event_types',
