@@ -101,7 +101,7 @@ class TrialsTable(TimeIntervals):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table that holds the data from the trials.',
             'default': 'Trial data',
         },
         {
@@ -126,10 +126,6 @@ class TrialsTable(TimeIntervals):
     )
     def __init__(self, **kwargs):
         kwargs['name'] = 'trials'
-        # store the table references as instance vars in case the DTR column does not exist yet
-        # and a row is added later which results in the DTR column being created.
-        # if the DTR column is not added and no rows are added, then these table references
-        # are not used.
         self._states_table = popargs('states_table', kwargs)
         self._events_table = popargs('events_table', kwargs)
         self._action_table = popargs('actions_table', kwargs)
@@ -174,6 +170,13 @@ class TrialsTable(TimeIntervals):
         if self._action_table is not None and self.actions is not None and self.actions.table is None:
             self.actions.table = self._action_table
 
+    @docval(
+        {
+            'name': 'data_path',
+            'type': str,
+            'doc': 'The path to the matlab data file.'
+        }
+    )
     def populate_from_matlab(self, **kwargs):
         states_table = self._states_table
         events_table = self._events_table
@@ -288,7 +291,7 @@ class StatesTable(TimeIntervals):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table to hold states data.',
             'default': 'State data',
         },
         {
@@ -366,6 +369,13 @@ class StatesTable(TimeIntervals):
         else:
             return True, unique_keys[0]
 
+    @docval(
+        {
+            'name': 'data_path',
+            'type': str,
+            'doc': 'The path to the matlab data file.'
+        }
+    )
     def populate_from_matlab(self, **kwargs):
         state_types_table = self.state_type.table
         file_path = kwargs['data_path']
@@ -457,7 +467,7 @@ class EventsTable(DynamicTable):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table to hold events data.',
             'default': 'Event data',
         },
         {
@@ -505,9 +515,16 @@ class EventsTable(DynamicTable):
 
     add_event = add_row  # alias for add_row
 
+    @docval(
+        {
+            'name': 'data_path',
+            'type': str,
+            'doc': 'The path to the matlab data file.'
+        }
+    )
     def populate_from_matlab(self, **kwargs):
         event_types_table = self.event_type.table
-        file_path = kwargs['data_path'] # data
+        file_path = kwargs['data_path']
 
         matlab_file = loadmat(file_path)
         events_data = matlab_file['BeadlData']['Events']
@@ -560,7 +577,7 @@ class StateTypesTable(DynamicTable):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table for the state_types',
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
@@ -604,7 +621,7 @@ class EventTypesTable(DynamicTable):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table for the event_types',
             'default': 'state type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
@@ -662,7 +679,7 @@ class ActionTypesTable(DynamicTable):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table for the action_types',
             'default': 'Action type data',
         },
         {'name': 'beadl_task_program', 'type': BEADLTaskProgram,
@@ -723,7 +740,7 @@ class ActionsTable(DynamicTable):
         {
             'name': 'description',
             'type': str,
-            'doc': 'A description of what is in this table.',
+            'doc': 'A table to hold the action data.',
             'default': 'OutputAction data',
         },
         {
@@ -773,15 +790,10 @@ class ActionsTable(DynamicTable):
 
     @docval(
         {
-            'name': 'action_types_table',
-            'type': ActionTypesTable,
-            'doc': ('The action type table.'),
-        },
-        {
             'name': 'data_path',
             'type': str,
-            'doc': ('The path to matlab dataset'),
-        },
+            'doc': 'The path to the matlab data file.'
+        }
     )
     def populate_from_matlab(self, **kwargs):
         action_types_table = self.action_type.table

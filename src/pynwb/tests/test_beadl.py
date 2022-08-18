@@ -196,7 +196,7 @@ class TestBeadlTablesPopulate(TestCase):
         action_types = ActionTypesTable(description='description', beadl_task_program=self.beadl_task_program, populate_from_program=True)
 
         actions = ActionsTable(description="description", action_types_table=action_types)
-        actions.populate_from_matlab(action_types_table=action_types, data_path=self.beadl_data)
+        actions.populate_from_matlab(data_path=self.beadl_data)
 
         event_types = EventTypesTable(description="description", beadl_task_program=self.beadl_task_program, populate_from_program=True) #assert description
 
