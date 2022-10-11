@@ -10,8 +10,9 @@ def main():
         doc="""An NWB extension for storing BEADL programs and data""",
         name="""ndx-beadl""",
         version="""0.1.0""",
-        author=list(map(str.strip, """Ryan Ly""".split(','))),
-        contact=list(map(str.strip, """rly@lbl.gov""".split(',')))
+        author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Reubel, Michael Wulf""".split(','))),
+        contact=list(map(str.strip, """rly@lbl.gov, mavaylon@lbl.gov,
+                                       oruebel@lbl.gov, michael.wulf@wustl.edu """.split(',')))
     )
 
     ns_builder.include_type('NWBData', namespace='core')

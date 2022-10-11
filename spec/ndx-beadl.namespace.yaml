@@ -1,8 +1,14 @@
 namespaces:
 - author:
   - Ryan Ly
+  - Matthew Avaylon
+  - Oliver Reubel
+  - Michael Wulf
   contact:
   - rly@lbl.gov
+  - mavaylon@lbl.gov
+  - oruebel@lbl.gov
+  - michael.wulf@wustl.edu
   doc: An NWB extension for storing BEADL programs and data
   name: ndx-beadl
   schema:
