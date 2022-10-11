@@ -5,8 +5,8 @@ from hdmf.container import Row
 from ndx_beadl import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 
-@register_class('TaskArgumentTable', 'ndx-beadl')
-class TaskArgumentTable(DynamicTable):
+@register_class('TaskArgumentsTable', 'ndx-beadl')
+class TaskArgumentsTable(DynamicTable):
     """
     A table to hold Task Program arguments.
     """

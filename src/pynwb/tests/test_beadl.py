@@ -10,7 +10,7 @@ from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
 from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
-                       TaskArgumentTable)
+                       TaskArgumentsTable)
 
 
 def set_up_nwbfile():
@@ -88,7 +88,7 @@ class TestBEADLTableConstructors(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        task_arg_table=TaskArgumentTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        task_arg_table=TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
 
         action_types = ActionTypesTable(description='description', beadl_task_program=beadl_task_program, populate_from_program=True)
 
@@ -253,7 +253,7 @@ class TestTaskSeriesRoundtrip(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        task_arg_table=TaskArgumentTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        task_arg_table=TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
 
         action_types = ActionTypesTable(description='description', beadl_task_program=beadl_task_program, populate_from_program=True)
 

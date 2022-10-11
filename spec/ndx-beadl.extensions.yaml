@@ -72,8 +72,8 @@ groups:
     neurodata_type_inc: ActionTypesTable
     doc: The ActionTypesTable
   - name: task_arguments
-    neurodata_type_inc: TaskArgumentTable
-    doc: The TaskArgumentTable
+    neurodata_type_inc: TaskArgumentsTable
+    doc: The TaskArgumentsTable
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials
@@ -173,7 +173,7 @@ groups:
   - name: action_name
     neurodata_type_inc: VectorData
     doc: The name of the action
-- neurodata_type_def: TaskArgumentTable
+- neurodata_type_def: TaskArgumentsTable
   neurodata_type_inc: DynamicTable
   name: task_arguments
   doc: Table to hold Task Program arguments.

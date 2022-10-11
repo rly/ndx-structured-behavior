@@ -29,4 +29,4 @@ BEADLTaskProgram = get_class('BEADLTaskProgram', 'ndx-beadl')
 # EventTypesTable = get_class('EventTypesTable', 'ndx-beadl')
 # StateTypesTable = get_class('StateTypesTable', 'ndx-beadl')
 from .trials_table import Task, EventsTable, StatesTable, TrialsTable, StateTypesTable, EventTypesTable, ActionTypesTable, ActionsTable  # noqa: F401,E402
-from .task_argument_table import TaskArgumentTable
+from .task_argument_table import TaskArgumentsTable

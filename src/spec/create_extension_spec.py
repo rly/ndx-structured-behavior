@@ -146,7 +146,7 @@ def main():
 
     task_argument_table = NWBGroupSpec(
         name='task_arguments',
-        neurodata_type_def='TaskArgumentTable',
+        neurodata_type_def='TaskArgumentsTable',
         neurodata_type_inc='DynamicTable',
         doc='Table to hold Task Program arguments.',
         datasets=[
@@ -206,8 +206,8 @@ def main():
             ),
             NWBGroupSpec(
                 name='task_arguments',
-                neurodata_type_inc='TaskArgumentTable',
-                doc=('The TaskArgumentTable')
+                neurodata_type_inc='TaskArgumentsTable',
+                doc=('The TaskArgumentsTable')
             )
 
         ],

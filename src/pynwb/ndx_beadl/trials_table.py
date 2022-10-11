@@ -47,7 +47,7 @@ class Task(LabMetaData):
         },
         {
             'name': 'task_arguments',
-            'type': 'TaskArgumentTable',
+            'type': 'TaskArgumentsTable',
             'doc': 'The table for task arguments populated by the task program',
         },
         allow_positional=AllowPositional.ERROR,
