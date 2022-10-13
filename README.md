@@ -7,7 +7,9 @@ For additional information about BEADL, please visit [https://beadl.org/](https:
 
 The *ndx-beadl* data model consists of three main components:
 
-![ndx-beadl schema](docs/tutorial_nwb_userdays_2022/ndx_beadl_schema.png?raw=true "ndx-beadl schema")
+![ndx-beadl schema](docs/tutorial_nwb_userdays_2022/beadl_components_p1.png?raw=true "ndx-beadl schema")
+![ndx-beadl schema](docs/tutorial_nwb_userdays_2022/beadl_components_p2.png?raw=true "ndx-beadl schema")
+
 
 ## Installation
 
