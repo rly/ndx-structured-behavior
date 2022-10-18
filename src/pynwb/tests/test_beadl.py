@@ -11,6 +11,7 @@ from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
                        TaskArgumentsTable)
+from ndx_beadl.plot import show_by_type_and_value
 
 
 def set_up_nwbfile():
@@ -152,13 +153,6 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(actions.columns[1].data, [0, 1])
         self.assertEqual(actions.columns[2].data, ['open', 'open'])
 
-        # self.assertEqual(task.name, "task")
-        # self.assertEqual(task.task_schema, beadl_task_schema)
-        # self.assertEqual(task.task_program, beadl_task_program)
-        # self.assertEqual(task.event_types, event_types)
-        # self.assertEqual(task.action_types, action_types)
-        # self.assertEqual(task.state_types, state_types)
-
         self.assertEqual(set(action_types.columns[0].data), set(['CorrectPortLED', 'CorrectPortValve']))
 
         self.assertEqual(set(state_types.columns[0].data), set(['WaitForPoke', 'End', 'Reward', 'ITI', 'TimeOut']))
@@ -215,6 +209,69 @@ class TestBeadlTablesPopulate(TestCase):
         self.assertEqual(actions.to_dataframe().shape, (251, 3))
         self.assertEqual(states.to_dataframe().shape, (612, 3))
         self.assertEqual(trials.to_dataframe().shape, (153, 10))
+
+
+class TestPlot(TestCase):
+
+    def setUp(self):
+        with open("BEADL.xsd", "r") as test_xsd_file:
+            test_xsd = test_xsd_file.read()
+
+        with open("LightChasingTask.xml", "r") as test_xml_file:
+            test_xml = test_xml_file.read()
+
+        self.beadl_task_schema = BEADLTaskSchema(
+            name = 'beadl_task_schema',
+            data=test_xsd,
+            version="0.1.0",
+            language="XSD"  # TODO remove when no longer necessary
+        )
+
+        self.beadl_task_program = BEADLTaskProgram(
+            name = 'beadl_task_program',
+            data=test_xml,
+            schema=self.beadl_task_schema,
+            language="XML"  # TODO remove when no longer necessary
+        )
+
+        self.beadl_data = 'BeadlDataSample.mat'
+
+        self.action_types = ActionTypesTable(description='description', beadl_task_program=self.beadl_task_program, populate_from_program=True)
+
+        self.actions = ActionsTable(description="description", action_types_table=self.action_types)
+        self.actions.populate_from_matlab(data_path=self.beadl_data)
+
+        self.event_types = EventTypesTable(description="description", beadl_task_program=self.beadl_task_program, populate_from_program=True) #assert description
+
+        self.events = EventsTable(description="description", event_types_table=self.event_types)
+        self.events.populate_from_matlab(data_path=self.beadl_data)
+
+    def test_events_show_by_type_and_value(self):
+        y_values, y_tick_labels, y_label = show_by_type_and_value(table=self.events, table_types=self.event_types)
+
+        self.assertEqual(y_label, 'Event type')
+        self.assertEqual(sorted(y_tick_labels), sorted(['ErrorPort1Poke(out)', 'CorrectPortPoke(out)', 'ErrorPort1Poke(in)', 'ErrorPort2Poke(in)',
+                                         'ErrorPort2Poke(out)',
+                                         'CorrectPortPoke(in)',
+                                         'stateTimer(expired)']))
+
+    def test_events_show_by_type(self):
+        y_values, y_tick_labels, y_label = show_by_type_and_value(table=self.events, table_types=self.event_types, show_table_values=False)
+
+        self.assertEqual(y_label, 'Event type')
+        self.assertEqual(sorted(y_tick_labels), sorted(['ErrorPort1Poke', 'CorrectPortPoke', 'stateTimer', 'ErrorPort2Poke']))
+
+    def test_actions_show_by_type_and_value(self):
+        y_values, y_tick_labels, y_label = show_by_type_and_value(table=self.actions, table_types=self.action_types)
+
+        self.assertEqual(y_label, 'Action type')
+        self.assertEqual(sorted(y_tick_labels), sorted(['CorrectPortLED(on)', 'CorrectPortValve(open)']))
+
+    def test_actions_show_by_type(self):
+        y_values, y_tick_labels, y_label = show_by_type_and_value(table=self.actions, table_types=self.action_types, show_table_values=False)
+
+        self.assertEqual(y_label, 'Action type')
+        self.assertEqual(sorted(y_tick_labels), sorted(['CorrectPortValve', 'CorrectPortLED']))
 
 
 class TestTaskSeriesRoundtrip(TestCase):

@@ -12,8 +12,31 @@ from ndx_beadl import (EventsTable, EventTypesTable,
                        StatesTable, StateTypesTable,
                        TrialsTable)
 
+def show_by_type_and_value(table: Union[ActionsTable, EventsTable],
+                           table_types: Union[ActionTypesTable, EventTypesTable],
+                           show_table_values: bool = True,
+                           y_offset: float = 0,
+                           ): # events and actions
+        df = table.to_dataframe(index=True)
+        type_name = 'event_name' if isinstance(table_types, EventTypesTable) else 'action_name'
+        type_column = 'event_type' if isinstance(table_types, EventTypesTable) else 'action_type'
+        x_values = df['timestamp'][:]
+        y_label = "Event type" if isinstance(table_types, EventTypesTable) else 'Action type'
+        # show table by type and value
+        if show_table_values:
+            table_types_loaded = table_types[type_name][:]
+            table_and_values_merged = list(zip([table_types_loaded[i] for i in df[type_column][:]], df['value'][:]))
+            table_types_and_values = list(set(table_and_values_merged))
+            y_values = [table_types_and_values.index(ev) + y_offset for ev in table_and_values_merged]
+            y_tick_labels = ["%s(%s)" % v for v in table_types_and_values]
+        # Show events by type
+        else:
+            y_values = np.asarray(df[type_column][:]) + y_offset
+            y_tick_labels = table_types[type_name][:]
 
-def plot_events(events: Union[EventsTable, pd.DataFrame],
+        return y_values, y_tick_labels, y_label
+
+def plot_events(events: EventsTable,
                 event_types: EventTypesTable,
                 show_event_values: bool = True,
                 marker: str = None,
@@ -43,21 +66,11 @@ def plot_events(events: Union[EventsTable, pd.DataFrame],
 
     :return: Matplotlib figure. Call plt.show() to render the figure.
     """
-    edf = events if isinstance(events, pd.DataFrame) else events.to_dataframe(index=True)
+    edf = events.to_dataframe(index=True)
     x_values = edf['timestamp'][:]
     # show events by type and value
-    if show_event_values:
-        event_types_loaded = event_types['event_name'][:]
-        events_and_values_merged = list(zip([event_types_loaded[i] for i in edf['event_type'][:]], edf['value'][:]))
-        event_types_and_values = list(set(events_and_values_merged))
-        y_values = [event_types_and_values.index(ev) + y_offset for ev in events_and_values_merged]
-        y_tick_labels = ["%s(%s)" % v for v in event_types_and_values]
-        y_label = "Event type"
-    # Show events by type
-    else:
-        y_values = np.asarray(edf['event_type'][:]) + y_offset
-        y_tick_labels = event_types['event_name'][:]
-        y_label = "Event type"
+    y_values, y_tick_labels, y_label = show_by_type_and_value(table=events, table_types=event_types)
+
     if fig is None:
         fig = plt.figure(figsize=(18, 3) if figsize is None else figsize)
     plt.scatter(
@@ -81,7 +94,7 @@ def plot_events(events: Union[EventsTable, pd.DataFrame],
     return fig
 
 
-def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
+def plot_actions(actions: ActionsTable,
                  action_types: ActionTypesTable,
                  show_action_values: bool = True,
                  marker: str = None,
@@ -111,21 +124,10 @@ def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
 
     :return: Matplotlib figure. Call plt.show() to render the figure.
     """
-    adf = actions if isinstance(actions, pd.DataFrame) else actions.to_dataframe(index=True)
+    adf =actions.to_dataframe(index=True)
     x_values = adf['timestamp'][:]
     # show events by type and value
-    if show_action_values:
-        action_types_loaded = action_types['action_name'][:]
-        actions_and_values_merged = list(zip([action_types_loaded[i] for i in adf['action_type'][:]], adf['value'][:]))
-        action_types_and_values = list(set(actions_and_values_merged))
-        y_values = [action_types_and_values.index(av) + y_offset for av in actions_and_values_merged]
-        y_tick_labels = ["%s(%s)" % v for v in action_types_and_values]
-        y_label = "Action type"
-    # Show events by type
-    else:
-        y_values = np.asarray(adf['action_type'][:]) + y_offset
-        y_tick_labels = action_types['action_name'][:]
-        y_label = "Action type"
+    y_values, y_tick_labels, y_label = show_by_type_and_value(table=actions, table_types=action_types)
     if fig is None:
         fig = plt.figure(figsize=(18, 3) if figsize is None else figsize)
     plt.scatter(x_values,
