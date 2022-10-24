@@ -28,10 +28,10 @@ from ndx_beadl.beadl_xml_parser import BeadlXMLParser
 from pynwb import NWBFile, NWBHDF5IO
 
 # Import the BEADL task schema and task program
-with open(beadl_schema_file, "r") as test_xsd_file:
+with open(src/pynwb/tests/beadl_schema_file, "r") as test_xsd_file:
     test_xsd = test_xsd_file.read()
 
-with open(beadl_task_file, "r") as test_xml_file:
+with open(src/pynwb/tests/beadl_task_file, "r") as test_xml_file:
     test_xml = test_xml_file.read()
 
 beadl_task_schema = BEADLTaskSchema(
