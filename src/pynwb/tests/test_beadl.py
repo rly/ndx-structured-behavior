@@ -1,5 +1,8 @@
 import datetime
 import numpy as np
+import os
+import subprocess
+import sys
 
 from pynwb import NWBHDF5IO, NWBFile
 from pynwb.core import DynamicTableRegion
@@ -12,7 +15,7 @@ from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
                        TaskArgumentsTable)
 from ndx_beadl.plot import show_by_type_and_value
-import os
+
 
 
 DATA_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +33,33 @@ def set_up_nwbfile():
 
     return nwbfile
 
+
+class TestExampleScript(TestCase):
+    """Test running the example script"""
+    def setUp(self):
+        self.test_script = os.path.join(DATA_BASE_DIR, "example.py")
+        self.nwb_outfile_path = os.path.join(DATA_BASE_DIR,  "beadl_light_chasing_task.nwb")
+        # Make sure we don't have a left-over file from a previous test run
+        if os.path.exists(self.nwb_outfile_path):
+            os.remove(self.nwb_outfile_path)
+
+    def tearDown(self):
+        if os.path.exists(self.nwb_outfile_path):
+            os.remove(self.nwb_outfile_path)
+
+    def test_run_example_script(self):
+        # Run the example script
+        subprocess.run([sys.executable, self.test_script])
+        # Test that the output file was generated
+        self.assertTrue(os.path.exists(self.nwb_outfile_path))
+        # Check that the data in the file is correct
+        with NWBHDF5IO(self.nwb_outfile_path, "r") as io:
+            nwbfile = io.read()
+            # Currently just checking that the data tables exists and have the correct number of rows
+            self.assertEqual(len(nwbfile.acquisition['actions']), 251)
+            self.assertEqual(len(nwbfile.acquisition['events']), 7695)
+            self.assertEqual(len(nwbfile.acquisition['states']), 612)
+            self.assertEqual(len(nwbfile.trials), 153)
 
 class TestBEADLProgramConstructors(TestCase):
     # TODO split into separate tests
