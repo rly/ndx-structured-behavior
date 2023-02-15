@@ -1,6 +1,9 @@
 # output NWB files
 *.nwb
 
+# PyCharm
+.idea
+
 # generated docs
 docs/source/_format_auto_docs
 
