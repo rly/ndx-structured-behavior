@@ -4,11 +4,13 @@ from ndx_beadl.beadl_xml_parser import BeadlXMLParser
 from pynwb import NWBHDF5IO
 from pynwb.file import NWBFile, Subject
 import datetime
+import os
 
 # Input file paths with the example BEADL data
-beadl_task_schema_file = "src/pynwb/tests/BEADL.xsd"
-beadl_task_program_file = "src/pynwb/tests/LightChasingTask.xml"
-bead_data_file = "src/pynwb/tests/BeadlDataSample.mat"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+beadl_task_schema_file = os.path.join(base_dir, "BEADL.xsd")
+beadl_task_program_file = os.path.join(base_dir, "LightChasingTask.xml")
+bead_data_file = os.path.join(base_dir, "BeadlDataSample.mat")
 
 # Output file paths
 nwb_filepath = "beadl_light_chasing_task.nwb"
