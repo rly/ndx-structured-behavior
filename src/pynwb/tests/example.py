@@ -10,10 +10,10 @@ import os
 base_dir = os.path.dirname(os.path.abspath(__file__))
 beadl_task_schema_file = os.path.join(base_dir, "BEADL.xsd")
 beadl_task_program_file = os.path.join(base_dir, "LightChasingTask.xml")
-bead_data_file = os.path.join(base_dir, "BeadlDataSample.mat")
+beadl_data_file = os.path.join(base_dir, "BeadlDataSample.mat")
 
 # Output file paths
-nwb_filepath = "beadl_light_chasing_task.nwb"
+nwb_filepath =  os.path.join(base_dir, "beadl_light_chasing_task.nwb")
 
 # Import the BEADL task schema and task program
 with open(beadl_task_schema_file, "r") as test_xsd_file:
@@ -56,16 +56,16 @@ task = Task(
 
 # Create Events, Actions, and States
 events = EventsTable(description="description", event_types_table=event_types)
-_ = events.populate_from_matlab(data_path=bead_data_file)
+_ = events.populate_from_matlab(data_path=beadl_data_file)
 
 actions = ActionsTable(description="description", action_types_table=action_types)
-_ = actions.populate_from_matlab(data_path=bead_data_file)
+_ = actions.populate_from_matlab(data_path=beadl_data_file)
 
 states = StatesTable(description="description", state_types_table=state_types)
-_ = states.populate_from_matlab(data_path=bead_data_file)
+_ = states.populate_from_matlab(data_path=beadl_data_file)
 
 trials = TrialsTable(description="description", states_table=states, events_table=events, actions_table=actions)
-_ = trials.populate_from_matlab(data_path=bead_data_file)
+_ = trials.populate_from_matlab(data_path=beadl_data_file)
 
 # Create NWBFile
 nwbfile = NWBFile(
