@@ -12,12 +12,12 @@ from ndx_beadl import (EventsTable, EventTypesTable,
                        StatesTable, StateTypesTable,
                        TrialsTable)
 
-def show_by_type_and_value(table: Union[ActionsTable, EventsTable],
+def show_by_type_and_value(table: Union[ActionsTable, EventsTable, pd.DataFrame],
                            table_types: Union[ActionTypesTable, EventTypesTable],
                            show_table_values: bool = True,
                            y_offset: float = 0,
                            ): # events and actions
-        df = table.to_dataframe(index=True)
+        df = table.to_dataframe(index=True) if not isinstance(table, pd.DataFrame) else table
         type_name = 'event_name' if isinstance(table_types, EventTypesTable) else 'action_name'
         type_column = 'event_type' if isinstance(table_types, EventTypesTable) else 'action_type'
         x_values = df['timestamp'][:]
@@ -36,7 +36,7 @@ def show_by_type_and_value(table: Union[ActionsTable, EventsTable],
 
         return y_values, y_tick_labels, y_label
 
-def plot_events(events: EventsTable,
+def plot_events(events: Union[EventsTable, pd.DataFrame],
                 event_types: EventTypesTable,
                 show_event_values: bool = True,
                 marker: str = None,
@@ -66,7 +66,7 @@ def plot_events(events: EventsTable,
 
     :return: Matplotlib figure. Call plt.show() to render the figure.
     """
-    edf = events.to_dataframe(index=True)
+    edf = events.to_dataframe(index=True) if not isinstance(events, pd.DataFrame) else events
     x_values = edf['timestamp'][:]
     # show events by type and value
     y_values, y_tick_labels, y_label = show_by_type_and_value(table=events, table_types=event_types)
@@ -94,7 +94,7 @@ def plot_events(events: EventsTable,
     return fig
 
 
-def plot_actions(actions: ActionsTable,
+def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
                  action_types: ActionTypesTable,
                  show_action_values: bool = True,
                  marker: str = None,
@@ -124,7 +124,7 @@ def plot_actions(actions: ActionsTable,
 
     :return: Matplotlib figure. Call plt.show() to render the figure.
     """
-    adf =actions.to_dataframe(index=True)
+    adf = actions.to_dataframe(index=True) if not isinstance(actions, pd.DataFrame) else actions
     x_values = adf['timestamp'][:]
     # show events by type and value
     y_values, y_tick_labels, y_label = show_by_type_and_value(table=actions, table_types=action_types)

@@ -11,8 +11,8 @@ import itertools
 @register_class('Task', 'ndx-beadl')
 class Task(LabMetaData):
     __nwbfields__ = (
-        {'name': 'beadl_task_program', 'child': True},
-        {'name': 'beadl_task_schema', 'child': True},
+        {'name': 'task_program', 'child': True},
+        {'name': 'task_schema', 'child': True},
         {'name': 'event_types', 'child': True},
         {'name': 'state_types', 'child': True},
         {'name': 'action_types', 'child': True},
@@ -21,13 +21,13 @@ class Task(LabMetaData):
     )
     @docval(
         {
-            'name': 'beadl_task_program',
-            'type': 'BEADLTaskProgram',
+            'name': 'task_program',
+            'type': 'TaskProgram',
             'doc': 'A dataset to store a task program.',
         },
         {
-            'name': 'beadl_task_schema',
-            'type': 'BEADLTaskSchema',
+            'name': 'task_schema',
+            'type': 'TaskSchema',
             'doc': 'A dataset to store a task schema, e.g., an XSD file.',
         },
         {
@@ -54,15 +54,15 @@ class Task(LabMetaData):
         )
     def __init__(self, **kwargs):
         kwargs['name'] = 'task'
-        task_program = popargs('beadl_task_program', kwargs)
-        task_schema = popargs('beadl_task_schema', kwargs)
+        task_program = popargs('task_program', kwargs)
+        task_schema = popargs('task_schema', kwargs)
         event_types = popargs('event_types', kwargs)
         state_types = popargs('state_types', kwargs)
         action_types = popargs('action_types', kwargs)
         task_arguments = popargs('task_arguments', kwargs)
         super().__init__(**kwargs)
-        self.beadl_task_program = task_program
-        self.beadl_task_schema = task_schema
+        self.task_program = task_program
+        self.task_schema = task_schema
         self.event_types = event_types
         self.state_types = state_types
         self.action_types = action_types

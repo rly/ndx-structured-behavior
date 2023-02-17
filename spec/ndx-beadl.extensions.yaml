@@ -55,11 +55,11 @@ groups:
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - name: beadl_task_program
-    neurodata_type_inc: BEADLTaskProgram
+  - name: task_program
+    neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
-  - name: beadl_task_schema
-    neurodata_type_inc: BEADLTaskSchema
+  - name: task_schema
+    neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
   groups:
   - name: event_types

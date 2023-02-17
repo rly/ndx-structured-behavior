@@ -23,14 +23,14 @@ with open(beadl_task_program_file, "r") as test_xml_file:
     test_xml = test_xml_file.read()
 
 beadl_task_schema = BEADLTaskSchema(
-    name='beadl_task_schema',
+    name='task_schema',
     data=test_xsd,
     version="0.1.0",
     language="XSD"
 )
 
 beadl_task_program = BEADLTaskProgram(
-    name='beadl_task_program',
+    name='task_program',
     data=test_xml,
     schema=beadl_task_schema,
     language="XML"
@@ -46,8 +46,8 @@ state_types = StateTypesTable(description="description", beadl_task_program=bead
                               populate_from_program=True)
 
 task = Task(
-    beadl_task_program=beadl_task_program,
-    beadl_task_schema=beadl_task_schema,
+    task_program=beadl_task_program,
+    task_schema=beadl_task_schema,
     event_types=event_types,
     state_types=state_types,
     action_types=action_types,
