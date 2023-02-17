@@ -10,7 +10,7 @@ def main():
         doc="""An NWB extension for storing BEADL programs and data""",
         name="""ndx-beadl""",
         version="""0.1.0""",
-        author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Reubel, Michael Wulf""".split(','))),
+        author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Ruebel, Michael Wulf""".split(','))),
         contact=list(map(str.strip, """rly@lbl.gov, mavaylon@lbl.gov,
                                        oruebel@lbl.gov, michael.wulf@wustl.edu """.split(',')))
     )
@@ -213,14 +213,14 @@ def main():
         ],
         datasets=[
             NWBDatasetSpec(
-                name='beadl_task_program',
-                neurodata_type_inc='BEADLTaskProgram',
+                name='task_program',
+                neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
                 # quantity='?'
             ),
             NWBDatasetSpec(
-                name='beadl_task_schema',
-                neurodata_type_inc='BEADLTaskSchema',
+                name='task_schema',
+                neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
                 # quantity='?'
             ),
