@@ -21,7 +21,7 @@ pip install -e .
 
 ## Usage
 
-https://github.com/rly/ndx-beadl/blob/a1b6380febdb964eeba4466c5901e103ef2fe463/src/pynwb/tests/example.py#L1-L90
+https://github.com/rly/ndx-beadl/blob/5df21f406a7e03587650157a6f3ec07be508b1f9/src/pynwb/tests/example.py#L1-L90
 
 ---
 This extension was created using [ndx-template](https://github.com/nwb-extensions/ndx-template).
