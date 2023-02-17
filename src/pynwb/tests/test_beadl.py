@@ -160,8 +160,8 @@ class TestBEADLTableConstructors(TestCase):
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
 
         task = Task(
-                beadl_task_program=beadl_task_program,
-                beadl_task_schema=beadl_task_schema,
+                task_program=beadl_task_program,
+                task_schema=beadl_task_schema,
                 event_types=event_types,
                 state_types=state_types,
                 action_types=action_types,
@@ -319,7 +319,8 @@ class TestTaskSeriesRoundtrip(TestCase):
         self.path = "test.nwb"
 
     def tearDown(self):
-        remove_test_file(self.path)
+        # remove_test_file(self.path)
+        pass
 
     def test_roundtrip(self):
         """
@@ -334,14 +335,14 @@ class TestTaskSeriesRoundtrip(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
-            name = "beadl_task_schema", # why do we need this?
+            name = "task_schema", # why do we need this?
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
-            name = "beadl_task_program", # why do we need this?
+            name = "task_program", # why do we need this?
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
@@ -381,8 +382,8 @@ class TestTaskSeriesRoundtrip(TestCase):
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
 
         task = Task(
-                beadl_task_program=beadl_task_program,
-                beadl_task_schema=beadl_task_schema,
+                task_program=beadl_task_program,
+                task_schema=beadl_task_schema,
                 event_types=event_types,
                 state_types=state_types,
                 action_types=action_types,
