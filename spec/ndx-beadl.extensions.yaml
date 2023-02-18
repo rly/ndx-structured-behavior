@@ -188,6 +188,7 @@ groups:
     doc: The comment of the argument from the program
   - name: expression
     neurodata_type_inc: VectorData
+    dtype: text
     doc: The expression/value (as a string) of the argument
   - name: expression_type
     neurodata_type_inc: VectorData

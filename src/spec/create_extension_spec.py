@@ -165,6 +165,7 @@ def main():
             NWBDatasetSpec(
                 name='expression',
                 neurodata_type_inc='VectorData',
+                dtype='text',
                 doc=('The expression/value (as a string) of the argument'),
             ),
             NWBDatasetSpec(
