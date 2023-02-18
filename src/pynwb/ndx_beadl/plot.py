@@ -358,6 +358,7 @@ def compute_state_transition_matrix(states: Union[StatesTable, pd.DataFrame],
     num_states = len(state_types)
     state_transition_count = np.zeros(shape=(num_states, num_states), dtype=int)
     sdf = states if isinstance(states, pd.DataFrame) else states.to_dataframe(index=True)
+    sdf = sdf.sort_values(by='start_time')  # the for loop to count state transitions assumes states are sorted
     state_sequence = sdf['state_type'].to_numpy()
     for (i, j) in zip(state_sequence, state_sequence[1:]):
         state_transition_count[i][j] += 1
