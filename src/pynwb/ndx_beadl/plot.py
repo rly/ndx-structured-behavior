@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import networkx as nx
 import numpy as np
 from typing import Union
+import warnings
 from ndx_beadl import (EventsTable, EventTypesTable,
                        ActionsTable, ActionTypesTable,
                        StatesTable, StateTypesTable,
@@ -408,7 +409,13 @@ def plot_state_transition_graph(transition_matrix,
                 edge_labels[(origin_state, destination_state)] = "{:.02f}".format(rate)
 
     fig =  plt.figure(figsize=(10, 10) if figsize is None else figsize)
-    pos = nx.planar_layout(G)
+    try:
+        pos = nx.planar_layout(G)
+    except nx.NetworkXException as e:
+        # This may happen if the network is not planar
+        warnings.warn("Error occurred in planar layout. Using shell_layout instead. " + str(e))
+        pos = nx.shell_layout(G)
+
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5, edge_color=edge_color)
     nx.draw_networkx_labels(G, pos, font_weight=2, font_color=node_font_color, font_size=fontsize)
     nx.draw_networkx_edge_labels(G, pos, edge_labels, font_color=edge_font_color, font_size=fontsize)
