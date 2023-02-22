@@ -131,7 +131,7 @@ def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
     if fig is None:
         fig = plt.figure(figsize=(18, 3) if figsize is None else figsize)
     plt.scatter(x_values,
-                y_values,
+                np.asarray(y_values) + y_offset,
                 marker='|' if marker is None else marker,
                 s=marker_size,
                 linewidth=marker_width,
