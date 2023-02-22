@@ -231,7 +231,7 @@ def plot_states(states: Union[StatesTable, pd.DataFrame],
         tp = plt.yticks()[0].tolist()
         tl = [t.get_text() for t in plt.yticks()[1]]
         plt.yticks(np.arange(y_offset, y_offset + len(y_tick_labels)).tolist() + tp,
-                   y_tick_labels + tl,
+                   np.concatenate([y_tick_labels , tl]),
                    fontsize=fontsize)
     else:
         plt.yticks(np.arange(y_offset, y_offset + len(y_tick_labels)).tolist(),
