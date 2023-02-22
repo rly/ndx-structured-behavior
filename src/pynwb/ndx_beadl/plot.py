@@ -277,44 +277,47 @@ def plot_trials(trials: Union[TrialsTable, pd.DataFrame],
     trials_df = trials if isinstance(trials, pd.DataFrame) else trials.to_dataframe(index=True)
     fig = plt.figure(figsize=(18, 10) if figsize is None else figsize)
     events_index = [j for i in trials_df["events"] for j in i]
-    plot_events(events=events[events_index],
-                event_types=event_types,
-                show_event_values=True,
-                marker_size=marker_size,
-                marker_width=2,
-                marker_color='blue',
-                y_offset=0,
-                fontsize=fontsize,
-                fig=fig)
+    if len(events_index) > 0:
+        plot_events(events=events[events_index],
+                    event_types=event_types,
+                    show_event_values=True,
+                    marker_size=marker_size,
+                    marker_width=2,
+                    marker_color='blue',
+                    y_offset=0,
+                    fontsize=fontsize,
+                    fig=fig)
     actions_index = [j for i in trials_df["actions"] for j in i]
     y_offset = np.ceil(plt.ylim()[1])
     if y_offset == plt.ylim()[1]:
         y_offset += 1
-    plot_actions(actions=actions[actions_index],
-                 action_types=action_types,
-                 show_action_values=True,
-                 marker_size=marker_size,
-                 marker_width=2,
-                 marker_color='green',
-                 y_offset=y_offset,
-                 keep_yticks=True,
-                 fontsize=fontsize,
-                 fig=fig)
+    if len(actions_index) > 0:
+        plot_actions(actions=actions[actions_index],
+                     action_types=action_types,
+                     show_action_values=True,
+                     marker_size=marker_size,
+                     marker_width=2,
+                     marker_color='green',
+                     y_offset=y_offset,
+                     keep_yticks=True,
+                     fontsize=fontsize,
+                     fig=fig)
     states_index = [j for i in trials_df["states"] for j in i]
     y_offset = np.ceil(plt.ylim()[1])
     if y_offset == plt.ylim()[1]:
         y_offset += 1
-    plot_states(states=states[states_index],
-                state_types=state_types,
-                y_offset=y_offset,
-                rectangle_height=1,
-                rectangle_color='black',
-                marker_color="red",
-                marker_size=marker_size,
-                keep_yticks=True,
-                fontsize=fontsize,
-                show_instantenous_states_markers=True,
-                fig=fig)
+    if len(states_index) > 0 :
+        plot_states(states=states[states_index],
+                    state_types=state_types,
+                    y_offset=y_offset,
+                    rectangle_height=1,
+                    rectangle_color='black',
+                    marker_color="red",
+                    marker_size=marker_size,
+                    keep_yticks=True,
+                    fontsize=fontsize,
+                    show_instantenous_states_markers=True,
+                    fig=fig)
     # Draw the trial start/end time boxes
     x_start = trials_df['start_time'][:].to_numpy()
     x_stop = trials_df['stop_time'][:]
