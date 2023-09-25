@@ -27,7 +27,7 @@ def data_program_validator(
             valid = False
             break
     
-    return valid # TODO: ADD TEST
+    return valid
 
 @register_class('Task', 'ndx-beadl')
 class Task(LabMetaData):
