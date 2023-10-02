@@ -14,7 +14,7 @@ def data_program_validator(
                            program: list
                           ):
     """
-    This method check that each event/state/action type from the data is in the program.
+    This method checks that each event/state/action type from the data is in the program.
     
     data: A list of all unique types from the data
     program: A list of all unique types from the program
