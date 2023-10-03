@@ -841,6 +841,11 @@ class ActionsTable(DynamicTable):
 
 @register_class('ASE', 'ndx-beadl')
 class ASE(NWBDataInterface):
+    """
+    A container class to store the ActionsTable, StatesTable, and EventsTable.
+    This class will be added into acquisition within the NWBFile, rather than the
+    individual tables themselves.
+    """
 
     __fields__ = (
         {'name': 'actions', 'child': True},
@@ -848,11 +853,6 @@ class ASE(NWBDataInterface):
         {'name': 'events', 'child': True},
         )
 
-    """
-    A container class to store the ActionsTable, StatesTable, and EventsTable.
-    This class will be added into acquisition within the NWBFile, rather than the
-    individual tables themselves.
-    """
     @docval({'name': 'actions',
              'type': ActionsTable,
              'doc': 'The populated ActionsTable to be added to the NWBFile.'},
