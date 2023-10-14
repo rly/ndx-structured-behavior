@@ -839,15 +839,14 @@ class ActionsTable(DynamicTable):
             raise ValueError(msg)
 
 
-@register_class('ASE', 'ndx-beadl')
-class ASE(NWBDataInterface):
+@register_class('TaskRecording', 'ndx-beadl')
+class TaskRecording(NWBDataInterface):
     """
     A container class to store the ActionsTable, StatesTable, and EventsTable.
     This class will be added into acquisition within the NWBFile, rather than the
     individual tables themselves.
     """
-
-    __fields__ = (
+    __nwbfields__ = (
         {'name': 'actions', 'child': True},
         {'name': 'states', 'child': True},
         {'name': 'events', 'child': True},
@@ -863,24 +862,12 @@ class ASE(NWBDataInterface):
              'type': EventsTable,
              'doc': 'The populated EventsTable to be added to the NWBFile.'},)
     def __init__(self, **kwargs):
-        kwargs['name'] = 'ASE'
+        kwargs['name'] = 'task_recording'
         actions, states, events = popargs('actions',
                                           'states',
                                           'events',
                                           kwargs)
         super().__init__(**kwargs)
-        self.__actions = actions
-        self.__states = states
-        self.__events = events
-
-    @property
-    def actions(self):
-        return self.__actions
-
-    @property
-    def states(self):
-        return self.__states
-
-    @property
-    def events(self):
-        return self.__events
+        self.actions = actions
+        self.states = states
+        self.events = events

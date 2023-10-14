@@ -74,9 +74,9 @@ groups:
   - name: task_arguments
     neurodata_type_inc: TaskArgumentsTable
     doc: The TaskArgumentsTable
-- neurodata_type_def: ASE
+- neurodata_type_def: TaskRecording
   neurodata_type_inc: NWBDataInterface
-  name: task
+  name: task_recording
   doc: A group to store the ActionsTable, StatesTable, EventsTable.
   groups:
   - name: events
