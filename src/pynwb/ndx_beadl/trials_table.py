@@ -450,6 +450,11 @@ class EventsTable(DynamicTable):
             'required': True
         },
         {
+            'name': 'duration',
+            'description': ('Duration of the event.'),
+            'required': False
+        },
+        {
             'name': 'event_type',
             'description': ('The event type'),
             'table': True,
@@ -490,6 +495,12 @@ class EventsTable(DynamicTable):
             'name': 'event_type',
             'type': int,
             'doc': ('The event type.'),
+        },
+        {
+            'name': 'duration',
+            'type': float,
+            'doc': ('Duration of event.'),
+            'default': None
         },
         {
             'name': 'value',
@@ -723,6 +734,11 @@ class ActionsTable(DynamicTable):
             'required': True
         },
         {
+            'name': 'duration',
+            'description': ('Duration of the action.'),
+            'required': False
+        },
+        {
             'name': 'action_type',
             'description': ('The action type'),
             'table': True,
@@ -763,6 +779,12 @@ class ActionsTable(DynamicTable):
             'name': 'action_type',
             'type': int,
             'doc': ('The action type.'),
+        },
+        {
+            'name': 'duration',
+            'type': float,
+            'doc': ('Duration of action.'),
+            'default': None
         },
         {
             'name': 'value',

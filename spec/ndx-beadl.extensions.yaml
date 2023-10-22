@@ -153,6 +153,11 @@ groups:
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time that the event occurred, in seconds.
+  - name: duration
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: Duration of the event.
+    quantity: '?'
   - name: event_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of event that occurred on each trial. This is represented as a reference
@@ -170,6 +175,11 @@ groups:
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time that the action occurred, in seconds.
+  - name: duration
+    neurodata_type_inc: VectorData
+    dtype: float32
+    doc: Duration of the action.
+    quantity: '?'
   - name: action_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of action that occurred on each trial. This is represented as a
