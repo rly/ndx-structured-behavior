@@ -451,7 +451,7 @@ class EventsTable(DynamicTable):
         },
         {
             'name': 'duration',
-            'description': ('Duration of the event.'),
+            'description': ('Duration of the event in seconds.'),
             'required': False
         },
         {
@@ -499,7 +499,7 @@ class EventsTable(DynamicTable):
         {
             'name': 'duration',
             'type': float,
-            'doc': ('Duration of the event.'),
+            'doc': ('Duration of the event in seconds.'),
             'default': None
         },
         {
@@ -735,7 +735,7 @@ class ActionsTable(DynamicTable):
         },
         {
             'name': 'duration',
-            'description': ('Duration of the action.'),
+            'description': ('Duration of the action in seconds.'),
             'required': False
         },
         {
@@ -783,7 +783,7 @@ class ActionsTable(DynamicTable):
         {
             'name': 'duration',
             'type': float,
-            'doc': ('Duration of the action.'),
+            'doc': ('Duration of the action in seconds.'),
             'default': None
         },
         {

@@ -164,7 +164,7 @@ groups:
   - name: duration
     neurodata_type_inc: VectorData
     dtype: float32
-    doc: Duration of the action.
+    doc: Duration of the action in seconds.
     quantity: '?'
   - name: action_type
     neurodata_type_inc: DynamicTableRegion
