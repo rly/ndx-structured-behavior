@@ -25,8 +25,5 @@ TaskSchema = get_class('TaskSchema', 'ndx-beadl')
 BEADLTaskSchema = get_class('BEADLTaskSchema', 'ndx-beadl')
 TaskProgram = get_class('TaskProgram', 'ndx-beadl')
 BEADLTaskProgram = get_class('BEADLTaskProgram', 'ndx-beadl')
-# Task = get_class('Task', 'ndx-beadl')
-# EventTypesTable = get_class('EventTypesTable', 'ndx-beadl')
-# StateTypesTable = get_class('StateTypesTable', 'ndx-beadl')
-from .trials_table import Task, EventsTable, StatesTable, TrialsTable, StateTypesTable, EventTypesTable, ActionTypesTable, ActionsTable  # noqa: F401,E402
+from .trials_table import TaskRecording, Task, EventsTable, StatesTable, TrialsTable, StateTypesTable, EventTypesTable, ActionTypesTable, ActionsTable  # noqa: F401,E402
 from .task_argument_table import TaskArgumentsTable
