@@ -1,6 +1,6 @@
 from pynwb import register_class
 from pynwb.file import LabMetaData
-from pynwb.core import DynamicTable, NWBDataInterface
+from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
 from ndx_beadl import BEADLTaskProgram
@@ -499,7 +499,7 @@ class EventsTable(DynamicTable):
         {
             'name': 'duration',
             'type': float,
-            'doc': ('Duration of event.'),
+            'doc': ('Duration of the event.'),
             'default': None
         },
         {
@@ -783,7 +783,7 @@ class ActionsTable(DynamicTable):
         {
             'name': 'duration',
             'type': float,
-            'doc': ('Duration of action.'),
+            'doc': ('Duration of the action.'),
             'default': None
         },
         {
