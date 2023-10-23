@@ -142,7 +142,7 @@ groups:
   - name: duration
     neurodata_type_inc: VectorData
     dtype: float32
-    doc: Duration of the event.
+    doc: Duration of the event in seconds.
     quantity: '?'
   - name: event_type
     neurodata_type_inc: DynamicTableRegion
