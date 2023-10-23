@@ -48,6 +48,20 @@ datasets:
     doc: The language of the schema, fixed to "XSD".
     required: false
 groups:
+- neurodata_type_def: TaskRecording
+  neurodata_type_inc: NWBDataInterface
+  name: task_recording
+  doc: A group to store the ActionsTable, StatesTable, EventsTable.
+  groups:
+  - name: events
+    neurodata_type_inc: EventsTable
+    doc: The EventsTable
+  - name: states
+    neurodata_type_inc: StatesTable
+    doc: The StatesTable
+  - name: actions
+    neurodata_type_inc: ActionsTable
+    doc: The ActionsTable
 - neurodata_type_def: Task
   neurodata_type_inc: LabMetaData
   name: task
