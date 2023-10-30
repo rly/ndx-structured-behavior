@@ -17,6 +17,7 @@ namespaces:
     - NWBData
     - LabMetaData
     - TimeIntervals
+    - NWBDataInterface
   - namespace: hdmf-common
     neurodata_types:
     - DynamicTable

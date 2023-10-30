@@ -18,6 +18,7 @@ def main():
     ns_builder.include_type('NWBData', namespace='core')
     ns_builder.include_type('LabMetaData', namespace='core')
     ns_builder.include_type('TimeIntervals', namespace='core')
+    ns_builder.include_type('NWBDataInterface', namespace='core')
     ns_builder.include_type('DynamicTable', namespace='hdmf-common')
     ns_builder.include_type('VectorData', namespace='hdmf-common')
     ns_builder.include_type('VectorIndex', namespace='hdmf-common')
@@ -354,7 +355,31 @@ def main():
         ]
     )
 
-    new_data_types = [task_program, beadl_task_program, task_schema, beadl_task_schema, tasks,
+    task_recording = NWBGroupSpec(
+        name='task_recording',
+        neurodata_type_def='TaskRecording',
+        neurodata_type_inc='NWBDataInterface',
+        doc='A group to store the ActionsTable, StatesTable, EventsTable.',
+        groups=[
+            NWBGroupSpec(
+                name='events',
+                neurodata_type_inc='EventsTable',
+                doc=('The EventsTable')
+            ),
+            NWBGroupSpec(
+                name='states',
+                neurodata_type_inc='StatesTable',
+                doc=('The StatesTable')
+            ),
+            NWBGroupSpec(
+                name='actions',
+                neurodata_type_inc='ActionsTable',
+                doc=('The ActionsTable')
+            )
+        ]
+    )
+
+    new_data_types = [task_program, task_recording, beadl_task_program, task_schema, beadl_task_schema, tasks,
                       trials_table, state_types_table, states_table, event_types_table, events_table,
                       actions_table, action_types_table, task_argument_table]
 

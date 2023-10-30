@@ -11,7 +11,7 @@ from pynwb.ecephys import ElectrodeGroup
 from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
-from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_beadl import (TaskRecording, Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
                        TaskArgumentsTable, data_program_validator)
 from ndx_beadl.plot import show_by_type_and_value
@@ -170,6 +170,8 @@ class TestBEADLTableConstructors(TestCase):
         states.add_state(state_type=2, start_time=1.2, stop_time=1.4)
         states.add_state(state_type=3, start_time=1.4, stop_time=1.5)
 
+        recording = TaskRecording(actions=actions, states=states, events=events)
+
         trials = TrialsTable(description="description", states_table=states, events_table=events, actions_table=actions)
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1], actions=[0,1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
@@ -188,22 +190,22 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(events.description, "description")
         self.assertEqual(event_types.description, "description")
         self.assertEqual(state_types.description, "description")
-        #
+
         self.assertEqual(trials.columns[0].data, [0,1])
         self.assertEqual(trials.columns[1].data, [0.8,1.8])
         self.assertEqual(trials.colnames, ("start_time", "stop_time", "states", "events", "actions"))
 
-        self.assertEqual(states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
-        self.assertEqual(states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
-        self.assertEqual(states.columns[2].data, [0, 1, 2, 3, 0, 1, 2, 3])
+        self.assertEqual(recording.states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
+        self.assertEqual(recording.states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
+        self.assertEqual(recording.states.columns[2].data, [0, 1, 2, 3, 0, 1, 2, 3])
 
-        self.assertEqual(events.columns[0].data, [0.4, 0.5, 1.4, 1.5])
-        self.assertEqual(events.columns[1].data, [0, 1, 1, 0])
-        self.assertEqual(events.columns[2].data, ["on", "on", "on", "on"])
+        self.assertEqual(recording.events.columns[0].data, [0.4, 0.5, 1.4, 1.5])
+        self.assertEqual(recording.events.columns[1].data, [0, 1, 1, 0])
+        self.assertEqual(recording.events.columns[2].data, ["on", "on", "on", "on"])
 
-        self.assertEqual(actions.columns[0].data, [0.4, 0.5])
-        self.assertEqual(actions.columns[1].data, [0, 1])
-        self.assertEqual(actions.columns[2].data, ["open", "open"])
+        self.assertEqual(recording.actions.columns[0].data, [0.4, 0.5])
+        self.assertEqual(recording.actions.columns[1].data, [0, 1])
+        self.assertEqual(recording.actions.columns[2].data, ["open", "open"])
 
         self.assertEqual(set(action_types.columns[0].data), set(["CorrectPortLED", "CorrectPortValve"]))
 
@@ -334,8 +336,7 @@ class TestTaskSeriesRoundtrip(TestCase):
         self.path = "test.nwb"
 
     def tearDown(self):
-        # remove_test_file(self.path)
-        pass
+        remove_test_file(self.path)
 
     def test_roundtrip(self):
         """
@@ -392,6 +393,8 @@ class TestTaskSeriesRoundtrip(TestCase):
         states.add_state(state_type=2, start_time=1.2, stop_time=1.4)
         states.add_state(state_type=3, start_time=1.4, stop_time=1.5)
 
+        recording = TaskRecording(actions=actions, states=states, events=events)
+
         trials = TrialsTable(description="description", states_table=states, events_table=events, actions_table=actions)
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1], actions=[0,1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
@@ -408,9 +411,7 @@ class TestTaskSeriesRoundtrip(TestCase):
         self.nwbfile.trials = trials
 
         file_task = self.nwbfile.add_lab_meta_data(task)
-        self.nwbfile.add_acquisition(states)
-        self.nwbfile.add_acquisition(events)
-        self.nwbfile.add_acquisition(actions)
+        self.nwbfile.add_acquisition(recording)
 
         with NWBHDF5IO(self.path, mode="w") as io:
             io.write(self.nwbfile)
@@ -418,6 +419,7 @@ class TestTaskSeriesRoundtrip(TestCase):
         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
             read_nwbfile = io.read()
             self.assertContainerEqual(file_task, read_nwbfile.lab_meta_data["task"])
-            self.assertContainerEqual(actions, read_nwbfile.get_acquisition("actions"))
-            self.assertContainerEqual(events, read_nwbfile.get_acquisition("events"))
-            self.assertContainerEqual(states, read_nwbfile.get_acquisition("states"))
+            self.assertContainerEqual(recording, read_nwbfile.get_acquisition("task_recording"))
+            self.assertContainerEqual(actions, read_nwbfile.get_acquisition("task_recording").actions)
+            self.assertContainerEqual(events, read_nwbfile.get_acquisition("task_recording").events)
+            self.assertContainerEqual(states, read_nwbfile.get_acquisition("task_recording").states)
