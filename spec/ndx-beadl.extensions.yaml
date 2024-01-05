@@ -69,11 +69,9 @@ groups:
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - name: task_program
-    neurodata_type_inc: TaskProgram
+  - neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
-  - name: task_schema
-    neurodata_type_inc: TaskSchema
+  - neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
   groups:
   - name: event_types
@@ -153,11 +151,6 @@ groups:
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time that the event occurred, in seconds.
-  - name: duration
-    neurodata_type_inc: VectorData
-    dtype: float32
-    doc: Duration of the event in seconds.
-    quantity: '?'
   - name: event_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of event that occurred on each trial. This is represented as a reference
@@ -175,11 +168,6 @@ groups:
     neurodata_type_inc: VectorData
     dtype: float32
     doc: The time that the action occurred, in seconds.
-  - name: duration
-    neurodata_type_inc: VectorData
-    dtype: float32
-    doc: Duration of the action in seconds.
-    quantity: '?'
   - name: action_type
     neurodata_type_inc: DynamicTableRegion
     doc: The type of action that occurred on each trial. This is represented as a
