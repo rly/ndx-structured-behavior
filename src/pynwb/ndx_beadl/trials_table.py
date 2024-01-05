@@ -1,6 +1,6 @@
 from pynwb import register_class
 from pynwb.file import LabMetaData
-from pynwb.core import DynamicTable, NWBDataInterface
+from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
 from ndx_beadl import BEADLTaskProgram
@@ -471,6 +471,11 @@ class EventsTable(DynamicTable):
             'required': True
         },
         {
+            'name': 'duration',
+            'description': ('Duration of the event in seconds.'),
+            'required': False
+        },
+        {
             'name': 'event_type',
             'description': ('The event type'),
             'table': True,
@@ -511,6 +516,12 @@ class EventsTable(DynamicTable):
             'name': 'event_type',
             'type': int,
             'doc': ('The event type.'),
+        },
+        {
+            'name': 'duration',
+            'type': float,
+            'doc': ('Duration of the event in seconds.'),
+            'default': None
         },
         {
             'name': 'value',
@@ -745,6 +756,11 @@ class ActionsTable(DynamicTable):
             'required': True
         },
         {
+            'name': 'duration',
+            'description': ('Duration of the action in seconds.'),
+            'required': False
+        },
+        {
             'name': 'action_type',
             'description': ('The action type'),
             'table': True,
@@ -785,6 +801,12 @@ class ActionsTable(DynamicTable):
             'name': 'action_type',
             'type': int,
             'doc': ('The action type.'),
+        },
+        {
+            'name': 'duration',
+            'type': float,
+            'doc': ('Duration of the action in seconds.'),
+            'default': None
         },
         {
             'name': 'value',
@@ -861,37 +883,3 @@ class ActionsTable(DynamicTable):
         else:
             msg = 'The actions from the data does not match possible actions from the task program.'
             raise ValueError(msg)
-
-
-@register_class('TaskRecording', 'ndx-beadl')
-class TaskRecording(NWBDataInterface):
-    """
-    A container class to store the ActionsTable, StatesTable, and EventsTable.
-    This class will be added into acquisition within the NWBFile, rather than the
-    individual tables themselves.
-    """
-    __nwbfields__ = (
-        {'name': 'actions', 'child': True},
-        {'name': 'states', 'child': True},
-        {'name': 'events', 'child': True},
-        )
-
-    @docval({'name': 'actions',
-             'type': ActionsTable,
-             'doc': 'The populated ActionsTable to be added to the NWBFile.'},
-            {'name': 'states',
-             'type': StatesTable,
-             'doc': 'The populated StatesTable to be added to the NWBFile.'},
-            {'name': 'events',
-             'type': EventsTable,
-             'doc': 'The populated EventsTable to be added to the NWBFile.'},)
-    def __init__(self, **kwargs):
-        kwargs['name'] = 'task_recording'
-        actions, states, events = popargs('actions',
-                                          'states',
-                                          'events',
-                                          kwargs)
-        super().__init__(**kwargs)
-        self.actions = actions
-        self.states = states
-        self.events = events

@@ -7,4 +7,5 @@ This extension defines a formal standard for storing task programs and behaviora
 Some of the recent updates include the following:
 
 ### Enhancements
+- Optional `duration` column for `EventsTable` and `ActionsTable`.
 - The `StatesTable`, `EventsTable`, and `ActionsTable` are stored within `TaskRecording` to be added to a NWBFile.
