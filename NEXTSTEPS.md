@@ -1,10 +1,10 @@
 
 
-# Next Steps for ndx-beadl Extension for NWB
+# Next Steps for ndx-structured-behavior Extension for NWB
 
 ## Creating Your Extension
 
-1. In a terminal, change directory into the new ndx-beadl directory.
+1. In a terminal, change directory into the new ndx-structured-behavior directory.
 
 2. Add any packages required by your extension to `requirements.txt` and `setup.py`.
 
@@ -14,8 +14,8 @@ and any other packages required by your extension.
 4. Modify `src/spec/create_extension_spec.py` to define your extension.
 
 5. Run `python src/spec/create_extension_spec.py` to generate the
-`spec/ndx-beadl.namespace.yaml` and
-`spec/ndx-beadl.extensions.yaml` files.
+`spec/ndx-structured-behavior.namespace.yaml` and
+`spec/ndx-structured-behavior.extensions.yaml` files.
 
 6. Define API classes for your new extension data types.
 
@@ -49,7 +49,7 @@ use any dependencies.
 
 1. Install the latest release of hdmf_docutils: `python -m pip install hdmf-docutils`
 
-2. Start a git repository for your extension directory ndx-beadl
+2. Start a git repository for your extension directory ndx-structured-behavior
  and push it to GitHub. You will need a GitHub account.
     - Follow these directions:
   https://help.github.com/en/articles/adding-an-existing-project-to-github-using-the-command-line
@@ -65,12 +65,12 @@ your extension.
 
 7. Add a license file. Permissive licenses should be used if possible. **A [BSD license](https://opensource.org/licenses/BSD-3-Clause) is recommended.**
 
-8. Make a release for the extension on GitHub with the version number specified. e.g. if version is 0.1.0, then this page should exist: https://github.com/rly/ndx-beadl/releases/tag/0.1.0 . For instructions on how to make a release on GitHub see [here](https://help.github.com/en/github/administering-a-repository/creating-releases).
+8. Make a release for the extension on GitHub with the version number specified. e.g. if version is 0.1.0, then this page should exist: https://github.com/rly/ndx-structured-behavior/releases/tag/0.1.0 . For instructions on how to make a release on GitHub see [here](https://help.github.com/en/github/administering-a-repository/creating-releases).
 
 9. Publish your updated extension on [PyPI](https://pypi.org/).
     - Follow these directions: https://packaging.python.org/tutorials/packaging-projects/
     - You may need to modify `setup.py`
-    - If your extension version is 0.1.0, then this page should exist: https://pypi.org/project/ndx-beadl/0.1.0
+    - If your extension version is 0.1.0, then this page should exist: https://pypi.org/project/ndx-structured-behavior/0.1.0
 
    Once your GitHub release and ``setup.py`` are ready, publishing on PyPI:
     ```bash
@@ -84,13 +84,13 @@ repository.
 11. Clone the fork onto your local filesystem.
 
 12. Copy the directory `staged-extensions/example` to a new directory
-`staged-extensions/ndx-beadl`:
+`staged-extensions/ndx-structured-behavior`:
 
     ```bash
-    cp -r staged-extensions/example staged-extensions/ndx-beadl
+    cp -r staged-extensions/example staged-extensions/ndx-structured-behavior
     ```
 
-13. Edit `staged-extensions/ndx-beadl/ndx-meta.yaml`
+13. Edit `staged-extensions/ndx-structured-behavior/ndx-meta.yaml`
 with information on where to find your NWB extension.
     - The YAML file MUST contain a dict with the following keys:
       - name: extension namespace name
@@ -102,28 +102,28 @@ with information on where to find your NWB extension.
     - You may copy and modify the following YAML that was auto-generated:
 
       ```yaml
-      name: ndx-beadl
+      name: ndx-structured-behavior
       version: 0.1.0
-      src: https://github.com/rly/ndx-beadl
-      pip: https://pypi.org/project/ndx-beadl/
+      src: https://github.com/rly/ndx-structured-behavior
+      pip: https://pypi.org/project/ndx-structured-behavior/
       license: BSD-3
-      maintainers: 
+      maintainers:
         - rly
       ```
 
-14. Edit `staged-extensions/ndx-beadl/README.md`
+14. Edit `staged-extensions/ndx-structured-behavior/README.md`
 to add information about your extension. You may copy it from
-`ndx-beadl/README.md`.
+`ndx-structured-behavior/README.md`.
 
   ```bash
-  cp ndx-beadl/README.md staged-extensions/ndx-beadl/README.md
+  cp ndx-structured-behavior/README.md staged-extensions/ndx-structured-behavior/README.md
   ```
 
 15. Add and commit your changes to Git and push your changes to GitHub.
 ```
 cd staged-extensions
-git add ndx-beadl
-git commit -m "Add new catalog entry for ndx-beadl" .
+git add ndx-structured-behavior
+git commit -m "Add new catalog entry for ndx-structured-behavior" .
 git push
 ```
 
@@ -132,17 +132,17 @@ Mac, and Linux. The technical team will review your extension shortly after
 and provide feedback and request changes, if any.
 
 17. When your pull request is merged, a new repository, called
-ndx-beadl-record will be created in the nwb-extensions
+ndx-structured-behavior-record will be created in the nwb-extensions
 GitHub organization and you will be added as a maintainer for that repository.
 
 
 ## Updating Your Published Extension
 
-1. Update your ndx-beadl GitHub repository.
+1. Update your ndx-structured-behavior GitHub repository.
 
 2. Publish your updated extension on PyPI.
 
-3. Fork the ndx-beadl-record repository on GitHub.
+3. Fork the ndx-structured-behavior-record repository on GitHub.
 
 4. Open a pull request to test the changes automatically. The technical team
 will review your changes shortly after and provide feedback and request changes,

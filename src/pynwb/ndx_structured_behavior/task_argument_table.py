@@ -2,10 +2,10 @@ from pynwb import register_class
 from pynwb.core import DynamicTable
 from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
 from hdmf.container import Row
-from ndx_beadl import BEADLTaskProgram
+from ndx_structured_behavior import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 
-@register_class('TaskArgumentsTable', 'ndx-beadl')
+@register_class('TaskArgumentsTable', 'ndx-structured-behavior')
 class TaskArgumentsTable(DynamicTable):
     """
     A table to hold Task Program arguments.

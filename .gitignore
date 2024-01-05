@@ -8,7 +8,7 @@
 docs/source/_format_auto_docs
 
 # copied spec files
-src/pynwb/ndx_beadl/spec/*.yaml
+src/pynwb/ndx_structured_behavior/spec/*.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

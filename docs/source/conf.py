@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ndx-beadl'
+project = 'ndx-structured-behavior'
 copyright = '2021, Ryan Ly'
 author = 'Ryan Ly'
 

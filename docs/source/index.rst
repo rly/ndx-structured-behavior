@@ -1,4 +1,4 @@
-Specification for the ndx-beadl extension
+Specification for the ndx-structured-behavior extension
 =========================================
 
 .. toctree::

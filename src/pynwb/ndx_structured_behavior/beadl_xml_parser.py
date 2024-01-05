@@ -3,7 +3,7 @@ import requests
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
-path = "/Users/mavaylon/Research/NWB/ndx-beadl/src/pynwb/tests/Foraging_Task.xml"
+path = "/Users/mavaylon/Research/NWB/ndx-structured-behavior/src/pynwb/tests/Foraging_Task.xml"
 
 class BeadlXMLParser():
     def __init__(self, **kwargs):

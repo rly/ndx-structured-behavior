@@ -1,8 +1,8 @@
 
-.. _ndx-beadl:
+.. _ndx-structured-behavior:
 
 *********
-ndx-beadl
+ndx-structured-behavior
 *********
 
 Version |release| |today|

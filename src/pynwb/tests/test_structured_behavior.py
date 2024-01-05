@@ -11,10 +11,10 @@ from pynwb.ecephys import ElectrodeGroup
 from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
-from ndx_beadl import (TaskRecording, Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_structured_behavior import (TaskRecording, Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
                        TaskArgumentsTable, data_program_validator)
-from ndx_beadl.plot import show_by_type_and_value
+from ndx_structured_behavior.plot import show_by_type_and_value
 
 
 
