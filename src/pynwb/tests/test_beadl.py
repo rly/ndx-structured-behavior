@@ -13,7 +13,7 @@ from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
 from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
-                       TaskArgumentsTable)
+                       TaskArgumentsTable, data_program_validator)
 from ndx_beadl.plot import show_by_type_and_value
 
 
@@ -32,6 +32,21 @@ def set_up_nwbfile():
     )
 
     return nwbfile
+
+
+class TestHelperFunctions(TestCase):
+    """Test for helper functions"""
+    def setUp(self):
+        self.program = ['a', 'b', 'c']
+        
+    def test_data_program_validator(self):
+        data = ['a', 'b']
+        
+        self.assertTrue(data_program_validator(data, self.program))
+    
+    def test_data_program_validator_invalid(self):
+        data = ['a', 'd']
+        self.assertFalse(data_program_validator(data, self.program))
 
 
 class TestExampleScript(TestCase):

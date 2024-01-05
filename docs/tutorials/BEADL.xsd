@@ -296,6 +296,6 @@
     </xs:complexType>
 
     <xs:complexType name="BeadlEditorType">
-        <!-- Not implemented yet, should just have a placeholde for an SVG!?! -->
+        <!-- Not implemented yet, should just have a placeholder for an SVG!?! -->
     </xs:complexType>
 </xs:schema>

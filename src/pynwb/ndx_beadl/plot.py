@@ -61,7 +61,7 @@ def plot_events(events: Union[EventsTable, pd.DataFrame],
     :param y_offset: Offset in the y axis to use. This is used to shift the plot when combining multiple
                      plots, e.g., an events and actions plot, in the same figure.
     :param keep_yticks: When combining with other plots (e.g,. events, actions, or states), we may want to
-                     keep the text and location of existing ytick lables. (Default=False)
+                     keep the text and location of existing ytick labels. (Default=False)
     :param fig: Matplotlib figure. If None then create a new figure, otherwise assume that a figure exists.
                 (Default=None, i.e., create a new figure)
 
@@ -119,7 +119,7 @@ def plot_actions(actions: Union[ActionsTable, pd.DataFrame],
     :param y_offset: Offset in the y axis to use. This is used to shift the plot when combining multiple
                      plots, e.g., an events and actions plot, in the same figure.
     :param keep_yticks: When combining with other plots (e.g,. events, actions, or states), we may want to
-                     keep the text and location of existing ytick lables. (Default=False)
+                     keep the text and location of existing ytick labels. (Default=False)
     :param fig: Matplotlib figure. If None then create a new figure, otherwise assume that a figure exists.
                 (Default=None, i.e., create a new figure)
 
@@ -189,7 +189,7 @@ def plot_states(states: Union[StatesTable, pd.DataFrame],
     :param y_offset: Offset in the y axis to use. This is used to shift the plot when combining multiple
                      plots, e.g., an events and actions plot, in the same figure.
     :param keep_yticks: When combining with other plots (e.g,. events, actions, or states), we may want to
-                     keep the text and location of existing ytick lables. (Default=False)
+                     keep the text and location of existing ytick labels. (Default=False)
     :param fig: Matplotlib figure. If None then create a new figure, otherwise assume that a figure exists.
                 (Default=None, i.e., create a new figure)
 
