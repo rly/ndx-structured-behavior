@@ -15,14 +15,7 @@ def main():
                                        oruebel@lbl.gov, michael.wulf@wustl.edu """.split(',')))
     )
 
-    ns_builder.include_type('NWBData', namespace='core')
-    ns_builder.include_type('LabMetaData', namespace='core')
-    ns_builder.include_type('TimeIntervals', namespace='core')
-    ns_builder.include_type('NWBDataInterface', namespace='core')
-    ns_builder.include_type('DynamicTable', namespace='hdmf-common')
-    ns_builder.include_type('VectorData', namespace='hdmf-common')
-    ns_builder.include_type('VectorIndex', namespace='hdmf-common')
-    ns_builder.include_type('DynamicTableRegion', namespace='hdmf-common')
+    ns_builder.include_namespace('core')
 
     # TODO this is being written as a group spec
     task_program = NWBDatasetSpec(
@@ -215,13 +208,15 @@ def main():
         ],
         datasets=[
             NWBDatasetSpec(
-                name='task_program',
+                # TODO requiring this name is restrictive, especially when the task program is called BEADLTaskProgram
+                # name='task_program',
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
                 # quantity='?'
             ),
             NWBDatasetSpec(
-                name='task_schema',
+                # TODO requiring this name is restrictive
+                # name='task_schema',
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
                 # quantity='?'

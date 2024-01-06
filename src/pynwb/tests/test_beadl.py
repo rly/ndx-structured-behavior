@@ -11,7 +11,7 @@ from pynwb.ecephys import ElectrodeGroup
 from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
-from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_beadl import (TaskRecording, Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable,
                        TaskArgumentsTable, data_program_validator)
 from ndx_beadl.plot import show_by_type_and_value
@@ -38,12 +38,12 @@ class TestHelperFunctions(TestCase):
     """Test for helper functions"""
     def setUp(self):
         self.program = ['a', 'b', 'c']
-        
+
     def test_data_program_validator(self):
         data = ['a', 'b']
-        
+
         self.assertTrue(data_program_validator(data, self.program))
-    
+
     def test_data_program_validator_invalid(self):
         data = ['a', 'd']
         self.assertFalse(data_program_validator(data, self.program))
@@ -170,18 +170,20 @@ class TestBEADLTableConstructors(TestCase):
         states.add_state(state_type=2, start_time=1.2, stop_time=1.4)
         states.add_state(state_type=3, start_time=1.4, stop_time=1.5)
 
+        recording = TaskRecording(actions=actions, states=states, events=events)
+
         trials = TrialsTable(description="description", states_table=states, events_table=events, actions_table=actions)
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1], actions=[0,1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
 
         task = Task(
-                task_program=beadl_task_program,
-                task_schema=beadl_task_schema,
-                event_types=event_types,
-                state_types=state_types,
-                action_types=action_types,
-                task_arguments=task_arg_table
-            )
+            task_program=beadl_task_program,
+            task_schema=beadl_task_schema,
+            event_types=event_types,
+            state_types=state_types,
+            action_types=action_types,
+            task_arguments=task_arg_table
+        )
 
         self.assertEqual(trials.description, "description")
         self.assertEqual(states.description, "description")
@@ -193,17 +195,17 @@ class TestBEADLTableConstructors(TestCase):
         self.assertEqual(trials.columns[1].data, [0.8,1.8])
         self.assertEqual(trials.colnames, ("start_time", "stop_time", "states", "events", "actions"))
 
-        self.assertEqual(states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
-        self.assertEqual(states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
-        self.assertEqual(states.columns[2].data, [0, 1, 2, 3, 0, 1, 2, 3])
+        self.assertEqual(recording.states.columns[0].data, [0.0, 0.1, 0.2, 0.4, 1.0, 1.1, 1.2, 1.4])
+        self.assertEqual(recording.states.columns[1].data, [0.1, 0.2, 0.4, 0.5, 1.1, 1.2, 1.4, 1.5])
+        self.assertEqual(recording.states.columns[2].data, [0, 1, 2, 3, 0, 1, 2, 3])
 
-        self.assertEqual(events.columns[0].data, [0.4, 0.5, 1.4, 1.5])
-        self.assertEqual(events.columns[1].data, [0, 1, 1, 0])
-        self.assertEqual(events.columns[2].data, ["on", "on", "on", "on"])
+        self.assertEqual(recording.events.columns[0].data, [0.4, 0.5, 1.4, 1.5])
+        self.assertEqual(recording.events.columns[1].data, [0, 1, 1, 0])
+        self.assertEqual(recording.events.columns[2].data, ["on", "on", "on", "on"])
 
-        self.assertEqual(actions.columns[0].data, [0.4, 0.5])
-        self.assertEqual(actions.columns[1].data, [0, 1])
-        self.assertEqual(actions.columns[2].data, ["open", "open"])
+        self.assertEqual(recording.actions.columns[0].data, [0.4, 0.5])
+        self.assertEqual(recording.actions.columns[1].data, [0, 1])
+        self.assertEqual(recording.actions.columns[2].data, ["open", "open"])
 
         self.assertEqual(set(action_types.columns[0].data), set(["CorrectPortLED", "CorrectPortValve"]))
 
@@ -362,15 +364,24 @@ class TestTaskSeriesRoundtrip(TestCase):
             language="XML"  # TODO remove when no longer necessary
         )
 
-        task_arg_table=TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        task_arg_table = TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
 
         action_types = ActionTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True)
+        event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True) #assert description
+        state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True)
+        task = Task(
+            task_program=beadl_task_program,
+            task_schema=beadl_task_schema,
+            event_types=event_types,
+            state_types=state_types,
+            action_types=action_types,
+            task_arguments=task_arg_table
+        )
+        file_task = self.nwbfile.add_lab_meta_data(task)
 
         actions = ActionsTable(description="description", action_types_table=action_types)
         actions.add_action(action_type=0, timestamp=0.4, duration=0.1, value="open")
         actions.add_action(action_type=1, timestamp=0.5, duration=0.1, value="open")
-
-        event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True) #assert description
 
         events = EventsTable(description="description", event_types_table=event_types)
         events.add_event(event_type=0, timestamp=0.4, duration=0.1, value="on")
@@ -378,10 +389,7 @@ class TestTaskSeriesRoundtrip(TestCase):
         events.add_event(event_type=1, timestamp=1.4, duration=0.1, value="on")
         events.add_event(event_type=0, timestamp=1.5, duration=0.1, value="on")
 
-        state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program, populate_from_program=True)
-
         states = StatesTable(description="description", state_types_table=state_types)
-
         states.add_state(state_type=0, start_time=0.0, stop_time=0.1)
         states.add_state(state_type=1, start_time=0.1, stop_time=0.2)
         states.add_state(state_type=2, start_time=0.2, stop_time=0.4)
@@ -395,21 +403,10 @@ class TestTaskSeriesRoundtrip(TestCase):
         trials.add_trial(start_time=0.0, stop_time=0.8, states=[0, 1, 2, 3], events=[0, 1], actions=[0,1])
         trials.add_trial(start_time=1.0, stop_time=1.8, states=[4, 5, 6, 7], events=[2, 3], actions=[0,1])
 
-        task = Task(
-                task_program=beadl_task_program,
-                task_schema=beadl_task_schema,
-                event_types=event_types,
-                state_types=state_types,
-                action_types=action_types,
-                task_arguments=task_arg_table
-            )
-
         self.nwbfile.trials = trials
 
-        file_task = self.nwbfile.add_lab_meta_data(task)
-        self.nwbfile.add_acquisition(states)
-        self.nwbfile.add_acquisition(events)
-        self.nwbfile.add_acquisition(actions)
+        recording = TaskRecording(actions=actions, states=states, events=events)
+        self.nwbfile.add_acquisition(recording)
 
         with NWBHDF5IO(self.path, mode="w") as io:
             io.write(self.nwbfile)
@@ -417,6 +414,7 @@ class TestTaskSeriesRoundtrip(TestCase):
         with NWBHDF5IO(self.path, mode="r", load_namespaces=True) as io:
             read_nwbfile = io.read()
             self.assertContainerEqual(file_task, read_nwbfile.lab_meta_data["task"])
-            self.assertContainerEqual(actions, read_nwbfile.get_acquisition("actions"))
-            self.assertContainerEqual(events, read_nwbfile.get_acquisition("events"))
-            self.assertContainerEqual(states, read_nwbfile.get_acquisition("states"))
+            self.assertContainerEqual(recording, read_nwbfile.get_acquisition("task_recording"))
+            self.assertContainerEqual(actions, read_nwbfile.get_acquisition("task_recording").actions)
+            self.assertContainerEqual(events, read_nwbfile.get_acquisition("task_recording").events)
+            self.assertContainerEqual(states, read_nwbfile.get_acquisition("task_recording").states)

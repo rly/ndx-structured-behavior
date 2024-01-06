@@ -2,20 +2,20 @@ from pynwb import register_class
 from pynwb.file import LabMetaData
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
-from hdmf.utils import docval, get_docval, getargs, popargs, AllowPositional
+from hdmf.utils import docval, get_docval, popargs, AllowPositional
 from ndx_beadl import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 from .utils import loadmat
 import itertools
 
 
-def data_program_validator( 
-                           data: list, 
+def data_program_validator(
+                           data: list,
                            program: list
                           ):
     """
     This method checks that each event/state/action type from the data is in the program.
-    
+
     data: A list of all unique types from the data
     program: A list of all unique types from the program
     """
@@ -26,68 +26,9 @@ def data_program_validator(
         else:
             valid = False
             break
-    
+
     return valid
 
-@register_class('Task', 'ndx-beadl')
-class Task(LabMetaData):
-    __nwbfields__ = (
-        {'name': 'task_program', 'child': True},
-        {'name': 'task_schema', 'child': True},
-        {'name': 'event_types', 'child': True},
-        {'name': 'state_types', 'child': True},
-        {'name': 'action_types', 'child': True},
-        {'name': 'task_arguments', 'child': True}
-
-    )
-    @docval(
-        {
-            'name': 'task_program',
-            'type': 'TaskProgram',
-            'doc': 'A dataset to store a task program.',
-        },
-        {
-            'name': 'task_schema',
-            'type': 'TaskSchema',
-            'doc': 'A dataset to store a task schema, e.g., an XSD file.',
-        },
-        {
-            'name': 'event_types',
-            'type': 'EventTypesTable',
-            'doc': 'The table for event types populated by the task program',
-        },
-        {
-            'name': 'state_types',
-            'type': 'StateTypesTable',
-            'doc': 'The table for state types populated by the task program',
-        },
-        {
-            'name': 'action_types',
-            'type': 'ActionTypesTable',
-            'doc': 'The table for action types populated by the task program',
-        },
-        {
-            'name': 'task_arguments',
-            'type': 'TaskArgumentsTable',
-            'doc': 'The table for task arguments populated by the task program',
-        },
-        allow_positional=AllowPositional.ERROR,
-        )
-    def __init__(self, **kwargs):
-        kwargs['name'] = 'task'
-        task_program = popargs('task_program', kwargs)
-        task_schema = popargs('task_schema', kwargs)
-        event_types = popargs('event_types', kwargs)
-        state_types = popargs('state_types', kwargs)
-        action_types = popargs('action_types', kwargs)
-        task_arguments = popargs('task_arguments', kwargs)
-        super().__init__(**kwargs)
-        self.task_program = task_program
-        self.task_schema = task_schema
-        self.event_types = event_types
-        self.state_types = state_types
-        self.action_types = action_types
-        self.task_arguments = task_arguments
 
 @register_class('TrialsTable', 'ndx-beadl')
 class TrialsTable(TimeIntervals):
@@ -573,7 +514,7 @@ class EventsTable(DynamicTable):
 
         unique_event_names=list(set(event_names_data))
         event_types_table_data = event_types_table['event_name'].data
-        
+
         valid = data_program_validator(data = unique_event_names, program=event_types_table_data)
         if valid:
             #loop over event_names where we want to find the idx of each element in the event_types_table
@@ -862,7 +803,7 @@ class ActionsTable(DynamicTable):
         #validate set-up
         unique_action_names=list(set(action_names_data))
         action_types_table_data = action_types_table['action_name'].data
-        
+
         valid = data_program_validator(data = unique_action_names, program=action_types_table_data)
 
         if valid:
