@@ -5,7 +5,7 @@ from pynwb.ecephys import ElectrodeGroup
 from pynwb.file import ElectrodeTable as get_electrode_table
 from pynwb.testing import TestCase, remove_test_file, AcquisitionH5IOMixin
 
-from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_structured_behavior import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable)
 
 

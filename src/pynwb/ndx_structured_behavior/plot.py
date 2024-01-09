@@ -1,5 +1,5 @@
 """
-Module with helper functions for plotting the behavioral data tables defined in the ndx_beadl extension
+Module with helper functions for plotting the behavioral data tables defined in the ndx_structured_behavior extension
 """
 import pandas as pd
 import matplotlib as mpl
@@ -8,7 +8,7 @@ import networkx as nx
 import numpy as np
 from typing import Union
 import warnings
-from ndx_beadl import (EventsTable, EventTypesTable,
+from ndx_structured_behavior import (EventsTable, EventTypesTable,
                        ActionsTable, ActionTypesTable,
                        StatesTable, StateTypesTable,
                        TrialsTable)

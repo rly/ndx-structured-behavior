@@ -8,7 +8,7 @@ def main():
     # these arguments were auto-generated from your cookiecutter inputs
     ns_builder = NWBNamespaceBuilder(
         doc="""An NWB extension for storing BEADL programs and data""",
-        name="""ndx-beadl""",
+        name="""ndx-structured-behavior""",
         version="""0.1.0""",
         author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Ruebel, Michael Wulf""".split(','))),
         contact=list(map(str.strip, """rly@lbl.gov, mavaylon@lbl.gov,

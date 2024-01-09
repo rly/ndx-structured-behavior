@@ -21,7 +21,7 @@ except Exception:
     readme = ""
 
 setup_args = {
-    'name': 'ndx-beadl',
+    'name': 'ndx-structured-behavior',
     'version': '0.1.0',
     'description': 'An NWB extension for storing BEADL programs and data',
     'long_description': readme,
@@ -37,9 +37,9 @@ setup_args = {
     ],
     'packages': find_packages('src/pynwb', exclude=["tests", "tests.*"]),
     'package_dir': {'': 'src/pynwb'},
-    'package_data': {'ndx_beadl': [
-        'spec/ndx-beadl.namespace.yaml',
-        'spec/ndx-beadl.extensions.yaml',
+    'package_data': {'ndx_structured_behavior': [
+        'spec/ndx-structured-behavior.namespace.yaml',
+        'spec/ndx-structured-behavior.extensions.yaml',
     ]},
     'classifiers': [
         "Intended Audience :: Developers",
@@ -57,10 +57,10 @@ setup_args = {
 
 
 def _copy_spec_files(project_dir):
-    ns_path = os.path.join(project_dir, 'spec', 'ndx-beadl.namespace.yaml')
-    ext_path = os.path.join(project_dir, 'spec', 'ndx-beadl.extensions.yaml')
+    ns_path = os.path.join(project_dir, 'spec', 'ndx-structured-behavior.namespace.yaml')
+    ext_path = os.path.join(project_dir, 'spec', 'ndx-structured-behavior.extensions.yaml')
 
-    dst_dir = os.path.join(project_dir, 'src', 'pynwb', 'ndx_beadl', 'spec')
+    dst_dir = os.path.join(project_dir, 'src', 'pynwb', 'ndx_structured_behavior', 'spec')
     if not os.path.exists(dst_dir):
         os.mkdir(dst_dir)
 

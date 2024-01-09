@@ -3,7 +3,7 @@ from pynwb.file import LabMetaData
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, popargs, AllowPositional
-from ndx_beadl import BEADLTaskProgram
+from ndx_structured_behavior import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
 from .utils import loadmat
 import itertools
@@ -30,7 +30,7 @@ def data_program_validator(
     return valid
 
 
-@register_class('TrialsTable', 'ndx-beadl')
+@register_class('TrialsTable', 'ndx-structured-behavior')
 class TrialsTable(TimeIntervals):
     """A table to hold trials data."""
 
@@ -225,7 +225,7 @@ class TrialsTable(TimeIntervals):
         return self
 
 
-@register_class('StatesTable', 'ndx-beadl')
+@register_class('StatesTable', 'ndx-structured-behavior')
 class StatesTable(TimeIntervals):
     """A table to hold states data."""
 
@@ -401,7 +401,7 @@ class StatesTable(TimeIntervals):
             raise ValueError(msg)
 
 
-@register_class('EventsTable', 'ndx-beadl')
+@register_class('EventsTable', 'ndx-structured-behavior')
 class EventsTable(DynamicTable):
     """A table to hold events data."""
 
@@ -536,7 +536,7 @@ class EventsTable(DynamicTable):
             raise ValueError(msg)
 
 
-@register_class('StateTypesTable', 'ndx-beadl')
+@register_class('StateTypesTable', 'ndx-structured-behavior')
 class StateTypesTable(DynamicTable):
     __columns__ = (
         {
@@ -580,7 +580,7 @@ class StateTypesTable(DynamicTable):
         for state in parsed_states['BeadlState']:
             super().add_row(state_name=state['name'])
 
-@register_class('EventTypesTable', 'ndx-beadl')
+@register_class('EventTypesTable', 'ndx-structured-behavior')
 class EventTypesTable(DynamicTable):
     __columns__ = (
         {
@@ -638,7 +638,7 @@ class EventTypesTable(DynamicTable):
         for event_name in set([event['eventName'] for event in joined_events]):
             super().add_row(event_name=event_name)
 
-@register_class('ActionTypesTable', 'ndx-beadl')
+@register_class('ActionTypesTable', 'ndx-structured-behavior')
 class ActionTypesTable(DynamicTable):
     __columns__ = (
         {
@@ -688,7 +688,7 @@ class ActionTypesTable(DynamicTable):
             super().add_row(action_name=action)
 
 
-@register_class('ActionsTable', 'ndx-beadl')
+@register_class('ActionsTable', 'ndx-structured-behavior')
 class ActionsTable(DynamicTable):
     __columns__ = (
         {

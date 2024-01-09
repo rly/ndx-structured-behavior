@@ -9,10 +9,10 @@ import os
 spec_input_spec_dir = '../spec'
 
 # Name of the YAML file with the specification of the Namespace to be documented
-spec_input_namespace_filename = 'ndx-beadl.namespace.yaml'
+spec_input_namespace_filename = 'ndx-structured-behavior.namespace.yaml'
 
 # Name of the default namespace in the file
-spec_input_default_namespace = 'ndx-beadl'
+spec_input_default_namespace = 'ndx-structured-behavior'
 
 
 # -- Options for customizing the locations of output files

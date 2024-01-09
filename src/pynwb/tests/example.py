@@ -1,6 +1,6 @@
-from ndx_beadl import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
+from ndx_structured_behavior import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
                        StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable, TaskArgumentsTable)
-from ndx_beadl.beadl_xml_parser import BeadlXMLParser
+from ndx_structured_behavior.beadl_xml_parser import BeadlXMLParser
 from pynwb import NWBHDF5IO
 from pynwb.file import NWBFile, Subject
 import datetime
