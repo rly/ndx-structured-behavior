@@ -16,14 +16,12 @@ with open("LightChasingTask.xml", "r") as test_xml_file:
     test_xml = test_xml_file.read()
 
 beadl_task_schema = BEADLTaskSchema(
-    name = 'beadl_task_schema',
     data=test_xsd,
     version="0.1.0",
     language="XSD"  # TODO remove when no longer necessary
 )
 
 beadl_task_program = BEADLTaskProgram(
-    name = 'beadl_task_program',
     data=test_xml,
     schema=beadl_task_schema,
     language="XML"  # TODO remove when no longer necessary

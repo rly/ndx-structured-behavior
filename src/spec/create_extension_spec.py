@@ -12,13 +12,12 @@ def main():
         version="""0.1.0""",
         author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Ruebel, Michael Wulf""".split(','))),
         contact=list(map(str.strip, """rly@lbl.gov, mavaylon@lbl.gov,
-                                       oruebel@lbl.gov, michael.wulf@wustl.edu """.split(',')))
+                                       oruebel@lbl.gov, michael.wulf@wustl.edu""".split(',')))
     )
-
     ns_builder.include_namespace('core')
 
-    # TODO this is being written as a group spec
     task_program = NWBDatasetSpec(
+        name='task_program',
         neurodata_type_def='TaskProgram',
         neurodata_type_inc='NWBData',
         doc=('A dataset to store a task program.'),
@@ -42,6 +41,7 @@ def main():
     )
 
     beadl_task_program = NWBDatasetSpec(
+        name='task_program',
         neurodata_type_def='BEADLTaskProgram',
         neurodata_type_inc='TaskProgram',
         doc=('A dataset to store a BEADL task program.'),
@@ -64,6 +64,7 @@ def main():
     )
 
     task_schema = NWBDatasetSpec(
+        name='task_schema',
         neurodata_type_def='TaskSchema',
         neurodata_type_inc='NWBData',
         doc=('A dataset to store a task schema, e.g., an XSD file.'),
@@ -83,6 +84,7 @@ def main():
     )
 
     beadl_task_schema = NWBDatasetSpec(
+        name='task_schema',
         neurodata_type_def='BEADLTaskSchema',
         neurodata_type_inc='TaskSchema',
         doc=('A dataset to store a BEADL task schema.'),
@@ -208,15 +210,13 @@ def main():
         ],
         datasets=[
             NWBDatasetSpec(
-                # TODO requiring this name is restrictive, especially when the task program is called BEADLTaskProgram
-                # name='task_program',
+                name='task_program',
                 neurodata_type_inc='TaskProgram',
                 doc=('A dataset to store a task program.'),
                 # quantity='?'
             ),
             NWBDatasetSpec(
-                # TODO requiring this name is restrictive
-                # name='task_schema',
+                name='task_schema',
                 neurodata_type_inc='TaskSchema',
                 doc=('A dataset to store a task schema, e.g., an XSD file.'),
                 # quantity='?'

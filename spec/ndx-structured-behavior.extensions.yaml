@@ -1,6 +1,7 @@
 datasets:
 - neurodata_type_def: TaskProgram
   neurodata_type_inc: NWBData
+  name: task_program
   dtype: text
   doc: A dataset to store a task program.
   attributes:
@@ -15,6 +16,7 @@ datasets:
     doc: The task schema that governs the program.
 - neurodata_type_def: BEADLTaskProgram
   neurodata_type_inc: TaskProgram
+  name: task_program
   doc: A dataset to store a BEADL task program.
   attributes:
   - name: language
@@ -29,6 +31,7 @@ datasets:
     doc: The BEADL task schema that governs the program.
 - neurodata_type_def: TaskSchema
   neurodata_type_inc: NWBData
+  name: task_schema
   dtype: text
   doc: A dataset to store a task schema, e.g., an XSD file.
   attributes:
@@ -40,6 +43,7 @@ datasets:
     doc: The language of the schema. Currently only "XSD" is supported.
 - neurodata_type_def: BEADLTaskSchema
   neurodata_type_inc: TaskSchema
+  name: task_schema
   doc: A dataset to store a BEADL task schema.
   attributes:
   - name: language
@@ -69,9 +73,11 @@ groups:
     this will no longer inherit from LabMetaData but from NWBContainer and be placed
     optionally in /general.
   datasets:
-  - neurodata_type_inc: TaskProgram
+  - name: task_program
+    neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
-  - neurodata_type_inc: TaskSchema
+  - name: task_schema
+    neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
   groups:
   - name: event_types

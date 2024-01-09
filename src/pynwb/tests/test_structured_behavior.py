@@ -92,24 +92,22 @@ class TestBEADLProgramConstructors(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
-            name = "beadl_task_schema",
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
-            name = "beadl_task_program",
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
         )
 
-        self.assertEqual(beadl_task_schema.name, "beadl_task_schema")
+        self.assertEqual(beadl_task_schema.name, "task_schema")
         self.assertEqual(beadl_task_schema.data, test_xsd)
         self.assertEqual(beadl_task_schema.version, "0.1.0")
         self.assertEqual(beadl_task_schema.language, "XSD")
-        self.assertEqual(beadl_task_program.name, "beadl_task_program")
+        self.assertEqual(beadl_task_program.name, "task_program")
         self.assertEqual(beadl_task_program.data, test_xml)
         self.assertIs(beadl_task_program.schema, beadl_task_schema)
         self.assertEqual(beadl_task_program.language, "XML")
@@ -128,14 +126,12 @@ class TestBEADLTableConstructors(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
-            name = "beadl_task_schema",
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
-            name = "beadl_task_program",
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
@@ -225,14 +221,12 @@ class TestBeadlTablesPopulate(TestCase):
             test_xml = test_xml_file.read()
 
         self.beadl_task_schema = BEADLTaskSchema(
-            name = "beadl_task_schema",
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         self.beadl_task_program = BEADLTaskProgram(
-            name = "beadl_task_program",
             data=test_xml,
             schema=self.beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
@@ -275,14 +269,12 @@ class TestPlot(TestCase):
             test_xml = test_xml_file.read()
 
         self.beadl_task_schema = BEADLTaskSchema(
-            name = "beadl_task_schema",
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         self.beadl_task_program = BEADLTaskProgram(
-            name = "beadl_task_program",
             data=test_xml,
             schema=self.beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
@@ -351,14 +343,12 @@ class TestTaskSeriesRoundtrip(TestCase):
             test_xml = test_xml_file.read()
 
         beadl_task_schema = BEADLTaskSchema(
-            name = "task_schema", # why do we need this?
             data=test_xsd,
             version="0.1.0",
             language="XSD"  # TODO remove when no longer necessary
         )
 
         beadl_task_program = BEADLTaskProgram(
-            name = "task_program", # why do we need this?
             data=test_xml,
             schema=beadl_task_schema,
             language="XML"  # TODO remove when no longer necessary
