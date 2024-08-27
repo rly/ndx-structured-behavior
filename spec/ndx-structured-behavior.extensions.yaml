@@ -71,8 +71,10 @@ groups:
   datasets:
   - neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
+    quantity: '?'
   - neurodata_type_inc: TaskSchema
     doc: A dataset to store a task schema, e.g., an XSD file.
+    quantity: '?'
   groups:
   - name: event_types
     neurodata_type_inc: EventTypesTable
