@@ -1,9 +1,9 @@
 
 .. _ndx-structured-behavior:
 
-*********
+***********************
 ndx-structured-behavior
-*********
+***********************
 
 Version |release| |today|
 

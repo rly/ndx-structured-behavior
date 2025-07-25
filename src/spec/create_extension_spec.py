@@ -1,21 +1,29 @@
 # -*- coding: utf-8 -*-
-import os.path
+from pathlib import Path
 
-from pynwb.spec import NWBNamespaceBuilder, export_spec, NWBGroupSpec, NWBDatasetSpec, NWBAttributeSpec, NWBRefSpec
+from pynwb.spec import NWBNamespaceBuilder, export_spec, NWBGroupSpec, NWBAttributeSpec, NWBDatasetSpec, NWBRefSpec
 
 
 def main():
     # these arguments were auto-generated from your cookiecutter inputs
     ns_builder = NWBNamespaceBuilder(
-        doc="""An NWB extension for storing BEADL programs and data""",
         name="""ndx-structured-behavior""",
         version="""0.1.0""",
-        author=list(map(str.strip, """Ryan Ly, Matthew Avaylon, Oliver Ruebel, Michael Wulf""".split(','))),
-        contact=list(map(str.strip, """rly@lbl.gov, mavaylon@lbl.gov,
-                                       oruebel@lbl.gov, michael.wulf@wustl.edu """.split(',')))
+        doc="""An NWB extension for storing structured behavior programs and data, such as from BAABL/BEADL""",
+        author=[
+            "Ryan Ly",
+            "Matthew Avaylon",
+            "Oliver Ruebel",
+            "Michael Wulf",
+        ],
+        contact=[
+            "rly@lbl.gov",
+            "mavaylon@lbl.gov",
+            "oruebel@lbl.gov",
+            "michael.wulf@wustl.edu",
+        ],
     )
-
-    ns_builder.include_namespace('core')
+    ns_builder.include_namespace("core")
 
     # TODO this is being written as a group spec
     task_program = NWBDatasetSpec(
@@ -374,15 +382,28 @@ def main():
         ]
     )
 
-    new_data_types = [task_program, task_recording, beadl_task_program, task_schema, beadl_task_schema, tasks,
-                      trials_table, state_types_table, states_table, event_types_table, events_table,
-                      actions_table, action_types_table, task_argument_table]
+    new_data_types = [
+        task_program,
+        task_recording,
+        beadl_task_program,
+        task_schema,
+        beadl_task_schema,
+        tasks,
+        trials_table,
+        state_types_table,
+        states_table,
+        event_types_table,
+        events_table,
+        actions_table,
+        action_types_table,
+        task_argument_table,
+    ]
 
-    # export the spec to yaml files in the spec folder
-    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'spec'))
+    # export the spec to yaml files in the root spec folder
+    output_dir = str((Path(__file__).parent.parent.parent / "spec").absolute())
     export_spec(ns_builder, new_data_types, output_dir)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # usage: python create_extension_spec.py
     main()

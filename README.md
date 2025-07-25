@@ -1,5 +1,7 @@
 # ndx-structured-behavior Extension for NWB
 
+An NWB extension for storing structured behavior programs and data, such as from BAABL/BEADL.
+
 The extension *ndx_structured_behavior* defines a collection of interlinked table data structures for
 storing behavioral tasks and data. While the extension has been designed with BEADL in
 mind, the data structures are general and are intended to be useful even without BEADL.
@@ -19,7 +21,7 @@ pip install -e .
 
 ## Usage
 
-https://github.com/rly/ndx-structured-behavior/blob/5df21f406a7e03587650157a6f3ec07be508b1f9/src/pynwb/tests/example.py#L1-L90
+https://github.com/rly/ndx-structured-behavior/main/src/pynwb/tests/example.py#L1-L90
 
 ---
 This extension was created using [ndx-template](https://github.com/nwb-extensions/ndx-template).

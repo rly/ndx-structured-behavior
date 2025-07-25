@@ -6,8 +6,8 @@ datasets:
   attributes:
   - name: language
     dtype: text
-    doc: The language of the program. Currently only "XML" is supported. It is not
-      recommended to include executable code here.
+    doc: The language of the program. Currently only "XML" is supported. It is 
+      not recommended to include executable code here.
   - name: schema
     dtype:
       target_type: TaskSchema
@@ -65,9 +65,9 @@ groups:
 - neurodata_type_def: Task
   neurodata_type_inc: LabMetaData
   name: task
-  doc: A group to store task-related general metadata. TODO When merged with core,
-    this will no longer inherit from LabMetaData but from NWBContainer and be placed
-    optionally in /general.
+  doc: A group to store task-related general metadata. TODO When merged with 
+    core, this will no longer inherit from LabMetaData but from NWBContainer and
+    be placed optionally in /general.
   datasets:
   - neurodata_type_inc: TaskProgram
     doc: A dataset to store a task program.
@@ -91,28 +91,29 @@ groups:
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials
-  doc: A column-based table to store information about trials, one trial per row.
+  doc: A column-based table to store information about trials, one trial per 
+    row.
   datasets:
   - name: states
     neurodata_type_inc: DynamicTableRegion
-    doc: The states that occurred on each trial. This is represented as a ragged array
-      reference to rows of the States table.
+    doc: The states that occurred on each trial. This is represented as a ragged
+      array reference to rows of the States table.
   - name: states_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "states" column.
     quantity: '?'
   - name: events
     neurodata_type_inc: DynamicTableRegion
-    doc: The events that occurred on each trial. This is represented as a ragged array
-      reference to rows of the Events table.
+    doc: The events that occurred on each trial. This is represented as a ragged
+      array reference to rows of the Events table.
   - name: events_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "events" column.
     quantity: '?'
   - name: actions
     neurodata_type_inc: DynamicTableRegion
-    doc: The actions that occurred on each trial. This is represented as a ragged
-      array reference to rows of the Actions table.
+    doc: The actions that occurred on each trial. This is represented as a 
+      ragged array reference to rows of the Actions table.
   - name: actions_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "actions" column.
@@ -120,8 +121,8 @@ groups:
 - neurodata_type_def: StateTypesTable
   neurodata_type_inc: DynamicTable
   name: state_types
-  doc: A column-based table to store information about action_types, one type per
-    row.
+  doc: A column-based table to store information about action_types, one type 
+    per row.
   datasets:
   - name: state_name
     neurodata_type_inc: VectorData
@@ -129,17 +130,18 @@ groups:
 - neurodata_type_def: StatesTable
   neurodata_type_inc: TimeIntervals
   name: states
-  doc: A column-based table to store information about states, one state per row.
+  doc: A column-based table to store information about states, one state per 
+    row.
   datasets:
   - name: state_type
     neurodata_type_inc: DynamicTableRegion
-    doc: The type of state that occurred on each trial. This is represented as a reference
-      to a row of the StateTypesTable.
+    doc: The type of state that occurred on each trial. This is represented as a
+      reference to a row of the StateTypesTable.
 - neurodata_type_def: EventTypesTable
   neurodata_type_inc: DynamicTable
   name: event_types
-  doc: A column-based table to store information about action_types, one type per
-    row.
+  doc: A column-based table to store information about action_types, one type 
+    per row.
   datasets:
   - name: event_name
     neurodata_type_inc: VectorData
@@ -147,7 +149,8 @@ groups:
 - neurodata_type_def: EventsTable
   neurodata_type_inc: DynamicTable
   name: events
-  doc: A column-based table to store information about events, one event per row.
+  doc: A column-based table to store information about events, one event per 
+    row.
   datasets:
   - name: timestamp
     neurodata_type_inc: VectorData
@@ -155,8 +158,8 @@ groups:
     doc: The time that the event occurred, in seconds.
   - name: event_type
     neurodata_type_inc: DynamicTableRegion
-    doc: The type of event that occurred on each trial. This is represented as a reference
-      to a row of the EventTypesTable.
+    doc: The type of event that occurred on each trial. This is represented as a
+      reference to a row of the EventTypesTable.
   - name: value
     neurodata_type_inc: VectorData
     dtype: text
@@ -164,7 +167,8 @@ groups:
 - neurodata_type_def: ActionsTable
   neurodata_type_inc: DynamicTable
   name: actions
-  doc: A column-based table to store information about actions, one action per row.
+  doc: A column-based table to store information about actions, one action per 
+    row.
   datasets:
   - name: timestamp
     neurodata_type_inc: VectorData
@@ -172,8 +176,8 @@ groups:
     doc: The time that the action occurred, in seconds.
   - name: action_type
     neurodata_type_inc: DynamicTableRegion
-    doc: The type of action that occurred on each trial. This is represented as a
-      reference to a row of the ActionTypesTable.
+    doc: The type of action that occurred on each trial. This is represented as 
+      a reference to a row of the ActionTypesTable.
   - name: value
     neurodata_type_inc: VectorData
     dtype: text
@@ -181,8 +185,8 @@ groups:
 - neurodata_type_def: ActionTypesTable
   neurodata_type_inc: DynamicTable
   name: action_types
-  doc: A column-based table to store information about action_types, one type per
-    row.
+  doc: A column-based table to store information about action_types, one type 
+    per row.
   datasets:
   - name: action_name
     neurodata_type_inc: VectorData
