@@ -48,7 +48,7 @@ test = [
     "pytest-subtests>=0.12.1",
     "python-dateutil>=2.8.2",
     "matplotlib>=3.9.4",
-    "networkx>=3.4",
+    "networkx>=3.2.1",
 ]
 
 docs = [
