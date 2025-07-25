@@ -38,8 +38,6 @@ dependencies = [
     "pynwb>=2.8.0",
     "hdmf>=3.14.1",
     "scipy>=1.10.1",
-    "matplotlib",
-    "networkx",
 ]
 
 [project.optional-dependencies]
@@ -49,6 +47,8 @@ test = [
     "pytest-cov>=5.0.0",
     "pytest-subtests>=0.12.1",
     "python-dateutil>=2.8.2",
+    "matplotlib>=3.10.3",
+    "networkx>=3.5",
 ]
 
 docs = [
@@ -68,8 +68,6 @@ min-reqs = [
     "pynwb==2.8.0",
     "hdmf==3.14.1",
     "scipy==1.10.1",
-    "matplotlib",
-    "networkx",
 ]
 
 # TODO: add URLs before release
