@@ -1,4 +1,4 @@
-name: Codespell
+name: Ruff
 on:
   push:
     branches:
@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  codespell:
-    name: Check for spelling errors
+  ruff:
+    name: Check for style errors and common problems
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Codespell
-        uses: codespell-project/actions-codespell@v2
+      - name: Ruff
+        uses: astral-sh/ruff-action@v3

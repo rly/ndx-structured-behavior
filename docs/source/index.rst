@@ -1,5 +1,5 @@
 Specification for the ndx-structured-behavior extension
-=========================================
+=======================================================
 
 .. toctree::
     :numbered:

@@ -1,0 +1,166 @@
+# This workflow runs all tests in the extension package on the latest versions of
+# Windows/MacOS/Linux and all recent versions of Python. It also tests whether the
+# tests pass when the minimum versions of dependencies allowed are installed, and
+# tests whether the tests pass when the built wheel, source distribution, and git
+# archive are installed.
+
+# NOTE: This workflow assumes that the extension package has no platform-specific dependencies.
+# The "build" and "test-package" jobs therefore only test on ubuntu-latest with the latest
+# Python version. These jobs should be adjusted if the assumption is incorrect.
+
+name: Run all tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 5 * * 0'  # once every Sunday at midnight ET
+  workflow_dispatch:
+
+jobs:
+  run-all-tests:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.name }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: linux-python3.9-minimum      , requirements: minimum    , python-ver: "3.9" , os: ubuntu-latest }
+          - { name: linux-python3.9              , requirements: upgraded   , python-ver: "3.9" , os: ubuntu-latest }
+          - { name: linux-python3.10             , requirements: upgraded   , python-ver: "3.10", os: ubuntu-latest }
+          - { name: linux-python3.11             , requirements: upgraded   , python-ver: "3.11", os: ubuntu-latest }
+          - { name: linux-python3.12             , requirements: upgraded   , python-ver: "3.12", os: ubuntu-latest }
+          - { name: linux-python3.13             , requirements: upgraded   , python-ver: "3.13", os: ubuntu-latest }
+          - { name: windows-python3.9-minimum    , requirements: minimum    , python-ver: "3.9" , os: windows-latest }
+          - { name: windows-python3.9            , requirements: upgraded   , python-ver: "3.9" , os: windows-latest }
+          - { name: windows-python3.10           , requirements: upgraded   , python-ver: "3.10", os: windows-latest }
+          - { name: windows-python3.11           , requirements: upgraded   , python-ver: "3.11", os: windows-latest }
+          - { name: windows-python3.12           , requirements: upgraded   , python-ver: "3.12", os: windows-latest }
+          - { name: windows-python3.13           , requirements: upgraded   , python-ver: "3.13", os: windows-latest }
+          - { name: macos-python3.9-minimum      , requirements: minimum    , python-ver: "3.9" , os: macos-latest }
+          - { name: macos-python3.9              , requirements: upgraded   , python-ver: "3.9" , os: macos-latest }
+          - { name: macos-python3.10             , requirements: upgraded   , python-ver: "3.10", os: macos-latest }
+          - { name: macos-python3.11             , requirements: upgraded   , python-ver: "3.11", os: macos-latest }
+          - { name: macos-python3.12             , requirements: upgraded   , python-ver: "3.12", os: macos-latest }
+          - { name: macos-python3.13             , requirements: upgraded   , python-ver: "3.13", os: macos-latest }
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # tags are required to determine the version
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-ver }}
+
+      - name: Install run requirements (minimum)
+        if: ${{ matrix.requirements == 'minimum' }}
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[min-reqs,test]"
+          python -m pip list
+          python -m pip check
+
+      - name: Install run requirements (upgraded)
+        if: ${{ matrix.requirements == 'upgraded' }}
+        run: |
+          python -m pip install --upgrade pip
+          # force upgrade of all dependencies to latest versions within allowed range
+          python -m pip install -U ".[test]"
+          python -m pip list
+          python -m pip check
+
+      - name: Run tests
+        run: |
+          pytest -v
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # tags are required to determine the version
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"  # use the latest stable version of Python
+
+      - name: Build and check wheel and source distribution
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          twine check dist/*
+
+      - name: Upload wheel and sdist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Build git archive
+        run: mkdir archive && git archive -v -o archive/archive.tgz HEAD
+
+      - name: Upload git archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive
+          path: archive/
+
+  test-package:
+    runs-on: ubuntu-latest
+    needs: [build]
+    strategy:
+      matrix:
+        package: ["wheel", "sdist", "archive"]
+    steps:
+      - name: Download sdist and wheel artifacts
+        if: matrix.package != 'archive'
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Download git archive artifact
+        if: matrix.package == 'archive'
+        uses: actions/download-artifact@v4
+        with:
+          name: archive
+          path: archive/
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"  # use the latest stable version of Python
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Update pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install wheel
+        if: matrix.package == 'wheel'
+        run: python -m pip install dist/*.whl
+
+      - name: Install sdist
+        if: matrix.package == 'sdist'
+        run: python -m pip install dist/*.tar.gz
+
+      - name: Install archive
+        if: matrix.package == 'archive'
+        run: python -m pip install archive/archive.tgz
+
+      - name: Check installed package
+        run: python -c "import ndx_structured_behavior"
+
+      - name: Checkout repo to access tests
+        uses: actions/checkout@v4
+
+      - name: Install pytest and run tests
+        run: |
+          python -m pip install pytest
+          pytest -v

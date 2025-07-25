@@ -9,7 +9,8 @@ namespaces:
   - mavaylon@lbl.gov
   - oruebel@lbl.gov
   - michael.wulf@wustl.edu
-  doc: An NWB extension for storing BEADL programs and data
+  doc: An NWB extension for storing structured behavior programs and data, such 
+    as from BAABL/BEADL
   name: ndx-structured-behavior
   schema:
   - namespace: core
