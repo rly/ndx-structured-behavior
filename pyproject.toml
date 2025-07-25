@@ -68,6 +68,8 @@ min-reqs = [
     "pynwb==2.8.0",
     "hdmf==3.14.1",
     "scipy==1.7.0",
+    "matplotlib",
+    "networkx",
 ]
 
 # TODO: add URLs before release
