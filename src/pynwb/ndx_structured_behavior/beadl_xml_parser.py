@@ -1,16 +1,17 @@
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
-path = "/Users/mavaylon/Research/NWB/ndx-structured-behavior/src/pynwb/tests/Foraging_Task.xml"
+# path = "/Users/mavaylon/Research/NWB/ndx-structured-behavior/src/pynwb/tests/Foraging_Task.xml"
 
-class BeadlXMLParser():
+
+class BeadlXMLParser:
     def __init__(self, **kwargs):
         # if kwargs['path'] is not None:
         #     self.path = kwargs['path'] # path to xml file
         #     self._xml_object = ET.parse(path)
         #     self._root = self._establish_root()
         # else:
-        self._root = ET.fromstring(kwargs['string'])
+        self._root = ET.fromstring(kwargs["string"])
         self.version = self._beadl_version()
         self._protocal = self._establish_protocal()
 
@@ -47,7 +48,7 @@ class BeadlXMLParser():
         and BeadlStateTransitions.
         """
 
-        element_name = kwargs['element_name']
+        element_name = kwargs["element_name"]
         element = self._protocal.find(element_name)
 
         return element
@@ -63,10 +64,12 @@ class BeadlXMLParser():
         one child for each element, e.g more than one BeadlStates, and we want to be able
         to store them.
         """
-        element = kwargs['element']
-        element_dict = defaultdict(list) # it is a list because there can be more than one of each child e.g BeadlStates
+        element = kwargs["element"]
+        element_dict = defaultdict(
+            list
+        )  # it is a list because there can be more than one of each child e.g BeadlStates
         for child in element.iter():
-            if len(child.attrib)>0:
+            if len(child.attrib) > 0:
                 element_dict[child.tag].append(child.attrib)
             else:
                 element_dict[child.tag].append(child.text)
@@ -84,22 +87,25 @@ class BeadlXMLParser():
 
         b.display_element(s)
         """
-        self._print_level(element,level)
+        self._print_level(element, level)
         for child in list(element):
-            self.display_element(child, level+2)
+            self.display_element(child, level + 2)
 
     def _print_level(self, element, level):
-        print ('-'*level+element.tag)
-        print(' '*(level+(int(len(element.tag)/2)))+'|')
+        print("-" * level + element.tag)  # noqa: T201
+        print(" " * (level + (int(len(element.tag) / 2))) + "|")  # noqa: T201
         for item in element.attrib:
             if element.attrib[item] is not None:
-                print(' '*(level+(int(len(element.tag)/2)))+'|---'+item+':',element.attrib[item])
+                print(  # noqa: T201
+                    " " * (level + (int(len(element.tag) / 2))) + "|---" + item + ":",
+                    element.attrib[item]
+                )
             # elif element.find(item) is not None:
             #     print(' '*(level+(int(len(element.tag)/2)))+'|---'+item+':',element.find(item).text)
 
     def retrieve_state_type(self, state_type):
-        states_element = self.element(element_name='BeadlStates').findall('BeadlState')
+        states_element = self.element(element_name="BeadlStates").findall("BeadlState")
         for states in states_element:
-            if states.attrib['name']==state_type:
+            if states.attrib["name"] == state_type:
                 parsed_child = self._parse_protocal_children(element=states)
         return parsed_child

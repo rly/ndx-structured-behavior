@@ -1,6 +1,16 @@
-from ndx_structured_behavior import (Task, BEADLTaskProgram, BEADLTaskSchema, EventTypesTable, EventsTable,
-                       StateTypesTable, StatesTable, TrialsTable, ActionTypesTable, ActionsTable, TaskArgumentsTable)
-from ndx_structured_behavior.beadl_xml_parser import BeadlXMLParser
+from ndx_structured_behavior import (
+    Task,
+    BEADLTaskProgram,
+    BEADLTaskSchema,
+    EventTypesTable,
+    EventsTable,
+    StateTypesTable,
+    StatesTable,
+    TrialsTable,
+    ActionTypesTable,
+    ActionsTable,
+    TaskArgumentsTable,
+)
 from pynwb import NWBHDF5IO
 from pynwb.file import NWBFile, Subject
 import datetime
@@ -13,7 +23,7 @@ beadl_task_program_file = os.path.join(base_dir, "LightChasingTask.xml")
 beadl_data_file = os.path.join(base_dir, "BeadlDataSample.mat")
 
 # Output file paths
-nwb_filepath =  os.path.join(base_dir, "beadl_light_chasing_task.nwb")
+nwb_filepath = os.path.join(base_dir, "beadl_light_chasing_task.nwb")
 
 # Import the BEADL task schema and task program
 with open(beadl_task_schema_file, "r") as test_xsd_file:
@@ -22,28 +32,21 @@ with open(beadl_task_schema_file, "r") as test_xsd_file:
 with open(beadl_task_program_file, "r") as test_xml_file:
     test_xml = test_xml_file.read()
 
-beadl_task_schema = BEADLTaskSchema(
-    name='task_schema',
-    data=test_xsd,
-    version="0.1.0",
-    language="XSD"
-)
+beadl_task_schema = BEADLTaskSchema(name="task_schema", data=test_xsd, version="0.1.0", language="XSD")
 
-beadl_task_program = BEADLTaskProgram(
-    name='task_program',
-    data=test_xml,
-    schema=beadl_task_schema,
-    language="XML"
-)
+beadl_task_program = BEADLTaskProgram(name="task_program", data=test_xml, schema=beadl_task_schema, language="XML")
 
 # Create a new Tasks object and add the BEADL task metadata
 task_arg_table = TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
-event_types = EventTypesTable(description="description", beadl_task_program=beadl_task_program,
-                              populate_from_program=True)
-action_types = ActionTypesTable(description="description", beadl_task_program=beadl_task_program,
-                                populate_from_program=True)
-state_types = StateTypesTable(description="description", beadl_task_program=beadl_task_program,
-                              populate_from_program=True)
+event_types = EventTypesTable(
+    description="description", beadl_task_program=beadl_task_program, populate_from_program=True
+)
+action_types = ActionTypesTable(
+    description="description", beadl_task_program=beadl_task_program, populate_from_program=True
+)
+state_types = StateTypesTable(
+    description="description", beadl_task_program=beadl_task_program, populate_from_program=True
+)
 
 task = Task(
     task_program=beadl_task_program,
@@ -51,7 +54,7 @@ task = Task(
     event_types=event_types,
     state_types=state_types,
     action_types=action_types,
-    task_arguments=task_arg_table
+    task_arguments=task_arg_table,
 )
 
 # Create Events, Actions, and States
@@ -72,7 +75,7 @@ nwbfile = NWBFile(
     session_description="session_description",
     identifier="LightChasingTask",
     session_start_time=datetime.datetime.now(datetime.timezone.utc),
-    subject=Subject(subject_id="SP_W2_RH")
+    subject=Subject(subject_id="SP_W2_RH"),
 )
 # Add Beadl Data
 nwbfile.add_lab_meta_data(task)
