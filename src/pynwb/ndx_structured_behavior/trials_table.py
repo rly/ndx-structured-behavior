@@ -4,26 +4,8 @@ from pynwb.epoch import TimeIntervals
 from hdmf.utils import docval, get_docval, popargs, AllowPositional
 from ndx_structured_behavior import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
-from .utils import loadmat
+from .utils import loadmat, validate_data_program
 import itertools
-
-
-def data_program_validator(data: list, program: list):
-    """
-    This method checks that each event/state/action type from the data is in the program.
-
-    data: A list of all unique types from the data
-    program: A list of all unique types from the program
-    """
-    valid = True
-    for _type in data:
-        if _type in program:
-            continue
-        else:
-            valid = False
-            break
-
-    return valid
 
 
 @register_class("TrialsTable", "ndx-structured-behavior")
@@ -311,7 +293,7 @@ class StatesTable(TimeIntervals):
         if validate_bool:
             # validate state_types from matlab file with task program xml
             state_types_table_data = state_types_table["state_name"].data
-            valid = data_program_validator(data=unique_keys, program=state_types_table_data)
+            valid = validate_data_program(data=unique_keys, program=state_types_table_data)
             if valid:
                 # retrieve start times
                 updated_start_times = []
@@ -441,7 +423,7 @@ class EventsTable(DynamicTable):
         unique_event_names = list(set(event_names_data))
         event_types_table_data = event_types_table["event_name"].data
 
-        valid = data_program_validator(data=unique_event_names, program=event_types_table_data)
+        valid = validate_data_program(data=unique_event_names, program=event_types_table_data)
         if valid:
             # loop over event_names where we want to find the idx of each element in the event_types_table
             event_idx_list = []
@@ -694,7 +676,7 @@ class ActionsTable(DynamicTable):
         unique_action_names = list(set(action_names_data))
         action_types_table_data = action_types_table["action_name"].data
 
-        valid = data_program_validator(data=unique_action_names, program=action_types_table_data)
+        valid = validate_data_program(data=unique_action_names, program=action_types_table_data)
 
         if valid:
             # loop over event_names where we want to find the idx of each element in the event_types_table
