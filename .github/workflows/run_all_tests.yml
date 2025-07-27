@@ -160,7 +160,7 @@ jobs:
       - name: Checkout repo to access tests
         uses: actions/checkout@v4
 
-      - name: Install pytest and run tests
+      - name: Install test dependencies from pyproject.toml and run tests
         run: |
           python -c "import tomllib; import subprocess; import sys; \
               data=tomllib.load(open('pyproject.toml','rb')); \
