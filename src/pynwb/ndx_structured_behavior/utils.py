@@ -53,3 +53,21 @@ def loadmat(filename):
 
     data = spio.loadmat(filename, struct_as_record=False, squeeze_me=True)
     return _check_keys(data)
+
+
+def validate_data_program(data: list, program: list) -> bool:
+    """
+    Check that each event/state/action type from the data is in the program.
+
+    data: A list of all unique types from the data
+    program: A list of all unique types from the program
+    """
+    valid = True
+    for _type in data:
+        if _type in program:
+            continue
+        else:
+            valid = False
+            break
+
+    return valid

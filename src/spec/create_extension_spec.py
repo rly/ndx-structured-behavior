@@ -25,7 +25,6 @@ def main():
     )
     ns_builder.include_namespace("core")
 
-    # TODO this is being written as a group spec
     task_program = NWBDatasetSpec(
         neurodata_type_def="TaskProgram",
         neurodata_type_inc="NWBData",
@@ -187,7 +186,8 @@ def main():
             NWBGroupSpec(name="state_types", neurodata_type_inc="StateTypesTable", doc=("The StateTypesTable")),
             NWBGroupSpec(name="action_types", neurodata_type_inc="ActionTypesTable", doc=("The ActionTypesTable")),
             NWBGroupSpec(
-                name="task_arguments", neurodata_type_inc="TaskArgumentsTable", doc=("The TaskArgumentsTable")
+                name="task_arguments", neurodata_type_inc="TaskArgumentsTable", doc=("The TaskArgumentsTable"),
+                quantity="?",
             ),
         ],
         datasets=[
@@ -208,8 +208,6 @@ def main():
         ],
     )
 
-    # TODO force the DTR/VectorIndex targets to be specific data types
-
     trials_table = NWBGroupSpec(
         name="trials",
         neurodata_type_def="TrialsTable",
@@ -223,6 +221,17 @@ def main():
                     "The states that occurred on each trial. This is represented as a ragged array reference to "
                     "rows of the States table."
                 ),
+                attributes=[
+                    NWBAttributeSpec(
+                        name="table",
+                        dtype=NWBRefSpec(target_type="StatesTable", reftype="object"),
+                        doc=(
+                            "Reference to the StatesTable table that this table region applies to. This specializes "
+                            "the attribute inherited from DynamicTableRegion to fix the type of table that can be "
+                            "referenced here."
+                        ),
+                    )
+                ],
             ),
             NWBDatasetSpec(
                 name="states_index",
@@ -237,6 +246,17 @@ def main():
                     "The events that occurred on each trial. This is represented as a ragged array reference to "
                     "rows of the Events table."
                 ),
+                attributes=[
+                    NWBAttributeSpec(
+                        name="table",
+                        dtype=NWBRefSpec(target_type="EventsTable", reftype="object"),
+                        doc=(
+                            "Reference to the EventsTable table that this table region applies to. This specializes "
+                            "the attribute inherited from DynamicTableRegion to fix the type of table that can be "
+                            "referenced here."
+                        ),
+                    )
+                ]
             ),
             NWBDatasetSpec(
                 name="events_index",
@@ -251,6 +271,17 @@ def main():
                     "The actions that occurred on each trial. This is represented as a ragged array reference to "
                     "rows of the Actions table."
                 ),
+                attributes=[
+                    NWBAttributeSpec(
+                        name="table",
+                        dtype=NWBRefSpec(target_type="ActionsTable", reftype="object"),
+                        doc=(
+                            "Reference to the ActionsTable table that this table region applies to. This specializes "
+                            "the attribute inherited from DynamicTableRegion to fix the type of table that can be "
+                            "referenced here."
+                        ),
+                    )
+                ]
             ),
             NWBDatasetSpec(
                 name="actions_index",
@@ -275,16 +306,6 @@ def main():
                     "a row of the StateTypesTable."
                 ),
             ),
-            # NWBDatasetSpec(
-            #     name='start_time',
-            #     neurodata_type_inc='VectorData',
-            #     doc=('The start time that the state'),
-            # ),
-            # NWBDatasetSpec(
-            #     name='stop_time',
-            #     neurodata_type_inc='VectorData',
-            #     doc=('The stop time that the state'),
-            # ),
         ],
     )
 

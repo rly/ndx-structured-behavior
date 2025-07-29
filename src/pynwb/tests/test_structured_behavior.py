@@ -19,9 +19,9 @@ from ndx_structured_behavior import (
     ActionTypesTable,
     ActionsTable,
     TaskArgumentsTable,
-    data_program_validator,
 )
 from ndx_structured_behavior.plot import show_by_type_and_value
+from ndx_structured_behavior.utils import validate_data_program
 
 DATA_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BEADL_TASK_SCHEMA_FILE = os.path.join(DATA_BASE_DIR, "BEADL.xsd")
@@ -45,14 +45,14 @@ class TestHelperFunctions(TestCase):
     def setUp(self):
         self.program = ["a", "b", "c"]
 
-    def test_data_program_validator(self):
+    def test_validate_data_program(self):
         data = ["a", "b"]
 
-        self.assertTrue(data_program_validator(data, self.program))
+        self.assertTrue(validate_data_program(data, self.program))
 
-    def test_data_program_validator_invalid(self):
+    def test_validate_data_program_invalid(self):
         data = ["a", "d"]
-        self.assertFalse(data_program_validator(data, self.program))
+        self.assertFalse(validate_data_program(data, self.program))
 
 
 class TestExampleScript(TestCase):

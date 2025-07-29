@@ -88,6 +88,7 @@ groups:
   - name: task_arguments
     neurodata_type_inc: TaskArgumentsTable
     doc: The TaskArgumentsTable
+    quantity: '?'
 - neurodata_type_def: TrialsTable
   neurodata_type_inc: TimeIntervals
   name: trials
@@ -98,6 +99,14 @@ groups:
     neurodata_type_inc: DynamicTableRegion
     doc: The states that occurred on each trial. This is represented as a ragged
       array reference to rows of the States table.
+    attributes:
+    - name: table
+      dtype:
+        target_type: StatesTable
+        reftype: object
+      doc: Reference to the StatesTable table that this table region applies to.
+        This specializes the attribute inherited from DynamicTableRegion to fix 
+        the type of table that can be referenced here.
   - name: states_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "states" column.
@@ -106,6 +115,14 @@ groups:
     neurodata_type_inc: DynamicTableRegion
     doc: The events that occurred on each trial. This is represented as a ragged
       array reference to rows of the Events table.
+    attributes:
+    - name: table
+      dtype:
+        target_type: EventsTable
+        reftype: object
+      doc: Reference to the EventsTable table that this table region applies to.
+        This specializes the attribute inherited from DynamicTableRegion to fix 
+        the type of table that can be referenced here.
   - name: events_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "events" column.
@@ -114,6 +131,14 @@ groups:
     neurodata_type_inc: DynamicTableRegion
     doc: The actions that occurred on each trial. This is represented as a 
       ragged array reference to rows of the Actions table.
+    attributes:
+    - name: table
+      dtype:
+        target_type: ActionsTable
+        reftype: object
+      doc: Reference to the ActionsTable table that this table region applies 
+        to. This specializes the attribute inherited from DynamicTableRegion to 
+        fix the type of table that can be referenced here.
   - name: actions_index
     neurodata_type_inc: VectorIndex
     doc: VectorIndex for the "actions" column.

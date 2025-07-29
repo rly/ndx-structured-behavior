@@ -25,7 +25,6 @@ from .trials_table import (  # noqa: E402
     EventTypesTable,
     ActionTypesTable,
     ActionsTable,
-    data_program_validator,
 )
 
 from .task_argument_table import TaskArgumentsTable  # noqa: E402
@@ -50,7 +49,6 @@ __all__ = [
     "EventTypesTable",
     "ActionTypesTable",
     "ActionsTable",
-    "data_program_validator",
     "TaskArgumentsTable",
     "TaskRecording",
     "Task",
