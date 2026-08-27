@@ -19,6 +19,9 @@ BEADLTaskProgram = get_class("BEADLTaskProgram", "ndx-structured-behavior")
 
 from .trials_table import (  # noqa: E402
     EventsTable,
+    create_events_table,
+    add_event,
+    populate_events_table_from_matlab,
     StatesTable,
     TrialsTable,
     StateTypesTable,
@@ -37,12 +40,14 @@ Task = get_class("Task", "ndx-structured-behavior")
 
 # TODO: Add all classes to __all__ to make them accessible at the package level
 __all__ = [
-    "TetrodeSeries",
     "TaskSchema",
     "BEADLTaskSchema",
     "TaskProgram",
     "BEADLTaskProgram",
     "EventsTable",
+    "create_events_table",
+    "add_event",
+    "populate_events_table_from_matlab",
     "StatesTable",
     "TrialsTable",
     "StateTypesTable",
