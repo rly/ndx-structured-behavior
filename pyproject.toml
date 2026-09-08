@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ndx-structured-behavior"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     { name="Ryan Ly", email="rly@lbl.gov" },
     { name="Matthew Avaylon", email="mavaylon@lbl.gov" },
@@ -13,12 +13,11 @@ authors = [
 ]
 description = "An NWB extension for storing structured behavior programs and data, such as from BAABL/BEADL"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "BSD-3-Clause"
 classifiers = [
     # TODO: update these classifiers before release
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -35,9 +34,9 @@ keywords = [
     'ndx-extension',
 ]
 dependencies = [
-    "pynwb>=2.8.0",
-    "hdmf>=3.14.1",
-    "scipy>=1.10.1",
+    "pynwb>=4.1.0",
+    "hdmf>=6.2.0",
+    "scipy>=1.14.1",
 ]
 
 [project.optional-dependencies]
@@ -65,9 +64,9 @@ dev = [
 
 # minimum requirements of project dependencies for testing (see .github/workflows/run_all_tests.yml)
 min-reqs = [
-    "pynwb==2.8.0",
-    "hdmf==3.14.1",
-    "scipy==1.10.1",
+    "pynwb==4.1.0",
+    "hdmf==6.2.0",
+    "scipy==1.14.1",
 ]
 
 # TODO: add URLs before release

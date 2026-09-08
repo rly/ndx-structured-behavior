@@ -171,24 +171,6 @@ groups:
   - name: event_name
     neurodata_type_inc: VectorData
     doc: The name of the event
-- neurodata_type_def: EventsTable
-  neurodata_type_inc: DynamicTable
-  name: events
-  doc: A column-based table to store information about events, one event per 
-    row.
-  datasets:
-  - name: timestamp
-    neurodata_type_inc: VectorData
-    dtype: float32
-    doc: The time that the event occurred, in seconds.
-  - name: event_type
-    neurodata_type_inc: DynamicTableRegion
-    doc: The type of event that occurred on each trial. This is represented as a
-      reference to a row of the EventTypesTable.
-  - name: value
-    neurodata_type_inc: VectorData
-    dtype: text
-    doc: The value of the event
 - neurodata_type_def: ActionsTable
   neurodata_type_inc: DynamicTable
   name: actions

@@ -8,7 +8,7 @@ def main():
     # these arguments were auto-generated from your cookiecutter inputs
     ns_builder = NWBNamespaceBuilder(
         name="""ndx-structured-behavior""",
-        version="""0.1.0""",
+        version="""0.2.0""",
         doc="""An NWB extension for storing structured behavior programs and data, such as from BAABL/BEADL""",
         author=[
             "Ryan Ly",
@@ -309,35 +309,6 @@ def main():
         ],
     )
 
-    events_table = NWBGroupSpec(
-        name="events",
-        neurodata_type_def="EventsTable",
-        neurodata_type_inc="DynamicTable",
-        doc=("A column-based table to store information about events, one event per row."),
-        datasets=[
-            NWBDatasetSpec(
-                name="timestamp",
-                neurodata_type_inc="VectorData",
-                dtype="float32",
-                doc=("The time that the event occurred, in seconds."),
-            ),
-            NWBDatasetSpec(
-                name="event_type",
-                neurodata_type_inc="DynamicTableRegion",
-                doc=(
-                    "The type of event that occurred on each trial. This is represented as a reference to "
-                    "a row of the EventTypesTable."
-                ),
-            ),
-            NWBDatasetSpec(
-                name="value",
-                neurodata_type_inc="VectorData",
-                dtype="text",
-                doc=("The value of the event"),
-            ),
-        ],
-    )
-
     actions_table = NWBGroupSpec(
         name="actions",
         neurodata_type_def="ActionsTable",
@@ -390,7 +361,6 @@ def main():
         state_types_table,
         states_table,
         event_types_table,
-        events_table,
         actions_table,
         action_types_table,
         task_argument_table,

@@ -1,6 +1,8 @@
 from pynwb import register_class
 from pynwb.core import DynamicTable
 from pynwb.epoch import TimeIntervals
+from pynwb.event import EventsTable, TimestampVectorData
+from hdmf.common import VectorData
 from hdmf.utils import docval, get_docval, popargs, AllowPositional
 from ndx_structured_behavior import BEADLTaskProgram
 from .beadl_xml_parser import BeadlXMLParser
@@ -342,108 +344,85 @@ class StatesTable(TimeIntervals):
             raise ValueError(msg)
 
 
-@register_class("EventsTable", "ndx-structured-behavior")
-class EventsTable(DynamicTable):
-    """A table to hold events data."""
+def create_events_table(
+    event_types_table,
+    description: str = "Event data",
+    name: str = "events",
+    source_description: str = None,
+) -> EventsTable:
+    """Create a core :py:class:`~pynwb.event.EventsTable` for structured behavior data.
 
-    __columns__ = (
-        {"name": "timestamp", "description": "The event timestamp", "required": True},
-        {"name": "duration", "description": "Duration of the event in seconds.", "required": False},
-        {"name": "event_type", "description": "The event type", "table": True, "required": True},
-        {"name": "value", "description": "The event value", "required": True},
-    )
+    Replaces the ``EventsTable`` type this extension defined up to version 0.1.0.
+    """
+    columns = [
+        TimestampVectorData(
+            name="timestamp",
+            description="The time that the event occurred, in seconds.",
+            data=list(),
+        ),
+        event_types_table.create_region(
+            name="event_type",
+            region=list(),
+            description=(
+                "The type of event that occurred on each trial. This is represented as a reference to "
+                "a row of the EventTypesTable."
+            ),
+        ),
+        VectorData(name="value", description="The value of the event", data=list()),
+    ]
+    kwargs = dict(name=name, description=description, columns=columns)
+    if source_description is not None:
+        kwargs["source_description"] = source_description
+    return EventsTable(**kwargs)
 
-    @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
-        {
-            "name": "description",
-            "type": str,
-            "doc": "A table to hold events data.",
-            "default": "Event data",
-        },
-        {"name": "event_types_table", "type": "EventTypesTable", "doc": "The events table.", "default": None},
-        allow_positional=AllowPositional.ERROR,
-    )
-    def __init__(self, **kwargs):
-        kwargs["name"] = "events"
-        event_types_table = popargs("event_types_table", kwargs)
-        super().__init__(**kwargs)
-        if event_types_table is not None and self.event_type is not None and self.event_type.table is None:
-            self.event_type.table = event_types_table
 
-    @docval(
-        {
-            "name": "event_type",
-            "type": int,
-            "doc": "The event type.",
-        },
-        {"name": "duration", "type": float, "doc": "Duration of the event in seconds.", "default": None},
-        {
-            "name": "value",
-            "type": str,
-            "doc": "The event value.",
-        },
-        {
-            "name": "timestamp",
-            "type": float,
-            "doc": "The event timestamp.",
-        },
-        allow_extra=True,
-        allow_positional=AllowPositional.ERROR,
-    )
-    def add_row(self, **kwargs):
-        """Add an event to this table."""
-        event_type_idx = kwargs["event_type"]
-        if event_type_idx >= 0 and event_type_idx < len(self.event_type.table):
-            super().add_row(**kwargs)
-        else:
-            msg = "Type index is out of bounds"
-            raise ValueError(msg)
+def add_event(events_table: EventsTable, event_type: int, timestamp: float, value: str, **kwargs):
+    """Add an event to an events table, validating ``event_type`` against the types table."""
+    if not 0 <= event_type < len(events_table.event_type.table):
+        msg = "Type index is out of bounds"
+        raise ValueError(msg)
+    return events_table.add_row(event_type=event_type, timestamp=timestamp, value=value, **kwargs)
 
-    add_event = add_row  # alias for add_row
 
-    @docval({"name": "data_path", "type": str, "doc": "The path to the matlab data file."})
-    def populate_from_matlab(self, **kwargs):
-        event_types_table = self.event_type.table
-        file_path = kwargs["data_path"]
+def populate_events_table_from_matlab(events_table: EventsTable, data_path: str) -> EventsTable:
+    """Populate an events table from a BEADL MATLAB data file.
 
-        matlab_file = loadmat(file_path)
-        events_data = matlab_file["BeadlData"]["Events"]
-        offset_times = matlab_file["BeadlData"]["SessionMetaData"]["TrialStartOffset"]
+    Replaces the ``EventsTable.populate_from_matlab`` method that existed while this extension
+    defined its own ``EventsTable`` type.
+    """
+    event_types_table = events_table.event_type.table
 
-        event_times = []
-        event_names_data = []
-        event_value = []
-        for trial, time in zip(events_data, offset_times):
-            for event in trial["AllEvents"]:
-                event_names_data.append(event["eventName"])
-                event_times.append(event["eventTime"] + time)
-                event_value.append(event["eventValue"])
+    matlab_file = loadmat(data_path)
+    events_data = matlab_file["BeadlData"]["Events"]
+    offset_times = matlab_file["BeadlData"]["SessionMetaData"]["TrialStartOffset"]
 
-        unique_event_names = list(set(event_names_data))
-        event_types_table_data = event_types_table["event_name"].data
+    event_times = []
+    event_names_data = []
+    event_value = []
+    for trial, time in zip(events_data, offset_times):
+        for event in trial["AllEvents"]:
+            event_names_data.append(event["eventName"])
+            event_times.append(event["eventTime"] + time)
+            event_value.append(event["eventValue"])
 
-        valid = validate_data_program(data=unique_event_names, program=event_types_table_data)
-        if valid:
-            # loop over event_names where we want to find the idx of each element in the event_types_table
-            event_idx_list = []
-            for event_name in event_names_data:
-                event_type_idx = event_types_table_data.index(event_name)
-                event_idx_list.append(event_type_idx)
+    unique_event_names = list(set(event_names_data))
+    event_types_table_data = event_types_table["event_name"].data
 
-            # create a dynamic table region where the data is the idx
-            region = event_types_table.create_region(
-                name="event_type", region=event_idx_list, description="idx to the names of events"
-            )
+    valid = validate_data_program(data=unique_event_names, program=event_types_table_data)
+    if not valid:
+        msg = "The events from the data does not match possible events from the task program."
+        raise ValueError(msg)
 
-            # populate events_table
-            for i in range(len(event_times)):
-                self.add_row(timestamp=event_times[i], event_type=region.data[i], value=event_value[i])
+    # loop over event_names where we want to find the idx of each element in the event_types_table
+    event_idx_list = []
+    for event_name in event_names_data:
+        event_type_idx = event_types_table_data.index(event_name)
+        event_idx_list.append(event_type_idx)
 
-            return self
-        else:
-            msg = "The events from the data does not match possible events from the task program."
-            raise ValueError(msg)
+    for i in range(len(event_times)):
+        events_table.add_row(timestamp=event_times[i], event_type=event_idx_list[i], value=event_value[i])
+
+    return events_table
 
 
 @register_class("StateTypesTable", "ndx-structured-behavior")

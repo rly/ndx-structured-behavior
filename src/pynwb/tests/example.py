@@ -3,7 +3,8 @@ from ndx_structured_behavior import (
     BEADLTaskProgram,
     BEADLTaskSchema,
     EventTypesTable,
-    EventsTable,
+    create_events_table,
+    populate_events_table_from_matlab,
     StateTypesTable,
     StatesTable,
     TrialsTable,
@@ -58,8 +59,8 @@ task = Task(
 )
 
 # Create Events, Actions, and States
-events = EventsTable(description="description", event_types_table=event_types)
-_ = events.populate_from_matlab(data_path=beadl_data_file)
+events = create_events_table(event_types_table=event_types, description="description")
+_ = populate_events_table_from_matlab(events, data_path=beadl_data_file)
 
 actions = ActionsTable(description="description", action_types_table=action_types)
 _ = actions.populate_from_matlab(data_path=beadl_data_file)

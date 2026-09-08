@@ -12,7 +12,9 @@ from ndx_structured_behavior import (
     BEADLTaskProgram,
     BEADLTaskSchema,
     EventTypesTable,
-    EventsTable,
+    create_events_table,
+    add_event,
+    populate_events_table_from_matlab,
     StateTypesTable,
     StatesTable,
     TrialsTable,
@@ -164,11 +166,11 @@ class TestBEADLTableConstructors(TestCase):
             description="description", beadl_task_program=beadl_task_program, populate_from_program=True
         )  # assert description
 
-        events = EventsTable(description="description", event_types_table=event_types)
-        events.add_event(event_type=0, timestamp=0.4, duration=0.1, value="on")
-        events.add_event(event_type=1, timestamp=0.5, duration=0.1, value="on")
-        events.add_event(event_type=1, timestamp=1.4, duration=0.1, value="on")
-        events.add_event(event_type=0, timestamp=1.5, duration=0.1, value="on")
+        events = create_events_table(event_types_table=event_types, description="description")
+        add_event(events, event_type=0, timestamp=0.4, duration=0.1, value="on")
+        add_event(events, event_type=1, timestamp=0.5, duration=0.1, value="on")
+        add_event(events, event_type=1, timestamp=1.4, duration=0.1, value="on")
+        add_event(events, event_type=0, timestamp=1.5, duration=0.1, value="on")
 
         state_types = StateTypesTable(
             description="description", beadl_task_program=beadl_task_program, populate_from_program=True
@@ -276,8 +278,8 @@ class TestBeadlTablesPopulate(TestCase):
             description="description", beadl_task_program=self.beadl_task_program, populate_from_program=True
         )  # assert description
 
-        events = EventsTable(description="description", event_types_table=event_types)
-        events.populate_from_matlab(data_path=self.beadl_data)
+        events = create_events_table(event_types_table=event_types, description="description")
+        populate_events_table_from_matlab(events, data_path=self.beadl_data)
 
         state_types = StateTypesTable(
             description="description", beadl_task_program=self.beadl_task_program, populate_from_program=True
@@ -331,8 +333,8 @@ class TestPlot(TestCase):
             description="description", beadl_task_program=self.beadl_task_program, populate_from_program=True
         )  # assert description
 
-        self.events = EventsTable(description="description", event_types_table=self.event_types)
-        self.events.populate_from_matlab(data_path=self.beadl_data)
+        self.events = create_events_table(event_types_table=self.event_types, description="description")
+        populate_events_table_from_matlab(self.events, data_path=self.beadl_data)
 
     def test_events_show_by_type_and_value(self):
         y_values, y_tick_labels, y_label = show_by_type_and_value(table=self.events, table_types=self.event_types)
@@ -379,7 +381,7 @@ class TestPlot(TestCase):
 
 
 class TestTaskSeriesRoundtrip(TestCase):
-    """Simple roundtrip test for TetrodeSeries."""
+    """Simple roundtrip test for Task, TaskRecording and TrialsTable."""
 
     def setUp(self):
         self.nwbfile = set_up_nwbfile()
@@ -439,11 +441,11 @@ class TestTaskSeriesRoundtrip(TestCase):
         actions.add_action(action_type=0, timestamp=0.4, duration=0.1, value="open")
         actions.add_action(action_type=1, timestamp=0.5, duration=0.1, value="open")
 
-        events = EventsTable(description="description", event_types_table=event_types)
-        events.add_event(event_type=0, timestamp=0.4, duration=0.1, value="on")
-        events.add_event(event_type=1, timestamp=0.5, duration=0.1, value="on")
-        events.add_event(event_type=1, timestamp=1.4, duration=0.1, value="on")
-        events.add_event(event_type=0, timestamp=1.5, duration=0.1, value="on")
+        events = create_events_table(event_types_table=event_types, description="description")
+        add_event(events, event_type=0, timestamp=0.4, duration=0.1, value="on")
+        add_event(events, event_type=1, timestamp=0.5, duration=0.1, value="on")
+        add_event(events, event_type=1, timestamp=1.4, duration=0.1, value="on")
+        add_event(events, event_type=0, timestamp=1.5, duration=0.1, value="on")
 
         states = StatesTable(description="description", state_types_table=state_types)
         states.add_state(state_type=0, start_time=0.0, stop_time=0.1)
