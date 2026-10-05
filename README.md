@@ -2,6 +2,12 @@
 
 [![PyPI version](https://badge.fury.io/py/ndx-structured-behavior.svg)](https://badge.fury.io/py/ndx-structured-behavior)
 
+> **Version 0.2.0 is not stable and is subject to major breaking changes.**
+> NWBEP001, developed as the [ndx-events](https://github.com/rly/ndx-events) extension, has been merged
+> into the core NWB schema (version 2.10.0), which now defines `EventsTable`, `TimestampVectorData`, and
+> `DurationVectorData`. This extension is not yet fully integrated with those core types, and completing
+> that integration is expected to change the on-disk layout.
+
 An NWB extension for storing structured behavior programs and data, such as from BAABL/BEADL.
 
 The extension *ndx_structured_behavior* defines a collection of interlinked table data structures for
