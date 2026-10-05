@@ -1,6 +1,6 @@
 # Changelog for ndx-structured-behavior
 
-## 0.2.0 (Upcoming)
+## ndx-structured-behavior 0.2.0 (October 5, 2026)
 
 ### Breaking changes
 - As pynwb 4 added an `EventsTable` to the core namespace, the `EventsTable` neurodata type defined in this extension is removed. 

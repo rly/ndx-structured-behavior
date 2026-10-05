@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-## Structured Behavior 0.2.0 (Upcoming)
+## Structured Behavior 0.2.0 (October 5, 2026)
 
 ### Breaking changes
 - As pynwb 4 added `EventsTable` to the core namespace, this extension doesn't need to define its own `EventsTable`.

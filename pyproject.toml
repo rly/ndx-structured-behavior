@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
@@ -15,17 +15,17 @@ description = "An NWB extension for storing structured behavior programs and dat
 readme = "README.md"
 requires-python = ">=3.10"
 license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
 classifiers = [
-    # TODO: update these classifiers before release
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
 ]
 keywords = [
     'NeurodataWithoutBorders',
@@ -39,7 +39,8 @@ dependencies = [
     "scipy>=1.14.1",
 ]
 
-[project.optional-dependencies]
+# Dependency groups (PEP 735) for development. They are not published to PyPI.
+[dependency-groups]
 test = [
     "coverage>=7.5.4",
     "pytest>=8.2.2",
@@ -59,7 +60,8 @@ dev = [
     "codespell>=2.3.0",
     "pre-commit>=3.5.0",
     "ruff>=0.4.10",
-    "ndx-structured-behavior[docs,test]",
+    {include-group = "docs"},
+    {include-group = "test"},
 ]
 
 # minimum requirements of project dependencies for testing (see .github/workflows/run_all_tests.yml)
@@ -69,12 +71,9 @@ min-reqs = [
     "scipy==1.14.1",
 ]
 
-# TODO: add URLs before release
 [project.urls]
 "Homepage" = "https://github.com/rly/ndx-structured-behavior"
-# "Documentation" = "https://package.readthedocs.io/"
 "Bug Tracker" = "https://github.com/rly/ndx-structured-behavior/issues"
-# "Discussions" = "https://github.com/organization/package/discussions"
 "Changelog" = "https://github.com/rly/ndx-structured-behavior/blob/main/CHANGELOG.md"
 
 # Include only the source code under `src/pynwb/ndx_structured_behavior` and the spec files under `spec`
