@@ -1,5 +1,10 @@
 # Changelog for ndx-structured-behavior
 
+## ndx-structured-behavior 0.2.1 (Upcoming)
+
+### Bug fixes
+- Fixed the extension's tables dropping MeaningsTables when reading a file. The constructors now accept all `DynamicTable` arguments, including `meanings_tables`. [Issue #57](https://github.com/rly/ndx-structured-behavior/issues/57)
+
 ## ndx-structured-behavior 0.2.0 (October 5, 2026)
 
 ### Breaking changes
