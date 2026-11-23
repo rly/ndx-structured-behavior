@@ -21,7 +21,7 @@ class TrialsTable(TimeIntervals):
     )
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,
@@ -193,7 +193,7 @@ class StatesTable(TimeIntervals):
     )
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,
@@ -430,7 +430,7 @@ class StateTypesTable(DynamicTable):
     __columns__ = ({"name": "state_name", "description": "The name of the state type", "required": True},)
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,
@@ -473,7 +473,7 @@ class EventTypesTable(DynamicTable):
     __columns__ = ({"name": "event_name", "description": "The name of the event type", "required": True},)
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,
@@ -530,7 +530,7 @@ class ActionTypesTable(DynamicTable):
     __columns__ = ({"name": "action_name", "description": "The name of the action type", "required": True},)
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,
@@ -582,7 +582,7 @@ class ActionsTable(DynamicTable):
     )
 
     @docval(
-        *get_docval(DynamicTable.__init__, "id", "columns", "colnames"),
+        *[arg for arg in get_docval(DynamicTable.__init__) if arg["name"] not in ("name", "description")],
         {
             "name": "description",
             "type": str,

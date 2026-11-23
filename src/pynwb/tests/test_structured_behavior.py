@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 
+from hdmf.common import MeaningsTable
 from pynwb import NWBHDF5IO, NWBFile
 from pynwb.testing import TestCase, remove_test_file
 
@@ -476,3 +477,96 @@ class TestTaskSeriesRoundtrip(TestCase):
             self.assertContainerEqual(actions, read_nwbfile.get_acquisition("task_recording").actions)
             self.assertContainerEqual(events, read_nwbfile.get_acquisition("task_recording").events)
             self.assertContainerEqual(states, read_nwbfile.get_acquisition("task_recording").states)
+
+
+class TestMeaningsTablesRoundtrip(TestCase):
+    """Test that MeaningsTables on the extension's tables survive a write/read round trip."""
+
+    def setUp(self):
+        self.nwbfile = set_up_nwbfile()
+        self.path = "test_meanings.nwb"
+
+    def tearDown(self):
+        remove_test_file(self.path)
+
+    def test_roundtrip(self):
+        with open(BEADL_TASK_SCHEMA_FILE, "r") as test_xsd_file:
+            test_xsd = test_xsd_file.read()
+
+        with open(BEADL_TASK_PROGRAM_FILE, "r") as test_xml_file:
+            test_xml = test_xml_file.read()
+
+        beadl_task_schema = BEADLTaskSchema(name="task_schema", data=test_xsd, version="0.1.0", language="XSD")
+        beadl_task_program = BEADLTaskProgram(
+            name="task_program", data=test_xml, schema=beadl_task_schema, language="XML"
+        )
+
+        task_arg_table = TaskArgumentsTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        action_types = ActionTypesTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        event_types = EventTypesTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        state_types = StateTypesTable(beadl_task_program=beadl_task_program, populate_from_program=True)
+        task = Task(
+            task_program=beadl_task_program,
+            task_schema=beadl_task_schema,
+            event_types=event_types,
+            state_types=state_types,
+            action_types=action_types,
+            task_arguments=task_arg_table,
+        )
+        self.nwbfile.add_lab_meta_data(task)
+
+        actions = ActionsTable(action_types_table=action_types)
+        actions.add_action(action_type=0, timestamp=0.4, duration=0.1, value="open")
+
+        events = create_events_table(event_types_table=event_types, description="description")
+        add_event(events, event_type=0, timestamp=0.4, duration=0.1, value="on")
+
+        states = StatesTable(state_types_table=state_types)
+        states.add_column(name="outcome", description="state outcome")
+        states.add_state(state_type=0, start_time=0.0, stop_time=0.1, outcome="hit")
+
+        trials = TrialsTable(states_table=states, events_table=events, actions_table=actions)
+        trials.add_column(name="outcome", description="trial outcome")
+        trials.add_trial(start_time=0.0, stop_time=0.8, states=[0], events=[0], actions=[0], outcome="hit")
+
+        self.nwbfile.trials = trials
+        self.nwbfile.add_acquisition(TaskRecording(actions=actions, states=states, events=events))
+
+        columns = [
+            (task_arg_table, "expression_type"),
+            (action_types, "action_name"),
+            (event_types, "event_name"),
+            (state_types, "state_name"),
+            (actions, "value"),
+            (states, "outcome"),
+            (trials, "outcome"),
+        ]
+        for table, column in columns:
+            meanings = MeaningsTable(target=table[column])
+            for value in sorted(set(table[column].data)):
+                meanings.add_row(value=value, meaning=f"meaning of {value}")
+            table.add_meanings_table(meanings)
+
+        with NWBHDF5IO(self.path, mode="w") as io:
+            io.write(self.nwbfile)
+
+        with NWBHDF5IO(self.path, mode="r") as io:
+            read_nwbfile = io.read()
+            read_task = read_nwbfile.lab_meta_data["task"]
+            read_recording = read_nwbfile.get_acquisition("task_recording")
+            read_tables = [
+                read_task.task_arguments,
+                read_task.action_types,
+                read_task.event_types,
+                read_task.state_types,
+                read_recording.actions,
+                read_recording.states,
+                read_nwbfile.trials,
+            ]
+            for (table, column), read_table in zip(columns, read_tables):
+                with self.subTest(table=type(table).__name__):
+                    self.assertIs(type(read_table), type(table))
+                    read_meanings = read_table.get_meanings_for_column(column)
+                    self.assertIsNotNone(read_meanings)
+                    expected_values = list(table.get_meanings_for_column(column)["value"].data)
+                    self.assertEqual(list(read_meanings["value"].data[:]), expected_values)
